@@ -1,0 +1,17 @@
+{
+  "name": "job_portal",
+  "version": "1.0.0",
+  "description": "Portal for job applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "country-list": "^2.3.0",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.6",
+    "validator": "^13.12.0"
+  }
+}
