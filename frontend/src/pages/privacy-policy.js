@@ -1,43 +1,35 @@
-// privacy-policy.js
+import React from "react";
 
-// Get the privacy policy link element
-const privacyPolicyLink = document.querySelector('a[href="/privacy"]');
+const PrivacyPolicy = () => {
+  return (
+    <div className="p-8 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
+      <p className="mb-2">
+        At Jobs in Education, we respect your privacy and are committed to protecting
+        your personal data.
+      </p>
+      <h2 className="text-2xl font-semibold mt-4">1. Information We Collect</h2>
+      <p>
+        We may collect personal information such as your name, email address, and
+        phone number when you use our platform.
+      </p>
+      <h2 className="text-2xl font-semibold mt-4">2. How We Use Your Information</h2>
+      <p>
+        Your information is used to improve our services, communicate with you, and
+        enhance your experience on our platform.
+      </p>
+      <h2 className="text-2xl font-semibold mt-4">3. Security</h2>
+      <p>
+        We take appropriate security measures to protect your personal information
+        from unauthorized access or disclosure.
+      </p>
+      <h2 className="text-2xl font-semibold mt-4">4. Contact Us</h2>
+      <p>
+        If you have any questions about this Privacy Policy, please contact us at
+        support@jobsineducation.net.
+      </p>
+    </div>
+  );
+};
 
-// Add a click event listener to the link
-privacyPolicyLink.addEventListener('click', (event) => {
-  event.preventDefault(); // Prevent the default link behavior
-  
-  // Load the privacy policy content
-  loadPrivacyPolicyContent();
-});
-
-function loadPrivacyPolicyContent() {
-  // Fetch the privacy policy content (you can replace this with your own content)
-  const privacyPolicyContent = `
-    <h1>Privacy Policy</h1>
-    <p>This is a sample privacy policy for a personal project.</p>
-    <p>We respect your privacy and are committed to protecting your personal information.</p>
-  `;
-
-  // Create a new modal or display the content on the page
-  showContentModal(privacyPolicyContent);
-}
-
-function showContentModal(content) {
-  // Create a new modal element
-  const modal = document.createElement('div');
-  modal.classList.add('modal');
-
-  // Add the content to the modal
-  modal.innerHTML = content;
-
-  // Append the modal to the document body
-  document.body.appendChild(modal);
-
-  // Add an event listener to close the modal when clicked outside
-  modal.addEventListener('click', (event) => {
-    if (event.target === modal) {
-      modal.remove();
-    }
-  });
-}
+export default PrivacyPolicy;

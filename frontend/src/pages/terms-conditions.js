@@ -1,43 +1,36 @@
-// terms-conditions.js
+import React from "react";
 
-// Get the terms and conditions link element
-const termsConditionsLink = document.querySelector('a[href="/terms"]');
+const TermsAndConditions = () => {
+  return (
+    <div className="p-8 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">Terms & Conditions</h1>
+      <p className="mb-2">
+        Welcome to Jobs in Education! These terms and conditions outline the rules and
+        regulations for the use of our platform.
+      </p>
+      <h2 className="text-2xl font-semibold mt-4">1. Acceptance of Terms</h2>
+      <p>
+        By accessing this website, you accept these terms and conditions in full.
+        Do not continue to use Jobs in Education if you do not agree to all of the
+        terms and conditions stated on this page.
+      </p>
+      <h2 className="text-2xl font-semibold mt-4">2. Use of Services</h2>
+      <p>
+        You agree to use our platform in accordance with applicable laws and not to
+        engage in any unlawful activities.
+      </p>
+      <h2 className="text-2xl font-semibold mt-4">3. Modifications</h2>
+      <p>
+        Jobs in Education reserves the right to revise these terms at any time.
+        By using this website, you are expected to review these terms regularly.
+      </p>
+      <h2 className="text-2xl font-semibold mt-4">4. Contact Us</h2>
+      <p>
+        If you have any questions about these Terms & Conditions, please contact us
+        at support@jobsineducation.net.
+      </p>
+    </div>
+  );
+};
 
-// Add a click event listener to the link
-termsConditionsLink.addEventListener('click', (event) => {
-  event.preventDefault(); // Prevent the default link behavior
-  
-  // Load the terms and conditions content
-  loadTermsConditionsContent();
-});
-
-function loadTermsConditionsContent() {
-  // Fetch the terms and conditions content (you can replace this with your own content)
-  const termsConditionsContent = `
-    <h1>Terms & Conditions</h1>
-    <p>This is a sample terms and conditions for a personal project.</p>
-    <p>By using this website, you agree to our terms and conditions.</p>
-  `;
-
-  // Create a new modal or display the content on the page
-  showContentModal(termsConditionsContent);
-}
-
-function showContentModal(content) {
-  // Create a new modal element
-  const modal = document.createElement('div');
-  modal.classList.add('modal');
-
-  // Add the content to the modal
-  modal.innerHTML = content;
-
-  // Append the modal to the document body
-  document.body.appendChild(modal);
-
-  // Add an event listener to close the modal when clicked outside
-  modal.addEventListener('click', (event) => {
-    if (event.target === modal) {
-      modal.remove();
-    }
-  });
-}
+export default TermsAndConditions;
