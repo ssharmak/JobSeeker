@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaEdit } from "react-icons/fa"; // Pencil icon for editing
+import { FaEdit } from "react-icons/fa";
 import EditProfile from "./EditProfile";
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false); // Toggle state for dark/light mode
   const [userData, setUserData] = useState({
     name: "",
-    profilePicture: "", // Placeholder for the profile picture
+    profilePicture: "",
     college: "",
     qualification: "",
     location: "",
@@ -15,170 +14,38 @@ const ProfilePage = () => {
     dob: "",
     phone: "",
     email: "",
-    resume: "", // Added field for resume
+    resume: "",
+    profileCompletion: 69, // Simulating profile progress
   });
 
-  // Simulate fetching data from a database
   useEffect(() => {
     const fetchedData = {
-      name: "Shailesh Sharma",
-      profilePicture: "https://via.placeholder.com/150", // Replace with dynamic image URL
+      name: "Shailesh Sharma K",
+      profilePicture: "https://via.placeholder.com/130",
       college: "Vivekananda College of Engineering",
       qualification: "B.Tech in Computer Science",
-      location: "India",
+      location: "Kasargode",
       gender: "Male",
-      dob: "2004-05-12",
-      phone: "+91 9876543210",
+      dob: "11th July 2004",
+      phone: "6235053469",
       email: "shaileshsharmakodwakere@gmail.com",
-      resume: "", // Simulated resume field
+      resume: "",
+      profileCompletion: 69,
     };
     setUserData(fetchedData);
   }, []);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
-  // Handle file upload (resume)
   const handleResumeUpload = (e) => {
     const file = e.target.files[0];
     if (file && file.type === "application/pdf") {
       const resumeURL = URL.createObjectURL(file);
       setUserData((prevState) => ({
         ...prevState,
-        resume: resumeURL, // Store the file URL
+        resume: resumeURL,
       }));
     } else {
       alert("Please upload a PDF file.");
     }
-  };
-
-  const styles = {
-    container: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh",
-      backgroundColor: isDarkMode ? "#121212" : "#f4f7fa", // Background color for dark/light mode
-      fontFamily: "Arial, sans-serif",
-    },
-    card: {
-      display: "flex",
-      flexDirection: "row",
-      backgroundColor: "#fff",
-      backgroundImage: isDarkMode
-        ? "none"
-        : "linear-gradient(135deg, #6e7dff, #b5e1fc)", // Colorful card in light mode
-      borderRadius: "15px", // Curved edges for the card
-      boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
-      width: "80%",
-      maxWidth: "1000px",
-      padding: "30px",
-      alignItems: "center",
-      border: "1px solid #ccc", // Light border for card
-      transition: "all 0.3s ease-in-out",
-    },
-    leftSection: {
-      flex: 1,
-      paddingRight: "20px",
-      display: "flex",
-      justifyContent: "center",
-    },
-    profilePic: {
-      width: "150px",
-      height: "150px",
-      borderRadius: "50%",
-      objectFit: "cover",
-      border: `5px solid ${isDarkMode ? "#fff" : "#007bff"}`, // Highlighted border for dark/light mode
-    },
-    rightSection: {
-      flex: 2,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-    },
-    name: {
-      fontSize: "24px",
-      fontWeight: "bold",
-      color: isDarkMode ? "#fff" : "#333", // Name color for dark/light mode
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
-    collegeQualification: {
-      fontSize: "14px",
-      color: isDarkMode ? "#bbb" : "#777", // Text color for dark/light mode
-      marginTop: "5px",
-    },
-    separatorLine: {
-      marginTop: "10px",
-      height: "1px",
-      backgroundColor: isDarkMode ? "#444" : "#ccc", // Line color for dark/light mode
-      opacity: 0.5,
-    },
-    infoContainer: {
-      display: "flex",
-      marginTop: "15px",
-      alignItems: "flex-start",
-    },
-    leftInfo: {
-      display: "flex",
-      flexDirection: "column",
-      fontSize: "14px",
-      color: isDarkMode ? "#bbb" : "#555", // Info text color for dark/light mode
-    },
-    rightInfo: {
-      display: "flex",
-      flexDirection: "column",
-      fontSize: "14px",
-      color: isDarkMode ? "#bbb" : "#555", // Info text color for dark/light mode
-    },
-    verticalLine: {
-      borderLeft: "1px solid #ccc",
-      height: "100%",
-      margin: "0 20px",
-    },
-    editButton: {
-      backgroundColor: isDarkMode ? "#007bff" : "#007bff",
-      color: "#fff",
-      border: "none",
-      padding: "8px 16px",
-      borderRadius: "5px",
-      cursor: "pointer",
-      marginTop: "20px",
-    },
-    editIcon: {
-      cursor: "pointer",
-      marginLeft: "10px",
-    },
-    toggleButton: {
-      position: "absolute",
-      top: "20px",
-      right: "20px",
-      backgroundColor: isDarkMode ? "#fff" : "#333", // Toggle button color for dark/light mode
-      color: isDarkMode ? "#333" : "#fff",
-      border: "none",
-      padding: "8px 16px",
-      borderRadius: "5px",
-      cursor: "pointer",
-    },
-    resumeSection: {
-      marginTop: "20px",
-      fontSize: "16px",
-      color: isDarkMode ? "#bbb" : "#555", // Text color for dark/light mode
-    },
-    resumeLink: {
-      color: "#007bff",
-      textDecoration: "underline",
-      cursor: "pointer",
-      marginTop: "10px",
-    },
-    fileInput: {
-      marginTop: "10px",
-      padding: "8px",
-      backgroundColor: "#f4f7fa",
-      borderRadius: "5px",
-    },
   };
 
   const handleEditClick = () => {
@@ -187,88 +54,114 @@ const ProfilePage = () => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.card}>
-        {/* Left Section: Profile Picture */}
-        <div style={styles.leftSection}>
-          <img
-            src={userData.profilePicture}
-            alt="Profile"
-            style={styles.profilePic}
-          />
+      <div style={styles.profileCard}>
+        {/* Profile Image with Progress */}
+        <div style={styles.profileImageContainer}>
+          <svg style={styles.progressCircle} viewBox="0 0 100 100">
+            <circle
+              style={styles.progressTrail}
+              cx="50"
+              cy="50"
+              r="48.5"
+            ></circle>
+            <circle
+              style={{
+                ...styles.progressPath,
+                strokeDashoffset: `${
+                  304.734 * ((100 - userData.profileCompletion) / 100)
+                }px`,
+              }}
+              cx="50"
+              cy="50"
+              r="48.5"
+            ></circle>
+          </svg>
+          <div style={styles.profileImageOverlay}>
+            <div style={styles.percentage}>{userData.profileCompletion}%</div>
+            <img
+              src={userData.profilePicture}
+              alt="Profile"
+              style={styles.profilePic}
+            />
+            <div style={styles.replacePhoto}>
+              <img
+                src="//static.naukimg.com/s/8/801/i/src/resources/svg/image-edit-new.aa3eb267.svg"
+                height="14"
+                width="14"
+                alt=""
+              />
+              <span>Replace photo</span>
+            </div>
+          </div>
         </div>
 
-        {/* Right Section: Personal Info */}
-        <div style={styles.rightSection}>
-          <div style={styles.name}>
+        {/* User Info */}
+        <div style={styles.profileDetails}>
+          <h1 style={styles.name}>
             {userData.name}
             <FaEdit style={styles.editIcon} onClick={handleEditClick} />
-          </div>
-          <div style={styles.collegeQualification}>
-            {userData.college}, {userData.qualification}
-          </div>
+          </h1>
+          <h2 style={styles.qualification}>{userData.qualification}</h2>
+          <h2 style={styles.college}>{userData.college}</h2>
 
-          {/* Separator Line */}
-          <div style={styles.separatorLine}></div>
+          {/* Separator */}
+          <div style={styles.separator}></div>
 
-          {/* Info Container: Left (Location, Gender, DOB) */}
-          <div style={styles.infoContainer}>
+          {/* User Details */}
+          <div style={styles.userInfo}>
             <div style={styles.leftInfo}>
-              <div>
-                Location: <span>{userData.location}</span>
-              </div>
-              <div>
-                Gender: <span>{userData.gender}</span>
-              </div>
-              <div>
-                DOB: <span>{userData.dob}</span>
-              </div>
+              <div>📍 {userData.location}</div>
+              <div>🧑 {userData.gender}</div>
+              <div>🎂 {userData.dob}</div>
             </div>
-
-            {/* Vertical Line */}
-            <div style={styles.verticalLine}></div>
-
-            {/* Info Container: Right (Phone, Email) */}
             <div style={styles.rightInfo}>
-              <div>
-                Phone: <span>{userData.phone}</span>
-              </div>
-              <div>
-                Email: <span>{userData.email}</span>
-              </div>
+              <div>📞 {userData.phone} ✅</div>
+              <div>📧 {userData.email} ✅</div>
             </div>
           </div>
 
-          {/* Edit Button */}
-          <button style={styles.editButton} onClick={handleEditClick}>
-            Edit Profile
-          </button>
-        </div>
-      </div>
-
-      {/* Resume Upload Section */}
-      <div style={styles.resumeSection}>
-        <div>Current Resume:</div>
-        {userData.resume ? (
-          <a
-            href={userData.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={styles.resumeLink}
-          >
-            View or Download Resume
-          </a>
-        ) : (
-          <p>No resume uploaded yet.</p>
-        )}
-
-        <input
-          type="file"
-          accept=".pdf"
-          onChange={handleResumeUpload}
-          style={styles.fileInput}
-        />
-        <div>
-          <small>Upload a new resume (PDF format only).</small>
+          {/* Resume Upload Section */}
+          <div style={styles.resumeSection}>
+            <h3 style={styles.resumeTitle}>Resume</h3>
+            {userData.resume ? (
+              <div style={styles.resumeInfo}>
+                <a
+                  href={userData.resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={styles.resumeLink}
+                >
+                  📄 View/Download Resume
+                </a>
+                <button
+                  style={styles.uploadButton}
+                  onClick={() =>
+                    document.getElementById("resumeUpload").click()
+                  }
+                >
+                  <FaEdit /> Edit Resume
+                </button>
+              </div>
+            ) : (
+              <div>
+                <input
+                  type="file"
+                  id="resumeUpload"
+                  accept=".pdf"
+                  onChange={handleResumeUpload}
+                  style={styles.hiddenFileInput}
+                />
+                <button
+                  style={styles.uploadButton}
+                  onClick={() =>
+                    document.getElementById("resumeUpload").click()
+                  }
+                >
+                  📤 Upload Resume (PDF only)
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -278,6 +171,105 @@ const ProfilePage = () => {
       )}
     </div>
   );
+};
+
+/* Styles */
+const styles = {
+  container: {
+    fontFamily: "Satoshi, sans-serif",
+    colorScheme: "dark",
+    backgroundColor: "#1d1c19",
+    color: "#fffddd",
+    padding: "20px",
+    boxSizing: "border-box",
+  },
+  profileCard: {
+    display: "flex",
+    flexDirection: "row",
+    background: "#21211d",
+    borderRadius: "15px",
+    boxShadow: "0 12px 15px rgba(0, 0, 0, 0.25)",
+    padding: "40px",
+    alignItems: "center",
+    border: "1px solid #545149",
+  },
+  profileImageContainer: {
+    position: "relative",
+    width: "130px",
+    height: "130px",
+    marginRight: "30px",
+  },
+  progressCircle: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+  profileImageOverlay: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  profilePic: {
+    borderRadius: "50%",
+    width: "130px",
+    height: "130px",
+  },
+  profileDetails: {
+    flex: 1,
+  },
+  name: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "#fffddd",
+  },
+  qualification: {
+    fontSize: "14px",
+    color: "#7aa7c2",
+  },
+  separator: {
+    height: "1px",
+    backgroundColor: "#545149",
+    margin: "20px 0",
+  },
+  userInfo: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  resumeSection: {
+    marginTop: "20px",
+  },
+  resumeTitle: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    color: "#7aa7c2",
+  },
+  resumeInfo: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+  resumeLink: {
+    color: "#7aa7c2",
+    textDecoration: "underline",
+  },
+  uploadButton: {
+    backgroundColor: "#007bff",
+    color: "#fff",
+    padding: "10px",
+    borderRadius: "8px",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    gap: "5px",
+  },
+  hiddenFileInput: {
+    display: "none",
+  },
 };
 
 export default ProfilePage;
