@@ -43,7 +43,6 @@ const EducationSection = () => {
 
   const handlePursuingChange = (field, value) => {
     if (value) {
-      // If any pursuing checkbox is checked, uncheck others
       setFormValues((prev) => ({
         ...prev,
         degreePursuing: field === "degreePursuing" ? value : false,
@@ -65,20 +64,10 @@ const EducationSection = () => {
     }
   };
 
-  const addEducation = () => {
-    const { degreeType, degreeCollege, degreePassingYearMonth } = formValues;
-    if (degreeType && degreeCollege && degreePassingYearMonth) {
-      setEducation([
-        ...education,
-        { degreeType, degreeCollege, degreePassingYearMonth },
-      ]);
-      setFormValues({
-        ...formValues,
-        degreeType: "",
-        degreeCollege: "",
-        degreePassingYearMonth: "",
-      });
-    }
+  const saveEducation = (section) => {
+    // You can choose to save data in a different state or call an API to save it
+    console.log(`${section} saved`, formValues);
+    alert(`${section} saved successfully!`);
   };
 
   return (
@@ -162,6 +151,9 @@ const EducationSection = () => {
             title="Enter the passing year and month"
             style={inputStyle}
           />
+          <button onClick={() => saveEducation("10th")} style={saveButtonStyle}>
+            Save 10th Education
+          </button>
 
           {/* 12th Marks */}
           <h4>12th Marks</h4>
@@ -214,6 +206,9 @@ const EducationSection = () => {
             title="Enter the passing year and month"
             style={inputStyle}
           />
+          <button onClick={() => saveEducation("12th")} style={saveButtonStyle}>
+            Save 12th Education
+          </button>
 
           {/* Degree Section */}
           <h4>Degree</h4>
@@ -285,6 +280,12 @@ const EducationSection = () => {
               style={{ marginLeft: "10px" }}
             />
           </label>
+          <button
+            onClick={() => saveEducation("Degree")}
+            style={saveButtonStyle}
+          >
+            Save Degree Education
+          </button>
 
           {/* Masters Section */}
           <h4>Masters</h4>
@@ -294,12 +295,11 @@ const EducationSection = () => {
             style={inputStyle}
           >
             <option value="">Select Degree</option>
-            <option value="MSc">MSc</option>
             <option value="MTech">MTech</option>
+            <option value="MSc">MSc</option>
             <option value="MBA">MBA</option>
             <option value="Other">Other</option>
           </select>
-
           <input
             type="number"
             placeholder="Percentage"
@@ -307,7 +307,6 @@ const EducationSection = () => {
             onChange={(e) => handleChange("mastersPercentage", e.target.value)}
             style={inputStyle}
           />
-
           <input
             type="text"
             placeholder="College Name"
@@ -336,6 +335,12 @@ const EducationSection = () => {
               style={{ marginLeft: "10px" }}
             />
           </label>
+          <button
+            onClick={() => saveEducation("Masters")}
+            style={saveButtonStyle}
+          >
+            Save Masters Education
+          </button>
 
           {/* Diploma Section */}
           <h4>Diploma</h4>
@@ -346,7 +351,6 @@ const EducationSection = () => {
             onChange={(e) => handleChange("diplomaPercentage", e.target.value)}
             style={inputStyle}
           />
-
           <input
             type="text"
             placeholder="College Name"
@@ -375,8 +379,11 @@ const EducationSection = () => {
               style={{ marginLeft: "10px" }}
             />
           </label>
-          <button onClick={addEducation} style={buttonStyle}>
-            Add Education
+          <button
+            onClick={() => saveEducation("Diploma")}
+            style={saveButtonStyle}
+          >
+            Save Diploma Education
           </button>
         </div>
       ) : (
@@ -407,6 +414,18 @@ const inputStyle = {
 const buttonStyle = {
   padding: "12px 20px",
   backgroundColor: "#ff6f61",
+  border: "none",
+  color: "#fff",
+  borderRadius: "5px",
+  cursor: "pointer",
+  fontSize: "16px",
+  marginTop: "15px",
+  display: "inline-block",
+};
+
+const saveButtonStyle = {
+  padding: "12px 20px",
+  backgroundColor: "#4CAF50",
   border: "none",
   color: "#fff",
   borderRadius: "5px",
