@@ -1,23 +1,78 @@
 import React, { useState } from "react";
-import { FaEdit } from "react-icons/fa";
 
-const ProfileSummary = () => {
+const ProfileSummary = ({ userId, onSaveSummary }) => {
   const [summary, setSummary] = useState("");
+
+  const handleSave = () => {
+    // Call the onSaveSummary function passed via props to save the summary
+    onSaveSummary(userId, summary);
+  };
 
   return (
     <div
-      style={{ padding: "20px", background: "#1e1e2f", borderRadius: "10px" }}
+      style={{
+        background: "#fff",
+        borderRadius: "10px",
+        padding: "20px",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        marginBottom: "20px",
+      }}
     >
-      <h3>
-        Profile Summary <FaEdit style={{ cursor: "pointer" }} />
-      </h3>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "10px",
+        }}
+      >
+        <h3
+          style={{
+            fontSize: "16px",
+            fontWeight: "600",
+            color: "#333",
+            margin: "0",
+          }}
+        >
+          Profile Summary
+        </h3>
+        {/* Add Edit button if needed */}
+      </div>
+
       <textarea
         rows="4"
         cols="50"
         value={summary}
         onChange={(e) => setSummary(e.target.value)}
-        placeholder="Write about yourself..."
+        placeholder="Write a brief summary about your skills, experience, and goals..."
+        style={{
+          width: "100%",
+          padding: "12px",
+          fontSize: "14px",
+          borderRadius: "5px",
+          border: "1px solid #ddd",
+          resize: "vertical",
+          boxSizing: "border-box",
+          backgroundColor: "#fafafa",
+          color: "#333",
+          lineHeight: "1.5",
+        }}
       />
+
+      <button
+        onClick={handleSave}
+        style={{
+          marginTop: "10px",
+          padding: "10px 20px",
+          backgroundColor: "#ff9800",
+          color: "#fff",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        Save
+      </button>
     </div>
   );
 };

@@ -138,91 +138,119 @@ const LanguagesSection = () => {
 
   return (
     <div
-      style={{ padding: "20px", background: "#1e1e2f", borderRadius: "10px" }}
+      style={{
+        padding: "20px",
+        background: "#1e1e2f",
+        borderRadius: "10px",
+        width: "500px",
+        margin: "0 auto",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      }}
     >
-      <h3 style={{ color: "#fff" }}>
-        Languages <FaEdit style={{ cursor: "pointer" }} />
-      </h3>
-      <input
-        type="text"
-        placeholder="Enter Language"
-        value={newLanguage}
-        onChange={handleLanguageChange}
+      <h3
         style={{
-          padding: "10px",
-          borderRadius: "5px",
-          border: "1px solid #ccc",
-          width: "80%",
-          marginBottom: "10px",
-          fontSize: "14px",
-        }}
-      />
-      {newLanguage && filteredLanguages.length > 0 && (
-        <ul
-          style={{
-            backgroundColor: "#fff",
-            padding: "10px",
-            borderRadius: "5px",
-            position: "absolute",
-            zIndex: 1,
-            width: "80%",
-          }}
-        >
-          {filteredLanguages.map((lang, index) => (
-            <li
-              key={index}
-              onClick={() => handleSelectLanguage(lang)}
-              style={{
-                cursor: "pointer",
-                padding: "5px",
-                borderBottom: "1px solid #ccc",
-                color: "#333",
-                fontSize: "14px",
-              }}
-            >
-              {lang}
-            </li>
-          ))}
-        </ul>
-      )}
-      <select
-        value={fluency}
-        onChange={(e) => setFluency(e.target.value)}
-        style={{
-          padding: "10px",
-          borderRadius: "5px",
-          border: "1px solid #ccc",
-          width: "80%",
-          marginTop: "10px", // Added margin top for spacing
+          color: "#fff",
+          fontSize: "18px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <option value="">Select Fluency</option>
-        <option value="Reading">Reading</option>
-        <option value="Writing">Writing</option>
-        <option value="Speaking">Speaking</option>
-        <option value="Expert">Expert</option>
-      </select>
+        Languages
+        <FaEdit style={{ cursor: "pointer", color: "#3E91F9" }} />
+      </h3>
+
+      <div>
+        <input
+          type="text"
+          placeholder="Enter Language"
+          value={newLanguage}
+          onChange={handleLanguageChange}
+          style={{
+            padding: "10px",
+            borderRadius: "5px",
+            width: "100%",
+            marginBottom: "10px",
+            border: "1px solid #ddd",
+            fontSize: "14px",
+            outline: "none",
+          }}
+        />
+      </div>
+
+      {filteredLanguages.length > 0 && newLanguage && (
+        <div
+          style={{
+            background: "#333",
+            padding: "10px",
+            borderRadius: "5px",
+            marginBottom: "10px",
+          }}
+        >
+          <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
+            {filteredLanguages.map((lang, index) => (
+              <li
+                key={index}
+                onClick={() => handleSelectLanguage(lang)}
+                style={{
+                  cursor: "pointer",
+                  padding: "5px",
+                  color: "#fff",
+                  backgroundColor: "#444",
+                  borderRadius: "4px",
+                  marginBottom: "5px",
+                }}
+              >
+                {lang}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div style={{ marginBottom: "10px" }}>
+        <select
+          value={fluency}
+          onChange={(e) => setFluency(e.target.value)}
+          style={{
+            padding: "10px",
+            borderRadius: "5px",
+            width: "100%",
+            fontSize: "14px",
+            border: "1px solid #ddd",
+            backgroundColor: "#1e1e2f",
+            color: "#fff",
+          }}
+        >
+          <option value="">Select Fluency</option>
+          <option value="Reading">Reading</option>
+          <option value="Writing">Writing</option>
+          <option value="Speaking">Speaking</option>
+          <option value="Expert">Expert</option>
+        </select>
+      </div>
+
       <button
         onClick={addLanguage}
         style={{
-          padding: "10px 20px",
-          backgroundColor: "#ff6f61",
+          backgroundColor: "#3E91F9",
           color: "#fff",
-          borderRadius: "5px",
+          padding: "10px 15px",
           border: "none",
+          borderRadius: "5px",
+          width: "100%",
           cursor: "pointer",
           fontSize: "14px",
-          marginTop: "20px", // Added margin top for spacing
         }}
       >
-        Add
+        Add Language
       </button>
-      <ul
-        style={{ listStyleType: "none", paddingLeft: "0", marginTop: "20px" }}
-      >
+
+      <ul style={{ marginTop: "20px", paddingLeft: "0", color: "#fff" }}>
         {languages.map((lang, index) => (
-          <li key={index} style={{ color: "#fff", marginBottom: "10px" }}>
-            {lang.name} - {lang.fluency}
+          <li key={index} style={{ marginBottom: "10px" }}>
+            <span>{lang.name}</span> -{" "}
+            <span style={{ fontWeight: "bold" }}>{lang.fluency}</span>
           </li>
         ))}
       </ul>

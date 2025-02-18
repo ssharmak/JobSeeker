@@ -54,28 +54,29 @@ const SkillsSection = () => {
   return (
     <div
       style={{
-        padding: "20px",
-        background: "#1e1e2f",
-        borderRadius: "10px",
+        padding: "15px",
+        backgroundColor: "#fff",
+        borderRadius: "8px",
         width: "500px",
-        margin: "0 auto",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        margin: "20px auto",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
       }}
     >
       <h3
         style={{
-          color: "#fff",
+          color: "#333",
           fontSize: "18px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          fontWeight: "bold",
         }}
       >
         Skills
         <FaEdit style={{ cursor: "pointer", color: "#3E91F9" }} />
       </h3>
 
-      <div>
+      <div style={{ marginBottom: "15px" }}>
         <input
           type="text"
           placeholder="Enter Skill"
@@ -83,12 +84,13 @@ const SkillsSection = () => {
           onChange={handleSkillChange}
           style={{
             padding: "10px",
-            borderRadius: "5px",
+            borderRadius: "4px",
             width: "100%",
             marginBottom: "10px",
             border: "1px solid #ddd",
             fontSize: "14px",
             outline: "none",
+            boxSizing: "border-box",
           }}
         />
       </div>
@@ -96,13 +98,21 @@ const SkillsSection = () => {
       {filteredSkills.length > 0 && newSkill && (
         <div
           style={{
-            background: "#333",
+            backgroundColor: "#f0f0f0",
             padding: "10px",
-            borderRadius: "5px",
+            borderRadius: "4px",
             marginBottom: "10px",
           }}
         >
-          <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
+          <ul
+            style={{
+              listStyleType: "none",
+              padding: "0",
+              margin: "0",
+              maxHeight: "150px",
+              overflowY: "auto",
+            }}
+          >
             {filteredSkills.map((skill, index) => (
               <li
                 key={index}
@@ -112,9 +122,9 @@ const SkillsSection = () => {
                 }}
                 style={{
                   cursor: "pointer",
-                  padding: "5px",
-                  color: "#fff",
-                  backgroundColor: "#444",
+                  padding: "8px",
+                  color: "#333",
+                  backgroundColor: "#e5e5e5",
                   borderRadius: "4px",
                   marginBottom: "5px",
                 }}
@@ -126,18 +136,18 @@ const SkillsSection = () => {
         </div>
       )}
 
-      <div style={{ marginBottom: "10px" }}>
+      <div style={{ marginBottom: "15px" }}>
         <select
           value={skillLevel}
           onChange={(e) => setSkillLevel(e.target.value)}
           style={{
             padding: "10px",
-            borderRadius: "5px",
+            borderRadius: "4px",
             width: "100%",
             fontSize: "14px",
             border: "1px solid #ddd",
-            backgroundColor: "#1e1e2f",
-            color: "#fff",
+            backgroundColor: "#fff",
+            color: "#333",
           }}
         >
           <option value="Beginner">Beginner</option>
@@ -153,7 +163,7 @@ const SkillsSection = () => {
           color: "#fff",
           padding: "10px 15px",
           border: "none",
-          borderRadius: "5px",
+          borderRadius: "4px",
           width: "100%",
           cursor: "pointer",
           fontSize: "14px",
@@ -162,7 +172,7 @@ const SkillsSection = () => {
         Add Skill
       </button>
 
-      <ul style={{ marginTop: "20px", paddingLeft: "0", color: "#fff" }}>
+      <ul style={{ marginTop: "20px", paddingLeft: "0", color: "#333" }}>
         {skills.map((skill, index) => (
           <li key={index} style={{ marginBottom: "10px" }}>
             <span>{skill.name}</span> -{" "}
