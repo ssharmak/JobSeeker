@@ -1,11 +1,10 @@
 import React from "react";
 import {
+  FaUser,
   FaUserGraduate,
   FaBriefcase,
-  FaFileAlt,
   FaTools,
   FaLanguage,
-  FaUser,
   FaClipboardList,
   FaBuilding,
 } from "react-icons/fa";
@@ -42,6 +41,9 @@ const Sidebar = ({ setSelectedSection }) => {
     <div style={sidebarStyle}>
       <h2>Quick Links</h2>
       <ul style={listStyle}>
+        <li style={listItemStyle} onClick={() => setSelectedSection("landing")}>
+          <FaUser style={iconStyle} /> Profile Overview
+        </li>
         <li
           style={listItemStyle}
           onClick={() => setSelectedSection("education")}
@@ -71,21 +73,15 @@ const Sidebar = ({ setSelectedSection }) => {
         </li>
         <li
           style={listItemStyle}
-          onClick={() => setSelectedSection("workPreference")}
+          onClick={() => setSelectedSection("workPreferences")}
         >
-          <FaClipboardList style={iconStyle} /> Work Preference
+          <FaClipboardList style={iconStyle} /> Work Preferences
         </li>
         <li
           style={listItemStyle}
           onClick={() => setSelectedSection("internships")}
         >
           <FaBuilding style={iconStyle} /> Internships
-        </li>
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("employment")}
-        >
-          <FaBriefcase style={iconStyle} /> Employment
         </li>
       </ul>
     </div>

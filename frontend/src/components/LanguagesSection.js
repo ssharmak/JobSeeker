@@ -15,19 +15,9 @@ const LanguagesSection = () => {
   };
 
   return (
-    <div
-      style={{ padding: "20px", background: "#1e1e2f", borderRadius: "10px" }}
-    >
-      <h3>
-        Languages Known <FaEdit style={{ cursor: "pointer" }} />
-      </h3>
-      <input
-        type="text"
-        placeholder="Enter Language"
-        value={newLanguage}
-        onChange={(e) => setNewLanguage(e.target.value)}
-        style={{ marginRight: "10px" }}
-      />
+    <div style={{ padding: "20px", background: "#1e1e2f", borderRadius: "10px" }}>
+      <h3>Languages <FaEdit style={{ cursor: "pointer" }} /></h3>
+      <input type="text" placeholder="Enter Language" value={newLanguage} onChange={(e) => setNewLanguage(e.target.value)} />
       <select value={fluency} onChange={(e) => setFluency(e.target.value)}>
         <option value="">Select Fluency</option>
         <option value="Reading">Reading</option>
@@ -36,12 +26,9 @@ const LanguagesSection = () => {
         <option value="Expert">Expert</option>
       </select>
       <button onClick={addLanguage}>Add</button>
-
       <ul>
         {languages.map((lang, index) => (
-          <li key={index}>
-            {lang.name} - {lang.fluency}
-          </li>
+          <li key={index}>{lang.name} - {lang.fluency}</li>
         ))}
       </ul>
     </div>

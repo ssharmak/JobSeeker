@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 
-const InternshipSection = () => {
+const InternshipsSection = () => {
   const [internships, setInternships] = useState([]);
   const [company, setCompany] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -44,8 +44,16 @@ const InternshipSection = () => {
         onChange={(e) => setEndDate(e.target.value)}
       />
       <button onClick={addInternship}>Add</button>
+      <ul>
+        {internships.map((internship, index) => (
+          <li key={index}>
+            {internship.company} - {internship.startDate} to{" "}
+            {internship.endDate}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default InternshipSection;
+export default InternshipsSection;

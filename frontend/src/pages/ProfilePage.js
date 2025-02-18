@@ -1,31 +1,25 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
-import ProfileSection from "../components/ProfileSection";
+import LandingPage from "../components/LandingPage";
+import EducationSection from "../components/EducationSection";
+import ExperienceSection from "../components/ExperienceSection";
+import SkillsSection from "../components/SkillsSection";
+import LanguagesSection from "../components/LanguagesSection";
+import ProfileSummary from "../components/ProfileSummary";
+import WorkPreferences from "../components/WorkPreferences";
+import InternshipsSection from "../components/InternshipsSection";
+import EmploymentSection from "../components/EmploymentSection";
 
 const ProfilePage = () => {
-  const [selectedSection, setSelectedSection] = useState("education");
-  const [formData, setFormData] = useState({}); // Stores all input values
+  const [selectedSection, setSelectedSection] = useState("landing");
 
-  const handleSaveChanges = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/saveProfile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        alert("Profile updated successfully!");
-      } else {
-        alert("Error: " + result.message);
-      }
-    } catch (error) {
-      console.error("Error saving profile:", error);
-      alert("Failed to save changes.");
-    }
+  const user = {
+    name: "John Doe",
+    email: "johndoe@gmail.com",
+    phone: "123-456-7890",
+    profilePic: "https://via.placeholder.com/150",
+    skills: ["React.js", "Node.js", "JavaScript", "CSS"],
+    experience: "5 years in web development",
   };
 
   const profileContainerStyle = {
@@ -43,64 +37,35 @@ const ProfilePage = () => {
     height: "100vh",
   };
 
-  const saveButtonStyle = {
-    background: "#28a745",
-    color: "white",
-    padding: "10px 20px",
-    borderRadius: "8px",
-    border: "none",
-    fontSize: "16px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    display: "block",
-    width: "100%",
-    marginTop: "20px",
+  const renderSection = () => {
+    switch (selectedSection) {
+      case "landing":
+        return <LandingPage user={user} />;
+      case "education":
+        return <EducationSection />;
+      case "experience":
+        return <ExperienceSection />;
+      case "skills":
+        return <SkillsSection />;
+      case "languages":
+        return <LanguagesSection />;
+      case "profileSummary":
+        return <ProfileSummary />;
+      case "workPreferences":
+        return <WorkPreferences />;
+      case "internships":
+        return <InternshipsSection />;
+      case "employment":
+        return <EmploymentSection />;
+      default:
+        return <LandingPage user={user} />;
+    }
   };
 
   return (
     <div style={profileContainerStyle}>
       <Sidebar setSelectedSection={setSelectedSection} />
-      <div style={contentStyle}>
-        {selectedSection === "education" && (
-          <>
-            <ProfileSection
-              id="education-10th"
-              title="10th Grade"
-              educationType="10th"
-              setFormData={setFormData}
-            />
-            <ProfileSection
-              id="education-12th"
-              title="12th Grade"
-              educationType="12th"
-              setFormData={setFormData}
-            />
-            <ProfileSection
-              id="education-diploma"
-              title="Diploma"
-              educationType="Diploma"
-              setFormData={setFormData}
-            />
-            <ProfileSection
-              id="education-degree"
-              title="Degree"
-              educationType="Degree"
-              setFormData={setFormData}
-            />
-            <ProfileSection
-              id="education-masters"
-              title="Masters Degree"
-              educationType="Masters"
-              setFormData={setFormData}
-            />
-          </>
-        )}
-
-        {/* Save Changes Button */}
-        <button style={saveButtonStyle} onClick={handleSaveChanges}>
-          Save Changes
-        </button>
-      </div>
+      <div style={contentStyle}>{renderSection()}</div>
     </div>
   );
 };
