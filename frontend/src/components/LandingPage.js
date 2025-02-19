@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
 const LandingPage = ({ user }) => {
-  // State to store the selected profile image
   const [profileImage, setProfileImage] = useState(
-    "https://via.placeholder.com/150" // Default image
+    "https://via.placeholder.com/150"
   );
 
   // Handle image selection
@@ -12,108 +11,92 @@ const LandingPage = ({ user }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result); // Update the profile image state with the selected image
+        setProfileImage(reader.result);
       };
-      reader.readAsDataURL(file); // Convert the selected file to a base64 string
+      reader.readAsDataURL(file);
     }
-  };
-
-  const profileCardStyle = {
-    display: "flex",
-    alignItems: "center",
-    background: "#2c2c3e",
-    borderRadius: "15px",
-    padding: "30px", // Increased padding for a larger card
-    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)", // Enhanced shadow for more depth
-    color: "white",
-    width: "90%",
-    maxWidth: "800px", // Increased the max width for a larger card
-    margin: "0 auto",
-    textAlign: "left",
-    gap: "40px", // Added gap to increase space between picture and details
-  };
-
-  const profilePictureStyle = {
-    width: "150px", // Increased size for the profile picture
-    height: "150px",
-    borderRadius: "50%", // Circular shape
-    objectFit: "cover",
-    border: "5px solid #ff9800", // Added border for the circular profile picture
-    padding: "5px", // Space between image and border
-    cursor: "pointer", // Indicate that the image is clickable
-  };
-
-  const detailsContainerStyle = {
-    flex: 1, // Takes the rest of the space next to the profile picture
-  };
-
-  const nameStyle = {
-    fontSize: "28px", // Increased font size for the name
-    fontWeight: "bold",
-    marginBottom: "10px",
-  };
-
-  const roleStyle = {
-    fontSize: "20px", // Increased font size for the role
-    color: "#ff9800",
-    marginBottom: "15px",
-  };
-
-  const contactStyle = {
-    fontSize: "16px", // Adjusted font size for contact details
-    marginBottom: "15px",
-  };
-
-  const linkStyle = {
-    color: "#ff9800",
-    textDecoration: "none",
   };
 
   return (
     <div
       style={{
-        background: "#121212",
+        padding: "30px",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        background: "inherit",
+        color: "inherit",
       }}
     >
-      <div style={profileCardStyle}>
+      <div
+        style={{
+          maxWidth: "800px",
+          width: "100%",
+          background: "#fff",
+          padding: "25px",
+          borderRadius: "12px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #ddd",
+          color: "#000",
+          textAlign: "center",
+        }}
+      >
+        <h2
+          style={{
+            textAlign: "center",
+            fontSize: "24px",
+            fontWeight: "bold",
+            marginBottom: "20px",
+            color: "#0077b6",
+          }}
+        >
+          Profile Overview
+        </h2>
+
+        {/* Profile Image Section */}
         <div>
-          {/* Profile Picture */}
           <img
-            src={profileImage} // Display the selected profile image
+            src={profileImage}
             alt="Profile"
-            style={profilePictureStyle}
+            style={{
+              width: "150px",
+              height: "150px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              border: "5px solid #0077b6",
+              padding: "5px",
+              cursor: "pointer",
+            }}
           />
-          {/* File input for changing profile picture */}
           <input
             type="file"
-            accept="image/*" // Accept only image files
-            style={{ display: "none" }} // Hide the default file input
+            accept="image/*"
+            style={{ display: "none" }}
             id="profileImageInput"
-            onChange={handleImageChange} // Handle file selection
+            onChange={handleImageChange}
           />
           <label
             htmlFor="profileImageInput"
             style={{
               cursor: "pointer",
-              color: "#ff9800",
+              color: "#0077b6",
               fontSize: "14px",
               marginTop: "10px",
               display: "block",
-              textAlign: "center",
             }}
           >
             Change Profile Picture
           </label>
         </div>
 
-        <div style={detailsContainerStyle}>
-          <div style={nameStyle}>{user.name}</div>
-          <div style={roleStyle}>Web Developer</div>
-          <div style={contactStyle}>
+        {/* User Details */}
+        <div style={{ marginTop: "20px" }}>
+          <h3 style={{ fontSize: "20px", fontWeight: "bold", color: "#333" }}>
+            {user.name}
+          </h3>
+
+          <div style={{ textAlign: "left", padding: "0 20px" }}>
             <p>
               <strong>Email:</strong> {user.email}
             </p>
@@ -126,7 +109,7 @@ const LandingPage = ({ user }) => {
                 href={user.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={linkStyle}
+                style={{ color: "#0077b6", textDecoration: "none" }}
               >
                 {user.linkedin}
               </a>
@@ -137,7 +120,7 @@ const LandingPage = ({ user }) => {
                 href={user.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={linkStyle}
+                style={{ color: "#0077b6", textDecoration: "none" }}
               >
                 {user.github}
               </a>

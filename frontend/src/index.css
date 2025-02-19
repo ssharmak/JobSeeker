@@ -37,3 +37,7 @@ code {
   }
 } /* Dark mode background for Quick Links
 --link-color: #fff; /* Dark mode link text color */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

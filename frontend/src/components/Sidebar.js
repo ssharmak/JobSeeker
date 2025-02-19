@@ -7,6 +7,7 @@ import {
   FaLanguage,
   FaClipboardList,
   FaBuilding,
+  FaFileAlt,
 } from "react-icons/fa";
 
 const Sidebar = ({ setSelectedSection }) => {
@@ -22,61 +23,80 @@ const Sidebar = ({ setSelectedSection }) => {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    boxShadow: "4px 0px 10px rgba(0, 0, 0, 0.2)", // Adds a slight shadow for better visibility
   };
 
   const listStyle = { listStyle: "none", padding: "0", width: "100%" };
+
   const listItemStyle = {
-    padding: "15px",
+    padding: "12px",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
     fontSize: "16px",
     borderRadius: "5px",
-    transition: "background 0.3s",
+    transition: "background 0.3s, transform 0.2s",
   };
 
   const iconStyle = { marginRight: "10px" };
 
   return (
     <div style={sidebarStyle}>
-      <h2>Quick Links</h2>
+      <h2 style={{ marginBottom: "15px", fontSize: "20px", color: "#FF9800" }}>
+        Quick Links
+      </h2>
+
       <ul style={listStyle}>
         <li style={listItemStyle} onClick={() => setSelectedSection("landing")}>
           <FaUser style={iconStyle} /> Profile Overview
         </li>
+
+        <li
+          style={listItemStyle}
+          onClick={() => setSelectedSection("personalProfile")}
+        >
+          <FaFileAlt style={iconStyle} /> Personal Profile
+        </li>
+
         <li
           style={listItemStyle}
           onClick={() => setSelectedSection("education")}
         >
           <FaUserGraduate style={iconStyle} /> Education
         </li>
+
         <li
           style={listItemStyle}
           onClick={() => setSelectedSection("experience")}
         >
           <FaBriefcase style={iconStyle} /> Experience
         </li>
+
         <li style={listItemStyle} onClick={() => setSelectedSection("skills")}>
           <FaTools style={iconStyle} /> Skills
         </li>
+
         <li
           style={listItemStyle}
           onClick={() => setSelectedSection("languages")}
         >
           <FaLanguage style={iconStyle} /> Languages
         </li>
+
         <li
           style={listItemStyle}
           onClick={() => setSelectedSection("profileSummary")}
         >
           <FaUser style={iconStyle} /> Profile Summary
         </li>
+
         <li
           style={listItemStyle}
           onClick={() => setSelectedSection("workPreferences")}
         >
           <FaClipboardList style={iconStyle} /> Work Preferences
         </li>
+
         <li
           style={listItemStyle}
           onClick={() => setSelectedSection("internships")}

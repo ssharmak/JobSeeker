@@ -1,109 +1,48 @@
 import React, { useState } from "react";
-import { FaEdit } from "react-icons/fa";
+import { FaTrash, FaPlusCircle } from "react-icons/fa";
 
 const LanguagesSection = () => {
   const [languages, setLanguages] = useState([]);
+  const [isAdding, setIsAdding] = useState(false);
   const [newLanguage, setNewLanguage] = useState("");
   const [fluency, setFluency] = useState("");
   const [filteredLanguages, setFilteredLanguages] = useState([]);
 
-  // List of all Google-recognized languages
+  // List of Google-Recognized Languages
   const allLanguages = [
     "Afrikaans",
-    "Albanian",
-    "Amharic",
     "Arabic",
-    "Armenian",
-    "Azerbaijani",
-    "Basque",
-    "Belarusian",
     "Bengali",
-    "Bosnian",
-    "Bulgarian",
-    "Catalan",
-    "Cebuano",
-    "Chichewa",
     "Chinese",
-    "Corsican",
     "Croatian",
     "Czech",
     "Danish",
     "Dutch",
     "English",
-    "Esperanto",
-    "Estonian",
-    "Filipino",
-    "Finnish",
     "French",
-    "Galician",
-    "Georgian",
     "German",
     "Greek",
-    "Gujarati",
-    "Haitian Creole",
-    "Hausa",
-    "Hebrew",
     "Hindi",
-    "Hmong",
     "Hungarian",
-    "Icelandic",
-    "Igbo",
-    "Indonesian",
-    "Irish",
     "Italian",
     "Japanese",
-    "Javanese",
-    "Kannada",
-    "Kazakh",
-    "Khmer",
     "Korean",
-    "Kurdish",
-    "Kyrgyz",
-    "Lao",
-    "Latvian",
-    "Lithuanian",
-    "Luxembourgish",
-    "Macedonian",
-    "Malagasy",
-    "Malay",
     "Malayalam",
-    "Maltese",
-    "Maori",
     "Marathi",
-    "Mongolian",
-    "Nepali",
     "Norwegian",
-    "Pashto",
     "Persian",
     "Polish",
     "Portuguese",
-    "Punjabi",
-    "Romanian",
     "Russian",
-    "Serbian",
-    "Sesotho",
-    "Sindhi",
-    "Sinhala",
-    "Slovak",
-    "Slovenian",
-    "Somali",
     "Spanish",
-    "Sundanese",
-    "Swahili",
     "Swedish",
-    "Tagalog",
     "Tamil",
     "Telugu",
     "Thai",
     "Turkish",
     "Ukrainian",
     "Urdu",
-    "Uzbek",
     "Vietnamese",
-    "Welsh",
-    "Xhosa",
-    "Yiddish",
-    "Yoruba",
     "Zulu",
   ];
 
@@ -112,148 +51,247 @@ const LanguagesSection = () => {
       setLanguages([...languages, { name: newLanguage, fluency }]);
       setNewLanguage("");
       setFluency("");
-      setFilteredLanguages([]); // Clear suggestions when added
+      setFilteredLanguages([]);
+      setIsAdding(false);
     }
   };
 
   const handleLanguageChange = (e) => {
     const input = e.target.value;
     setNewLanguage(input);
-
-    // Only filter languages if the input is not empty
-    if (input) {
-      const filtered = allLanguages.filter((lang) =>
-        lang.toLowerCase().includes(input.toLowerCase())
-      );
-      setFilteredLanguages(filtered);
-    } else {
-      setFilteredLanguages([]); // Clear suggestions if input is empty
-    }
+    setFilteredLanguages(
+      input
+        ? allLanguages.filter((lang) =>
+            lang.toLowerCase().includes(input.toLowerCase())
+          )
+        : []
+    );
   };
 
   const handleSelectLanguage = (lang) => {
     setNewLanguage(lang);
-    setFilteredLanguages([]); // Clear suggestions when a language is selected
+    setFilteredLanguages([]);
+  };
+
+  const deleteLanguage = (index) => {
+    setLanguages(languages.filter((_, i) => i !== index));
   };
 
   return (
     <div
       style={{
-        padding: "20px",
-        background: "#1e1e2f",
-        borderRadius: "10px",
-        width: "500px",
-        margin: "0 auto",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        padding: "30px",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "inherit",
+        color: "inherit",
       }}
     >
-      <h3
+      <div
         style={{
-          color: "#fff",
-          fontSize: "18px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          maxWidth: "800px",
+          width: "100%",
+          background: "#fff",
+          padding: "25px",
+          borderRadius: "12px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #ddd",
+          color: "#000",
         }}
       >
-        Languages
-        <FaEdit style={{ cursor: "pointer", color: "#3E91F9" }} />
-      </h3>
-
-      <div>
-        <input
-          type="text"
-          placeholder="Enter Language"
-          value={newLanguage}
-          onChange={handleLanguageChange}
+        <h2
           style={{
-            padding: "10px",
-            borderRadius: "5px",
-            width: "100%",
-            marginBottom: "10px",
-            border: "1px solid #ddd",
-            fontSize: "14px",
-            outline: "none",
+            textAlign: "center",
+            fontSize: "24px",
+            fontWeight: "bold",
+            marginBottom: "20px",
+            color: "#FF5722",
           }}
-        />
-      </div>
+        >
+          Languages Known
+        </h2>
 
-      {filteredLanguages.length > 0 && newLanguage && (
+        {/* Add Language Button */}
         <div
           style={{
-            background: "#333",
-            padding: "10px",
-            borderRadius: "5px",
-            marginBottom: "10px",
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "15px",
           }}
         >
-          <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
-            {filteredLanguages.map((lang, index) => (
-              <li
-                key={index}
-                onClick={() => handleSelectLanguage(lang)}
+          <button
+            onClick={() => setIsAdding(!isAdding)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "#0077b6",
+              color: "white",
+              padding: "10px 18px",
+              fontSize: "16px",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              transition: "0.3s",
+            }}
+          >
+            <FaPlusCircle style={{ marginRight: "5px" }} />
+            {isAdding ? "Close Form" : "Add Language"}
+          </button>
+        </div>
+
+        {/* Language Form */}
+        {isAdding && (
+          <form
+            style={{
+              background: "#f9f9f9",
+              padding: "15px",
+              borderRadius: "10px",
+              border: "1px solid #ccc",
+              marginBottom: "15px",
+            }}
+          >
+            <div style={{ marginBottom: "12px" }}>
+              <label
                 style={{
-                  cursor: "pointer",
-                  padding: "5px",
-                  color: "#fff",
-                  backgroundColor: "#444",
-                  borderRadius: "4px",
+                  fontSize: "14px",
+                  fontWeight: "bold",
                   marginBottom: "5px",
+                  display: "block",
                 }}
               >
-                {lang}
-              </li>
-            ))}
-          </ul>
+                Language
+              </label>
+              <input
+                type="text"
+                placeholder="Enter or Select a Language"
+                value={newLanguage}
+                onChange={handleLanguageChange}
+                style={{
+                  padding: "10px",
+                  border: "1px solid #ddd",
+                  borderRadius: "6px",
+                  fontSize: "14px",
+                  width: "100%",
+                }}
+              />
+              {filteredLanguages.length > 0 && (
+                <ul
+                  style={{
+                    background: "#fff",
+                    border: "1px solid #ddd",
+                    borderRadius: "6px",
+                    listStyleType: "none",
+                    padding: "5px",
+                    marginTop: "5px",
+                  }}
+                >
+                  {filteredLanguages.map((lang, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleSelectLanguage(lang)}
+                      style={{
+                        padding: "5px",
+                        cursor: "pointer",
+                        borderBottom:
+                          index !== filteredLanguages.length - 1
+                            ? "1px solid #ddd"
+                            : "none",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {lang}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div style={{ marginBottom: "12px" }}>
+              <label
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  marginBottom: "5px",
+                  display: "block",
+                }}
+              >
+                Fluency
+              </label>
+              <select
+                value={fluency}
+                onChange={(e) => setFluency(e.target.value)}
+                style={{
+                  padding: "10px",
+                  border: "1px solid #ddd",
+                  borderRadius: "6px",
+                  fontSize: "14px",
+                  width: "100%",
+                }}
+              >
+                <option value="">Select Fluency</option>
+                <option value="Reading">Reading</option>
+                <option value="Writing">Writing</option>
+                <option value="Speaking">Speaking</option>
+                <option value="Expert">Expert</option>
+              </select>
+            </div>
+
+            <button
+              onClick={addLanguage}
+              type="button"
+              style={{
+                width: "100%",
+                background: "#28a745",
+                color: "white",
+                padding: "10px",
+                border: "none",
+                fontSize: "16px",
+                cursor: "pointer",
+                borderRadius: "6px",
+                transition: "0.3s",
+              }}
+            >
+              Save Language
+            </button>
+          </form>
+        )}
+
+        {/* Display Added Languages */}
+        <div>
+          {languages.map((lang, index) => (
+            <div
+              key={index}
+              style={{
+                background: "#fff",
+                padding: "12px",
+                borderRadius: "8px",
+                border: "1px solid #ddd",
+                boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.1)",
+                marginBottom: "12px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <span>
+                <strong>{lang.name}</strong> - {lang.fluency}
+              </span>
+              <button
+                onClick={() => deleteLanguage(index)}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "red",
+                  cursor: "pointer",
+                }}
+              >
+                <FaTrash />
+              </button>
+            </div>
+          ))}
         </div>
-      )}
-
-      <div style={{ marginBottom: "10px" }}>
-        <select
-          value={fluency}
-          onChange={(e) => setFluency(e.target.value)}
-          style={{
-            padding: "10px",
-            borderRadius: "5px",
-            width: "100%",
-            fontSize: "14px",
-            border: "1px solid #ddd",
-            backgroundColor: "#1e1e2f",
-            color: "#fff",
-          }}
-        >
-          <option value="">Select Fluency</option>
-          <option value="Reading">Reading</option>
-          <option value="Writing">Writing</option>
-          <option value="Speaking">Speaking</option>
-          <option value="Expert">Expert</option>
-        </select>
       </div>
-
-      <button
-        onClick={addLanguage}
-        style={{
-          backgroundColor: "#3E91F9",
-          color: "#fff",
-          padding: "10px 15px",
-          border: "none",
-          borderRadius: "5px",
-          width: "100%",
-          cursor: "pointer",
-          fontSize: "14px",
-        }}
-      >
-        Add Language
-      </button>
-
-      <ul style={{ marginTop: "20px", paddingLeft: "0", color: "#fff" }}>
-        {languages.map((lang, index) => (
-          <li key={index} style={{ marginBottom: "10px" }}>
-            <span>{lang.name}</span> -{" "}
-            <span style={{ fontWeight: "bold" }}>{lang.fluency}</span>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };

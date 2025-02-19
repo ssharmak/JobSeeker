@@ -9,18 +9,26 @@ import ProfileSummary from "../components/ProfileSummary";
 import WorkPreferences from "../components/WorkPreferences";
 import InternshipsSection from "../components/InternshipsSection";
 import EmploymentSection from "../components/EmploymentSection";
+import PersonalProfile from "../components/PersonalProfile";
 
 const ProfilePage = () => {
   const [selectedSection, setSelectedSection] = useState("landing");
 
-  const user = {
-    name: "John Doe",
-    email: "johndoe@gmail.com",
-    phone: "123-456-7890",
+  // User state to store profile data (shared between pages)
+  const [user, setUser] = useState({
+    name: "",
+    role: "", // ✅ Added Role Field
+    email: "",
+    phone: "",
+    dob: "",
+    age: "",
+    address: "",
+    github: "",
+    linkedin: "",
+    hackerrank: "",
+    resume: "",
     profilePic: "https://via.placeholder.com/150",
-    skills: ["React.js", "Node.js", "JavaScript", "CSS"],
-    experience: "5 years in web development",
-  };
+  });
 
   const profileContainerStyle = {
     display: "flex",
@@ -41,6 +49,8 @@ const ProfilePage = () => {
     switch (selectedSection) {
       case "landing":
         return <LandingPage user={user} />;
+      case "personalProfile":
+        return <PersonalProfile user={user} setUser={setUser} />;
       case "education":
         return <EducationSection />;
       case "experience":
