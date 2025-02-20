@@ -5,21 +5,21 @@ const otp=require("../models/otp");
 const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
 
-exports.registerAdmin = async (req, res) => {
+exports.registerUser = async (req, res) => {
     const { username, email } = req.body; // Password is not required during registration
   
     try {
       // Check if the admin already exists and is verified
-      let admin = await User.findOne({ email });
-      if (admin && admin.is_verified) {
-        return res.status(400).json({ message: "Admin already exists" });
+      let user = await User.findOne({ email });
+      if (user && user.is_verified) {
+        return res.status(400).json({ message: "User already exists" });
       }
   
       // If the user exists but is not verified, update the username and proceed to set the password later
-      if (admin && !admin.is_verified) {
-        admin.username = username; // Update the username if needed
-        await admin.save(); // Save the user without setting the password yet
-      } else if (!admin) {
+      if (user && !user.is_verified) {
+        user.username = username; // Update the username if needed
+        await user.save(); // Save the user without setting the password yet
+      } else if (!user) {
         // Create a new user without a password initially
         const newUser = new User({ username, email });
         await newUser.save();
@@ -74,7 +74,7 @@ exports.verifyOtp = async (req, res) => {
       }
   
       // Mark the user as verified
-      existingUser.is_verified = true;
+      existingUser.otp_verified = true;
       await existingUser.save();
   
       // Delete OTP record after verification
@@ -115,7 +115,7 @@ exports.verifyOtp = async (req, res) => {
         return res.status(400).json({ message: "User does not exist" });
       }
   
-      if (!user.is_verified) {
+      if (!user.otp_verified) {
         return res.status(400).json({ message: "User is not verified yet" });
       }
   
@@ -124,6 +124,7 @@ exports.verifyOtp = async (req, res) => {
   
       // Update the user's password field
       user.password = hashedPassword;
+      user.is_verified=true;
       await user.save();
   
       // Optionally, generate a JWT token upon successful password setup
@@ -144,7 +145,7 @@ exports.verifyOtp = async (req, res) => {
   
   
 
-exports.loginAdmin= async(req,res) =>{
+exports.loginUser= async(req,res) =>{
     const {email,password} = req.body;
 
     try{

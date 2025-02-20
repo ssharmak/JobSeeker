@@ -66,9 +66,11 @@ exports.verifyOtpInstitution = async (req, res) => {
     if (!institution) {
       return res.status(400).json({ message: "Institution not found" });
     }
-    if (institution.is_verified===true) {
-      return res.status(400).json({ message: "Institution already verified" });
+    if (institution.otp_verified===true) {
+      return res.status(400).json({ message: "Institution already otp verified" });
     }
+
+    institution.otp_verified=true;
 
     // Mark institution as verified
     await institution.save();
@@ -101,8 +103,8 @@ exports.setPasswordInstitution = async (req, res) => {
     if (!institution) {
       return res.status(400).json({ message: "Institution not found" });
     }
-    if (!institution.is_verified) {
-      return res.status(400).json({ message: "Institution is not verified yet" });
+    if (!institution.otp_verified) {
+      return res.status(400).json({ message: "Institution is not otp verified yet" });
     }
 
     // Hash the password and update the institution record

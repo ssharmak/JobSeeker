@@ -33,6 +33,10 @@ const InstitutionSchema = new mongoose.Schema({
     type: String,
     required: false,
     minlength: 6
+  },
+  otp_verified: {
+    type: Boolean,
+    default: false
   }
 });
 

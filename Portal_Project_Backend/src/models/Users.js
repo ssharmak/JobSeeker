@@ -6,6 +6,7 @@ const User_Schema= new mongoose.Schema({
 
 },
     password:{type:String,required:true},
+    otp_verified:{type:Boolean,required:true,default:false},
     is_verified:{type:Boolean,required:true,default:false},
     last_login:{type:Date,default:Date.now()},
     role:{type:String, default:"user"},
