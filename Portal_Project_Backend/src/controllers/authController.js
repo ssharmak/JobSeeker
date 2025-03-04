@@ -6,7 +6,7 @@ const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
 
 exports.registerUser = async (req, res) => {
-    const { username, email } = req.body; // Password is not required during registration
+    const { username, email } = req.body; 
   
     try {
       // Check if the admin already exists and is verified
@@ -17,10 +17,10 @@ exports.registerUser = async (req, res) => {
   
       // If the user exists but is not verified, update the username and proceed to set the password later
       if (user && !user.is_verified) {
-        user.username = username; // Update the username if needed
-        await user.save(); // Save the user without setting the password yet
+        user.username = username; 
+        await user.save(); 
       } else if (!user) {
-        // Create a new user without a password initially
+       
         const newUser = new User({ username, email });
         await newUser.save();
       }
