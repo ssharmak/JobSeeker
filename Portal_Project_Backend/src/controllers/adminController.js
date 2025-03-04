@@ -44,6 +44,15 @@ exports.AppReq= async(req,res) =>{
     gmail=cand.email;
     await sendEmail(gmail, "Congratulations!!! Your Profile is approved by admin");
     res.status(200).message(`Candidate with ${aid} is verified successfully by admin`);
-}
+};
+
+exports.RejRequest= async(req,res) => {
+    const rid=req.body.id;
+    const cand=await Candidates.findById(rid);
+    const reason=req.body.reason;
+    gmail=cand.email;
+    await sendEmail(gmail, "Your profile is rejected..Do following corrections and resubit",`${reason}`)
+};
+
 
 
