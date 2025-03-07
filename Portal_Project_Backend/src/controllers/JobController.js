@@ -48,7 +48,7 @@ exports.JobFilter=async (req, res) => {
         {
           $group: {
             _id: "$location.city", 
-            jobTitles: { $push: "$title" }
+            jobTitles: { $addToSet: "$title" }
           }
         }
       ]);
@@ -67,6 +67,10 @@ exports.JobFilter=async (req, res) => {
     try {
       
       const { category_name } = req.body;
+
+      if (!category_name) {
+        return res.status(400).json({ message: "Category name is required" });
+      } 
   
       
       const category = await Category.findOne({ CategoryName: category_name });
@@ -80,24 +84,7 @@ exports.JobFilter=async (req, res) => {
         {
           $match: { category: category._id } 
         },
-        {
-          $lookup: {
-            from: "categories", 
-            localField: "category", 
-            foreignField: "_id", 
-            as: "categoryDetails" 
-          }
-        },
-        {
-          $unwind: "$categoryDetails" 
-        },
-        {
-          $group: {
-            _id: "$category", 
-            categoryName: { $first: "$categoryDetails.CategoryName" }, 
-            jobTitles: { $push: "$title" } 
-          }
-        }
+        {$project:{title:1,_id:0,}}
       ]);
   
       if (jobs.length === 0) {
