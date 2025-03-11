@@ -1,12 +1,26 @@
 const express = require("express");
-const { loginAdmin,profileApproval,AppReq,RejRequest } = require("../controllers/adminController");  // ✅ Fix Import
+const { loginAdmin,profileApproval,AppReq,RejRequest } = require("../controllers/adminController");
+const { validateRequest } = require("../middleware/validateRequest");
+const { body, query, param } = require("express-validator");  
 
 const router = express.Router();
+//Admin login
+router.post("/admin/login",validateRequest([
+    body("email").trim().escape().notEmpty().withMessage("id is required"),body("password").trim().escape().notEmpty().withMessage("password is required"),
+]), loginAdmin); 
 
-router.post("/admin/login", loginAdmin); 
+//Profile which are pending for approval
 router.get("/profile_approval",profileApproval); 
-router.post("/approve",AppReq);
-router.post("/reject",RejRequest);
+
+//Approve the profile 
+router.post("/approve/:id",validateRequest([
+    param("id").trim().escape().notEmpty().withMessage("id is required"),
+]),AppReq);
+
+//Reject the profile
+router.post("/reject/:id",validateRequest([
+    param("id").trim().escape().notEmpty().withMessage("id is required"),
+]),RejRequest);
 
 
 module.exports = router;
