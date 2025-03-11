@@ -1,6 +1,7 @@
 const express = require("express");
 const { loginAdmin,profileApproval,AppReq,RejRequest } = require("../controllers/adminController");
 const { validateRequest } = require("../middleware/validateRequest");
+const { authMiddleware} = require("../middleware/authMiddleware");
 const { body, query, param } = require("express-validator");  
 
 const router = express.Router();
@@ -10,15 +11,15 @@ router.post("/admin/login",validateRequest([
 ]), loginAdmin); 
 
 //Profile which are pending for approval
-router.get("/profile_approval",profileApproval); 
+router.get("/profile_approval",authMiddleware,profileApproval); 
 
 //Approve the profile 
-router.post("/approve/:id",validateRequest([
+router.post("/approve/:id",authMiddleware,validateRequest([
     param("id").trim().escape().notEmpty().withMessage("id is required"),
 ]),AppReq);
 
 //Reject the profile
-router.post("/reject/:id",validateRequest([
+router.post("/reject/:id",authMiddleware,validateRequest([
     param("id").trim().escape().notEmpty().withMessage("id is required"),
 ]),RejRequest);
 

@@ -12,6 +12,6 @@ exports.authenticateTempToken = (req, res, next) => {
     req.user = decoded; // Attach decoded email to request
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Unauthorized: Invalid token" });
+    return res.status(401).json({ message: "Unauthorized: Invalid or expired token" });
   }
 };
