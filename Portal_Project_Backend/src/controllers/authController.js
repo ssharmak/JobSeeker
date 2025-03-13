@@ -4,6 +4,7 @@ const User= require("../models/Users");
 const otp=require("../models/otp");
 const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
+const Users = require("../models/Users");
 
 exports.registerUser = async (req, res) => {
     const { username, email } = req.body; 
@@ -128,12 +129,7 @@ exports.verifyOtp = async (req, res) => {
       await user.save();
   
       // Optionally, generate a JWT token upon successful password setup
-      const token = jwt.sign(
-        { id: user._id, role: user.role, email: user.email },
-        process.env.JWT_SECRET,
-        { expiresIn: "7d" }
-      );
-  
+    
       res.status(200).json({
         message: "Password set successfully. Registration complete.",
         token,
@@ -145,30 +141,64 @@ exports.verifyOtp = async (req, res) => {
   
   
 
-exports.loginUser= async(req,res) =>{
-    const {email,password} = req.body;
+// exports.loginUser= async(req,res) =>{
+//     const {email,password} = req.body;
 
-    try{
-        let user=await User.findOne({email});
-        if(!user) return res.status(400).json({message:"User does not exist please register"}); 
+//     try{
+//         let user=await User.findOne({email});
+//         if(!user) return res.status(400).json({message:"User does not exist please register"}); 
 
-        const isMatch= await bcrypt.compare(password,user.password);
-        if(!isMatch) return res.status(400).json({message:"Wrong Password"});
+//         const isMatch= await bcrypt.compare(password,user.password);
+//         if(!isMatch) return res.status(400).json({message:"Wrong Password"});
 
-        if(!user.is_verified) return res.status(500).json({ message: "user not verified..Please verify your email" });
-        
-
+//         if(!user.is_verified) return res.status(500).json({ message: "user not verified..Please verify your email" });
         
         
-        //JWT Token Generation
-        const token= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET,{expiresIn:"7d"});
+//         //JWT Token Generation
+//         const token= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET,{expiresIn:"7d"});
+//         const refToken= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET_REFRESH);
          
-        res.json({token:token,message: "Login successful"});
+//         res.json({token:token,refreshToken: refToken,message: "Login successful"});
 
-    }
-    catch(err){
-        res.status(500).json({message: err.message});
-    }
+//     }
+//     catch(err){
+//         res.status(500).json({message: err.message});
+//     }
+// };
+
+// Login Route (Single for All Roles)
+exports.loginUser=async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+      const user = await Users.findOne({ email }); 
+
+      if (!user) {
+          return res.status(400).json({ message: "User not found!" });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+          return res.status(400).json({ message: "Invalid Credentials!" });
+      }
+
+      
+      const token= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET,{expiresIn:"7d"});
+      const refToken= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET_REFRESH);
+
+     //We can change the url paths when they finalised  
+      if (user.role === 'admin') {
+          return res.json({ redirect: '/admin/dashboard' });
+      } else if (user.role === 'institution') {
+          return res.json({ redirect: '/institution/dashboard' });
+      } else {
+          return res.json({ redirect: '/user/dashboard' });
+      }
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error!" });
+  }
 };
 
 
