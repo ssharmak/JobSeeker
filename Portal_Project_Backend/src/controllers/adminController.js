@@ -5,31 +5,31 @@ const Candidates = require("../models/candidates");
 const sendEmail = require("../utils/sendEmail");
 const Status = require("../models/application_status");
 
-exports.loginAdmin = async (req, res) => {
-    const { email, password } = req.body;
+// exports.loginAdmin = async (req, res) => {
+//     const { email, password } = req.body;
 
-    try {
-        let admin1 = await admin.findOne({ email });
-        if (!admin1) {
-            return res.status(400).json({ message: "Admin does not exist" });
-        }
+//     try {
+//         let admin1 = await admin.findOne({ email });
+//         if (!admin1) {
+//             return res.status(400).json({ message: "Admin does not exist" });
+//         }
 
-        const isMatch = await bcrypt.compare(password, admin1.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: "Wrong Password" });
-        }
+//         const isMatch = await bcrypt.compare(password, admin1.password);
+//         if (!isMatch) {
+//             return res.status(400).json({ message: "Wrong Password" });
+//         }
 
-        const token = jwt.sign(
-            { id: admin1._id },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" }
-        );
+//         const token = jwt.sign(
+//             { id: admin1._id },
+//             process.env.JWT_SECRET,
+//             { expiresIn: "7d" }
+//         );
 
-        res.json({ token: token, message: "Login successful" });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
+//         res.json({ token: token, message: "Login successful" });
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// };
 
 exports.profileApproval = async (req, res) => {
     try {

@@ -183,16 +183,23 @@ exports.loginUser=async (req, res) => {
       }
 
       
-      const token= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET,{expiresIn:"7d"});
+      const token= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET,{expiresIn:"15m"});
       const refToken= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET_REFRESH);
+
+      //Storing the refresh Token in cookies to use it later
+      res.cookie("refreshToken", refToken, {
+        httpOnly: true,
+        secure: true, // Set to true in production (for HTTPS)
+        sameSite: "Strict",
+      });
 
      //We can change the url paths when they finalised  
       if (user.role === 'admin') {
-          return res.json({ redirect: '/admin/dashboard' });
+          return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/admin/dashboard' });
       } else if (user.role === 'institution') {
-          return res.json({ redirect: '/institution/dashboard' });
+          return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/institution/dashboard' });
       } else {
-          return res.json({ redirect: '/user/dashboard' });
+          return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/user/dashboard' });
       }
 
   } catch (error) {
