@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 // Registration (without password)
-exports.registerInstitution = async (req, res) => {
+const registerInstitution = async (req, res) => {
   const { name, country, mobile_number, email } = req.body;
 
   try {
@@ -51,7 +51,7 @@ exports.registerInstitution = async (req, res) => {
 };
 
 // Verify OTP and mark institution as verified
-exports.verifyOtpInstitution = async (req, res) => {
+const verifyOtpInstitution = async (req, res) => {
   try {
     const { otp1 } = req.body; // OTP provided by the institution
 
@@ -90,7 +90,7 @@ exports.verifyOtpInstitution = async (req, res) => {
 };
 
 // Set Password (only password input; email comes from temporary token)
-exports.setPasswordInstitution = async (req, res) => {
+const setPasswordInstitution = async (req, res) => {
   try {
     const { password } = req.body; // Only the password is input by the institution
     // Retrieve email from temporary token (set via middleware)
@@ -120,3 +120,5 @@ exports.setPasswordInstitution = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution };

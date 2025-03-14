@@ -31,7 +31,7 @@ const Status = require("../models/application_status");
 //     }
 // };
 
-exports.profileApproval = async (req, res) => {
+const profileApproval = async (req, res) => {
     try {
         const unverified = await Candidates.find({ admin_verified: false });
         res.json(unverified);
@@ -40,7 +40,7 @@ exports.profileApproval = async (req, res) => {
     }
 };
 
-exports.AppReq = async (req, res) => {
+const AppReq = async (req, res) => {
     try {
         const { id } = req.param;
         const cand = await Candidates.findById(id);
@@ -68,7 +68,7 @@ exports.AppReq = async (req, res) => {
     }
 };
 
-exports.RejRequest = async (req, res) => {
+const RejRequest = async (req, res) => {
     try {
         const { reason } = req.body;
         const { id } = req.param;
@@ -95,3 +95,5 @@ exports.RejRequest = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+module.exports={ RejRequest,AppReq,profileApproval  }

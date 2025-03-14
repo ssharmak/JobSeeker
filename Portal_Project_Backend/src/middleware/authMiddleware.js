@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-exports.authenticateTempToken = (req, res, next) => {
+const authenticateTempToken = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1]; // Extract token from header
   const refreshToken=req.cookies.refreshToken;
 
@@ -30,3 +30,5 @@ exports.authenticateTempToken = (req, res, next) => {
     
   }
 };
+
+module.exports={ authenticateTempToken };

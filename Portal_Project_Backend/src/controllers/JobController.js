@@ -2,7 +2,7 @@ const Category=require("../models/job_category");
 const Job=require("../models/job");
 
 //To get all categories and their job counts
-exports.JobCountByCategory=async (req, res) => {
+const JobCountByCategory=async (req, res) => {
     try {
       const jobCounts = await Job.aggregate([
         {
@@ -39,7 +39,7 @@ exports.JobCountByCategory=async (req, res) => {
 
 
 //To get all city names
-  exports.allCity= async(req,res)=>{
+  const allCity= async(req,res)=>{
     try{
       const allCities = await Job.distinct("location.city");
     if (allCities.length===0){
@@ -54,7 +54,7 @@ res.status(500).json({message:"Error fetching cities"});
 
 
   //To get all designations ( Since there is no field separately as designation in the database, job title is considered here as designation)
- exports.allDesignations=async(req,res)=>{
+ const allDesignations=async(req,res)=>{
   try{
     const allDesignations = await Job.distinct("title");
     if (allDesignations.length===0){
@@ -71,7 +71,7 @@ res.status(500).json({message:"Error fetching Designations"});
 
 
 //Job filtering based on query parameters
-exports.filterJobs = async (req, res) => {
+const filterJobs = async (req, res) => {
   try {
     const { city, designation, category } = req.query;
 
@@ -101,5 +101,7 @@ exports.filterJobs = async (req, res) => {
     res.status(500).json({ message: "Error fetching jobs", error: error.message });
   }
 };
+
+module.exports={ JobCountByCategory,allCity,filterJobs,allDesignations }
 
 

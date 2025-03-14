@@ -28,3 +28,5 @@ const filterValidationRules = [
 
 router.get("/filterJobs",validateRequest(filterValidationRules), filterJobs);
 
+module.exports=router;
+

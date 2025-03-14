@@ -6,7 +6,7 @@ const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
 const Users = require("../models/Users");
 
-exports.registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
     const { username, email } = req.body; 
   
     try {
@@ -51,7 +51,7 @@ exports.registerUser = async (req, res) => {
   
 
 
-exports.verifyOtp = async (req, res) => {
+const verifyOtp = async (req, res) => {
     try {
       const { otp1 } = req.body; // OTP provided by the user
   
@@ -99,7 +99,7 @@ exports.verifyOtp = async (req, res) => {
   
 
 
-  exports.setPassword = async (req, res) => {
+  const setPassword = async (req, res) => {
     try {
       const { password } = req.body; // Only password is taken as input
   
@@ -167,7 +167,7 @@ exports.verifyOtp = async (req, res) => {
 // };
 
 // Login Route (Single for All Roles)
-exports.loginUser=async (req, res) => {
+const loginUser=async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -207,6 +207,9 @@ exports.loginUser=async (req, res) => {
       res.status(500).json({ message: "Server error!" });
   }
 };
+
+
+module.exports={ loginUser,setPassword,verifyOtp,registerUser }
 
 
 
