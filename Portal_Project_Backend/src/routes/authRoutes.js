@@ -8,6 +8,7 @@ const {
     verifyOtpInstitution,
     setPasswordInstitution,lo
   } = require("../controllers/institutionController");
+const { singleToken } = require("../middleware/singleTokenMiddleware");
 
 
 
@@ -22,16 +23,16 @@ const router=express.Router();
 router.post("/register-user",registerUser);
 router.post("/login-user",loginUser);
 router.post("/verify",verifyOtp);
-router.post("/set-password", setPassword);
+router.post("/set-password",singleToken,setPassword);
 
 
-router.post("/register-inst", registerInstitution);
+// router.post("/register-inst", registerInstitution);
 
-// OTP Verification: Provide OTP (otp1) to verify institution
-router.post("/verify-otp-inst", verifyOtpInstitution);
+// // OTP Verification: Provide OTP (otp1) to verify institution
+// router.post("/verify-otp-inst", verifyOtpInstitution);
 
-// Set Password: Only password is required; institution email comes from token
-router.post("/password-inst", authenticateTempToken, setPasswordInstitution);
+// // Set Password: Only password is required; institution email comes from token
+// router.post("/password-inst", authenticateTempToken, setPasswordInstitution);
 
 
 

@@ -67,19 +67,20 @@ res.status(500).json({message:"Error fetching Designations"});
   }
 
  };
-  module.exports = router;
+ 
 
 
 //Job filtering based on query parameters
 const filterJobs = async (req, res) => {
   try {
-    const { city, designation, category } = req.query;
+    const { city, designation , category,min_salary  } = req.query;
 
     // Build dynamic filter object
     let filter = {};
 
     if (city) filter["location.city"] = city;
     if (designation) filter["title"] = designation;
+    if (min_salary) filter["salary_range.min"]= {$gte:Number(min_salary)}
 
     if (category) {
       const categoryDoc = await Category.findOne({ CategoryName: category });
@@ -87,10 +88,13 @@ const filterJobs = async (req, res) => {
         return res.status(404).json({ message: "Category not found" });
       }
       filter["category"] = categoryDoc._id;
-    }
 
+    }
+    console.log("Query Params:", req.query);
+
+    console.log("filter",filter);
     // Fetch jobs based on filters
-    const jobs = await Job.find(filter, { _id: 0, title: 1, location: 1, category: 1 });
+    const jobs = await Job.find(filter,{_id:0, title:1, location:1});
 
     if (jobs.length === 0) {
       return res.status(404).json({ message: "No jobs found matching the criteria" });

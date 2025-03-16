@@ -4,29 +4,32 @@ const User= require("../models/Users");
 const otp=require("../models/otp");
 const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
-const Users = require("../models/Users");
 
-const registerUser = async (req, res) => {
-    const { username, email } = req.body; 
+  
+  const registerUser = async (req, res) => {
+    const { username, country, mobile_number, email, role } = req.body;
   
     try {
-      // Check if the admin already exists and is verified
+      // Check if a user with the provided email already exists
       let user = await User.findOne({ email });
       if (user && user.is_verified) {
         return res.status(400).json({ message: "User already exists" });
       }
   
-      // If the user exists but is not verified, update the username and proceed to set the password later
+      // If user exists but is not verified, update details
       if (user && !user.is_verified) {
-        user.username = username; 
-        await user.save(); 
+        user.username = username;
+        user.country = country;
+        user.mobile_number = mobile_number;
+        user.role=role;
+        await user.save();
       } else if (!user) {
-       
-        const newUser = new User({ username, email });
-        await newUser.save();
+        // Create a new user record (without password)
+        user = new User({ username, country, mobile_number, email,role });
+        await user.save();
       }
   
-      // Check if OTP has already been sent recently (within the expiry time)
+      // Check if OTP was already sent and is still valid
       const existingOtp = await otp.findOne({ email });
       if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_Expiry * 1000) {
         const timeLeft = process.env.OTP_Expiry - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
@@ -35,14 +38,13 @@ const registerUser = async (req, res) => {
         });
       }
   
-      // Generate a new OTP code
+      // Generate a 6-digit OTP
       const otpCode = crypto.randomInt(100000, 999999).toString();
       await otp.create({ email, otp: otpCode });
   
-      // Send the OTP to the user's email
+      // Send OTP to user email
       await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
   
-      // Respond with a success message
       res.status(200).json({ message: "OTP sent successfully" });
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -132,7 +134,7 @@ const verifyOtp = async (req, res) => {
     
       res.status(200).json({
         message: "Password set successfully. Registration complete.",
-        token,
+    
       });
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -171,7 +173,7 @@ const loginUser=async (req, res) => {
   const { email, password } = req.body;
 
   try {
-      const user = await Users.findOne({ email }); 
+      const user = await User.findOne({ email }); 
 
       if (!user) {
           return res.status(400).json({ message: "User not found!" });

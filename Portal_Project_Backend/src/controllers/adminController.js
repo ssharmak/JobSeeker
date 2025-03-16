@@ -42,7 +42,7 @@ const profileApproval = async (req, res) => {
 
 const AppReq = async (req, res) => {
     try {
-        const { id } = req.param;
+        const { id } = req.params;
         const cand = await Candidates.findById(id);
         if (!cand) {
             return res.status(404).json({ message: "Candidate not found" });
@@ -71,7 +71,7 @@ const AppReq = async (req, res) => {
 const RejRequest = async (req, res) => {
     try {
         const { reason } = req.body;
-        const { id } = req.param;
+        const { id } = req.params;
         const cand = await Candidates.findById(id);
         if (!cand) {
             return res.status(404).json({ message: "Candidate not found" });
@@ -96,4 +96,4 @@ const RejRequest = async (req, res) => {
     }
 };
 
-module.exports={ RejRequest,AppReq,profileApproval  }
+module.exports={ profileApproval, AppReq, RejRequest  }

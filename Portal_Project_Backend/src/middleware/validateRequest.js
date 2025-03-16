@@ -16,4 +16,4 @@ const validateRequest = (validations) => {
     };
 };
 
-modules.export={ validateRequest }
+module.exports={ validateRequest }

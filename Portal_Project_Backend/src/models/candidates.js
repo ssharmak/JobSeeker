@@ -109,7 +109,7 @@ const candidateSchema = new mongoose.Schema({
     status: { type: String, required: true },
     email_verified: { type: Boolean, required: true },
     phone_verified: { type: Boolean, required: true },
-    admin_verified:{type:Boolean,required:True}
+    admin_verified:{type:Boolean,required:true}
    
 },{ timestamps: true });
 
