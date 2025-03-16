@@ -1,6 +1,5 @@
 const express= require("express");
-const bcrypt=require("bcryptjs");
-const jwt= require("jsonwebtoken")
+
 const {registerUser,loginUser, verifyOtp,setPassword} = require("../controllers/authController");
 const { authenticateTempToken } = require("../middleware/authMiddleware");
 const {
