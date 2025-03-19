@@ -4,6 +4,7 @@ const User= require("../models/Users");
 const otp=require("../models/otp");
 const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
+const Candidate=require("../models/candidates");
 
   
   const registerUser = async (req, res) => {
@@ -129,6 +130,39 @@ const verifyOtp = async (req, res) => {
       user.password = hashedPassword;
       user.is_verified=true;
       await user.save();
+
+      if(user.role==="user"){
+        const newCandidate = new Candidate({
+          main_user: user._id,  
+          first_name: username,  
+          last_name: "",
+          email: email,
+          phone: "",
+          date_of_birth: null,
+          address: {
+              street: "",
+              city: "",
+              state: "",
+              postal_code: "",
+              country: country
+          },
+          linkedin_profile: "",
+          portfolio_website: "",
+          education: [],
+          work_experience: [],
+          skills: [],
+          certifications: [],
+          resume: null,
+          applications: [],
+          status: "pending",
+          email_verified: false,
+          phone_verified: false,
+          admin_verified: false
+      });
+
+      await newCandidate.save();
+
+      }
   
       // Optionally, generate a JWT token upon successful password setup
     

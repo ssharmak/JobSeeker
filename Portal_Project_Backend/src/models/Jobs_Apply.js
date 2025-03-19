@@ -19,6 +19,8 @@ const jobApplicationSchema = new mongoose.Schema({
     notes: { type: [notesSchema], default: [] } 
 });
 
+jobApplicationSchema.index({candidate_id:1,job_id:1},{unique:true});
+
 const JobApplication = mongoose.model('JobApplication', jobApplicationSchema);
 
 module.exports = JobApplication;

@@ -51,12 +51,13 @@ const resumeSchema = new mongoose.Schema({
 const applicationSchema = new mongoose.Schema({
     job_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: true },
     job_title: { type: String, required: true },
-    applied_date: { type: Date, required: true },
-    status: { type: String, required: true },
+    applied_date: { type: Date, required: true,default:Date.now() },
+    Status: { type: String, required: true },
     recruiter_comments: { type: String }
 });
 
 const candidateSchema = new mongoose.Schema({
+    main_user:{type:mongoose.Schema.Types.ObjectId, ref:'Users',required:true},
     first_name: { type: String, required: true },
     last_name: { type: String, required: true },
     email: {
@@ -115,4 +116,5 @@ const candidateSchema = new mongoose.Schema({
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
 
-module.exports = Candidate;
+
+module.exports = {Candidate};
