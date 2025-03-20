@@ -1,7 +1,6 @@
 const Candidate=require("../models/candidates");
 const JobApplication=require("../models/Jobs_Apply");
 const jobs=require("../models/job");
-const cand_application=require("../models/cand_application")
 
 
 const applyToJob= async (req,res)=> {
@@ -44,4 +43,45 @@ if (!cand){
 
 }
 
-module.exports={applyToJob};
+//Display all jobs particular user applied
+
+const allAppliedJobs= async (req,res)=>
+{
+    
+
+        try {
+            // Get the user ID from the authenticated request
+            const user_id = req.user.id; 
+    
+            
+            if (!user_id) {
+                return res.status(400).json({ message: "User not found" });
+            }
+    
+            
+            const candidate = await Candidate.findOne({ Main_user: user_id });
+    
+            // If candidate is not found, return error
+            if (!candidate) {
+                return res.status(404).json({ message: "Candidate not found" });
+            }
+    
+        const allJobs= candidate.applications.map(app =>({
+            job_id:app.job_id,
+            job_title:app.job_title,
+            status:app.status,
+            applied_date:app.applied_date
+
+        }));
+
+        res.status(200).json(allJobs);
+
+    }
+    catch(error){
+        res.status(400).json({message:"Internal Server Error"});
+        console.log("error",error);
+
+    }
+}
+
+module.exports={applyToJob, allAppliedJobs};
