@@ -121,4 +121,57 @@ const setPasswordInstitution = async (req, res) => {
   }
 };
 
-module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution };
+
+
+
+const loginInstitution = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Find institution by email
+    const institution = await Institution.findOne({ email });
+
+    if (!institution) {
+      return res.status(400).json({ message: "Institution not found!" });
+    }
+
+    // Check if password exists in DB (some institutions might not have passwords)
+    if (!institution.password) {
+      return res.status(400).json({ message: "Password not set for this institution!" });
+    }
+
+    // Compare entered password with hashed password
+    const isMatch = await bcrypt.compare(password, institution.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials!" });
+    }
+
+    // Generate JWT tokens
+    const token = jwt.sign({ id: institution._id, role: "institution" }, process.env.JWT_SECRET, { expiresIn: "15m" });
+    const refreshToken = jwt.sign({ id: institution._id, role: "institution" }, process.env.JWT_SECRET_REFRESH);
+
+    // Store refresh token in HTTP-only cookies
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true, // Set to true in production (for HTTPS)
+      sameSite: "Strict",
+    });
+
+    return res.json({
+      message: "Login successful!",
+      accessToken: token,
+      refreshToken: refreshToken,
+      redirect: "/institution/dashboard",
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error!" });
+  }
+};
+
+
+
+
+
+module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution,loginInstitution };

@@ -73,14 +73,15 @@ res.status(500).json({message:"Error fetching Designations"});
 //Job filtering based on query parameters
 const filterJobs = async (req, res) => {
   try {
-    const { city, designation , category,min_salary  } = req.query;
+    const { city, designation , category,min_salary, experience } = req.query;
 
     // Build dynamic filter object
     let filter = {};
 
     if (city) filter["location.city"] = city;
     if (designation) filter["title"] = designation;
-    if (min_salary) filter["salary_range.min"]= {$gte:Number(min_salary)}
+    if (min_salary) filter["salary_range.min"]= {$gte:Number(min_salary)};
+    if(experience) filter["min_experience"]= experience;
 
     if (category) {
       const categoryDoc = await Category.findOne({ CategoryName: category });

@@ -5,53 +5,127 @@ const otp=require("../models/otp");
 const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
 const Candidate=require("../models/candidates");
+const multer = require("multer");
 
   
+  // const registerUser = async (req, res) => {
+  //   const { username, country, mobile_number, email, role } = req.body;
+  
+  //   try {
+  //     // Check if a user with the provided email already exists
+  //     let user = await User.findOne({ email });
+  //     if (user && user.is_verified) {
+  //       return res.status(400).json({ message: "User already exists" });
+  //     }
+  
+  //     // If user exists but is not verified, update details
+  //     if (user && !user.is_verified) {
+  //       user.username = username;
+  //       user.country = country;
+  //       user.mobile_number = mobile_number;
+  //       user.role=role;
+  //       await user.save();
+  //     } else if (!user) {
+  //       // Create a new user record (without password)
+  //       user = new User({ username, country, mobile_number, email,role });
+  //       await user.save();
+  //     }
+  
+  //     // Check if OTP was already sent and is still valid
+  //     const existingOtp = await otp.findOne({ email });
+  //     if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_Expiry * 1000) {
+  //       const timeLeft = process.env.OTP_Expiry - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
+  //       return res.status(400).json({
+  //         message: `OTP already sent! Please wait ${timeLeft} seconds before requesting again`,
+  //       });
+  //     }
+  
+  //     // Generate a 6-digit OTP
+  //     const otpCode = crypto.randomInt(100000, 999999).toString();
+  //     await otp.create({ email, otp: otpCode });
+  
+  //     // Send OTP to user email
+  //     await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
+  
+  //     res.status(200).json({ message: "OTP sent successfully" });
+  //   } catch (err) {
+  //     res.status(500).json({ message: err.message });
+  //   }
+  // };
+  
+  
+  
+  // Configure file storage for resume uploads
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "uploads/resumes/"); // Change to your upload directory
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    },
+  });
+  const upload = multer({ storage });
+  
+  // Register User Function
   const registerUser = async (req, res) => {
-    const { username, country, mobile_number, email, role } = req.body;
-  
     try {
-      // Check if a user with the provided email already exists
-      let user = await User.findOne({ email });
-      if (user && user.is_verified) {
-        return res.status(400).json({ message: "User already exists" });
-      }
+      upload.single("resume")(req, res, async (err) => {
+        if (err) {
+          return res.status(400).json({ message: "File upload error" });
+        }
   
-      // If user exists but is not verified, update details
-      if (user && !user.is_verified) {
-        user.username = username;
-        user.country = country;
-        user.mobile_number = mobile_number;
-        user.role=role;
-        await user.save();
-      } else if (!user) {
-        // Create a new user record (without password)
-        user = new User({ username, country, mobile_number, email,role });
-        await user.save();
-      }
+        const { name, phone_number, email } = req.body;
+        const resume = req.file ? req.file.path : null;
   
-      // Check if OTP was already sent and is still valid
-      const existingOtp = await otp.findOne({ email });
-      if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_Expiry * 1000) {
-        const timeLeft = process.env.OTP_Expiry - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
-        return res.status(400).json({
-          message: `OTP already sent! Please wait ${timeLeft} seconds before requesting again`,
-        });
-      }
+        // Validate required fields
+        if (!name || !phone_number || !email || !resume) {
+          return res.status(400).json({ message: "All fields are required" });
+        }
   
-      // Generate a 6-digit OTP
-      const otpCode = crypto.randomInt(100000, 999999).toString();
-      await otp.create({ email, otp: otpCode });
+        // Check if a user with the provided email already exists
+        let user = await User.findOne({ email });
   
-      // Send OTP to user email
-      await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
+        if (user && user.is_verified) {
+          return res.status(400).json({ message: "User already exists" });
+        }
   
-      res.status(200).json({ message: "OTP sent successfully" });
+        // If user exists but is not verified, update details
+        if (user && !user.is_verified) {
+          user.name = name;
+          user.phone_number = phone_number;
+          user.resume = resume;
+          await user.save();
+        } else if (!user) {
+          // Create a new user record
+          user = new User({ name, phone_number, email, resume });
+          await user.save();
+        }
+  
+        // Check if OTP was already sent and is still valid
+        const existingOtp = await Otp.findOne({ email });
+        if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_EXPIRY * 1000) {
+          const timeLeft = process.env.OTP_EXPIRY - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
+          return res.status(400).json({
+            message: `OTP already sent! Please wait ${timeLeft} seconds before requesting again`,
+          });
+        }
+  
+        // Generate a 6-digit OTP
+        const otpCode = crypto.randomInt(100000, 999999).toString();
+        await Otp.create({ email, otp: otpCode });
+  
+        // Send OTP to user email
+        await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
+  
+        res.status(200).json({ message: "OTP sent successfully" });
+      });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
   };
   
+  module.exports = registerUser;
+    
 
 
 const verifyOtp = async (req, res) => {
@@ -232,8 +306,6 @@ const loginUser=async (req, res) => {
      //We can change the url paths when they finalised  
       if (user.role === 'admin') {
           return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/admin/dashboard' });
-      } else if (user.role === 'institution') {
-          return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/institution/dashboard' });
       } else {
           return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/user/dashboard' });
       }

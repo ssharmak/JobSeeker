@@ -7,10 +7,19 @@ const User_Schema= new mongoose.Schema({
 },
 country: {
     type: String,
-    required: true,
+    default:"India",
     trim: true
   },
+  phone: {
+    type: String,
+    required: true,
+    unique: true,
+    match: [/^\+?[1-9]\d{6,14}$/, "Invalid phone number format"]},
     password:{type:String},
+    resume: {
+      type: String, // Stores file path as a string
+      required: true
+    },
     otp_verified:{type:Boolean,required:true,default:false},
     is_verified:{type:Boolean,required:true,default:false},
     last_login:{type:Date,default:Date.now()},
