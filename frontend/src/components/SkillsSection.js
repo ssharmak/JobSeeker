@@ -1,28 +1,6 @@
 import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 
-const availableSkills = [
-  "JavaScript",
-  "Python",
-  "React",
-  "Node.js",
-  "Java",
-  "C++",
-  "HTML",
-  "CSS",
-  "SQL",
-  "MongoDB",
-  "Git",
-  "TypeScript",
-  "Docker",
-  "AWS",
-  "Machine Learning",
-  "AI",
-  "Cloud Computing",
-  "Django",
-  "Flask",
-];
-
 const SkillsSection = () => {
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
