@@ -6,6 +6,7 @@ const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
 const {Candidate}=require("../models/candidates");
 const multer = require("multer");
+const util = require("util");
 
   
   // const registerUser = async (req, res) => {
@@ -58,23 +59,22 @@ const multer = require("multer");
   // Configure file storage for resume uploads
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, "D:/uploads/resumes/"); 
+      cb(null, "/uploads/resumes/"); 
     },
     filename: (req, file, cb) => {
       cb(null, `${Date.now()}_${file.originalname}`);
     },
   });
   const upload = multer({ storage });
+
+  const uploadSingle = util.promisify(upload.single("resume"));
   
   // Register User Function
   const registerUser = async (req, res) => {
     try {
         // Handle file upload first
-        upload.single("resume")(req, res, async (err) => {
-            if (err) {
-                return res.status(400).json({ message: "File upload error" });
-            }
 
+        await uploadSingle(req, res);
             const { name, phone_number, email } = req.body;
             const resume = req.file ? req.file.path : null;
 
@@ -94,11 +94,11 @@ const multer = require("multer");
             if (user && !user.is_verified) {
                 user.username = name;  // 🔹 Make sure this matches the schema field
                 user.phone = phone_number;
-                if (resume) user.resume = resume;
+                if (resume) user.resume =resume;
                 await user.save();
             } else {
                 // Create new user
-                user = new User({ username: name, phone: phone_number, email, resume });
+                user = new User({ username: name, phone: phone_number, email, resume: resume });
                 await user.save();
             }
 
@@ -118,8 +118,8 @@ const multer = require("multer");
             await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
 
             res.status(200).json({ message: "OTP sent successfully" });
-        });
-    } catch (err) {
+        }
+    catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
