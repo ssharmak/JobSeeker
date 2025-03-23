@@ -4,7 +4,7 @@ const User= require("../models/Users");
 const otp=require("../models/otp");
 const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
-const Candidate=require("../models/candidates");
+const {Candidate}=require("../models/candidates");
 const multer = require("multer");
 
   
