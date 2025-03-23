@@ -58,7 +58,7 @@ const multer = require("multer");
   // Configure file storage for resume uploads
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, "uploads/resumes/"); // Change to your upload directory
+      cb(null, "D:/uploads/resumes/"); 
     },
     filename: (req, file, cb) => {
       cb(null, `${Date.now()}_${file.originalname}`);
@@ -69,62 +69,63 @@ const multer = require("multer");
   // Register User Function
   const registerUser = async (req, res) => {
     try {
-      upload.single("resume")(req, res, async (err) => {
-        if (err) {
-          return res.status(400).json({ message: "File upload error" });
-        }
-  
-        const { name, phone_number, email } = req.body;
-        const resume = req.file ? req.file.path : null;
-  
-        // Validate required fields
-        if (!name || !phone_number || !email || !resume) {
-          return res.status(400).json({ message: "All fields are required" });
-        }
-  
-        // Check if a user with the provided email already exists
-        let user = await User.findOne({ email });
-  
-        if (user && user.is_verified) {
-          return res.status(400).json({ message: "User already exists" });
-        }
-  
-        // If user exists but is not verified, update details
-        if (user && !user.is_verified) {
-          user.name = name;
-          user.phone_number = phone_number;
-          user.resume = resume;
-          await user.save();
-        } else if (!user) {
-          // Create a new user record
-          user = new User({ name, phone_number, email, resume });
-          await user.save();
-        }
-  
-        // Check if OTP was already sent and is still valid
-        const existingOtp = await Otp.findOne({ email });
-        if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_EXPIRY * 1000) {
-          const timeLeft = process.env.OTP_EXPIRY - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
-          return res.status(400).json({
-            message: `OTP already sent! Please wait ${timeLeft} seconds before requesting again`,
-          });
-        }
-  
-        // Generate a 6-digit OTP
-        const otpCode = crypto.randomInt(100000, 999999).toString();
-        await Otp.create({ email, otp: otpCode });
-  
-        // Send OTP to user email
-        await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
-  
-        res.status(200).json({ message: "OTP sent successfully" });
-      });
+        // Handle file upload first
+        upload.single("resume")(req, res, async (err) => {
+            if (err) {
+                return res.status(400).json({ message: "File upload error" });
+            }
+
+            const { name, phone_number, email } = req.body;
+            const resume = req.file ? req.file.path : null;
+
+            // Check for missing fields
+            if (!name || !phone_number || !email) {
+                return res.status(400).json({ message: "All fields are required" });
+            }
+
+            // Check if user exists
+            let user = await User.findOne({ email });
+
+            if (user && user.is_verified) {
+                return res.status(400).json({ message: "User already exists" });
+            }
+
+            // If user exists but is not verified, update details
+            if (user && !user.is_verified) {
+                user.username = name;  // 🔹 Make sure this matches the schema field
+                user.phone = phone_number;
+                if (resume) user.resume = resume;
+                await user.save();
+            } else {
+                // Create new user
+                user = new User({ username: name, phone: phone_number, email, resume });
+                await user.save();
+            }
+
+            // OTP handling
+            const existingOtp = await otp.findOne({ email });
+
+            if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_EXPIRY * 1000) {
+                const timeLeft = process.env.OTP_EXPIRY - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
+                return res.status(400).json({ message: `OTP already sent! Wait ${timeLeft} seconds.` });
+            }
+
+            // Generate OTP
+            const otpCode = crypto.randomInt(100000, 999999).toString();
+            await otp.create({ email, otp: otpCode });
+
+            // Send OTP to user
+            await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
+
+            res.status(200).json({ message: "OTP sent successfully" });
+        });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
-  };
+};
+
   
-  module.exports = registerUser;
+ 
     
 
 
@@ -208,7 +209,7 @@ const verifyOtp = async (req, res) => {
       if(user.role==="user"){
         const newCandidate = new Candidate({
           main_user: user._id,  
-          first_name: username,  
+          first_name: user.username,  
           last_name: "",
           email: email,
           phone: "",
@@ -317,7 +318,56 @@ const loginUser=async (req, res) => {
 };
 
 
-module.exports={ loginUser,setPassword,verifyOtp,registerUser }
+//function to resend otp
+
+const resendOTP = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Check if user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Generate new OTP
+        const newOTP =crypto.randomInt(100000, 999999).toString();
+
+        // Store OTP in the database 
+        user.otp = newOTP;
+        user.otp_verified = false; // Reset OTP verification status
+        await user.save();
+
+        // Send OTP via Email
+        let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        let mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: "Your OTP Code",
+            text: `Your OTP code is: ${newOTP}`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return res.status(500).json({ message: "Error sending OTP email", error });
+            }
+            res.status(200).json({ message: "OTP sent successfully" });
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+};
+
+
+module.exports={ loginUser,setPassword,verifyOtp,registerUser,resendOTP }
 
 
 
