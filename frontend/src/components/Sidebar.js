@@ -12,13 +12,13 @@ import {
 
 const Sidebar = ({ setSelectedSection, theme }) => {
   // Theme-based Styles
-  const isDarkMode = theme === "dark";
+  //const isDarkMode = theme === "dark";
 
   const sidebarStyle = {
     width: "250px",
     height: "100vh",
-    backgroundColor: isDarkMode ? "#1E1E1E" : "#f4f4f4", // Dark Mode / Light Mode
-    color: isDarkMode ? "white" : "black",
+    backgroundColor: "white", // Dark Mode / Light Mode
+    color: "white",
     padding: "20px",
     position: "fixed",
     left: "0",
@@ -40,11 +40,11 @@ const Sidebar = ({ setSelectedSection, theme }) => {
     fontSize: "16px",
     borderRadius: "5px",
     transition: "background 0.3s, transform 0.2s",
-    color: isDarkMode ? "white" : "black",
+    color: "white",
   };
 
   const listItemHoverStyle = {
-    backgroundColor: isDarkMode ? "#333" : "#ddd", // Hover effect based on theme
+    backgroundColor: "white", // Hover effect based on theme
   };
 
   const iconStyle = { marginRight: "10px" };
@@ -55,7 +55,7 @@ const Sidebar = ({ setSelectedSection, theme }) => {
         style={{
           marginBottom: "15px",
           fontSize: "20px",
-          color: isDarkMode ? "#FF9800" : "#0077b6", // Different colors for dark/light mode
+          color: "white", // Different colors for dark/light mode
           transition: "color 0.3s ease",
         }}
       >
