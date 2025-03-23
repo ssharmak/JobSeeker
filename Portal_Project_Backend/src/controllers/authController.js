@@ -287,8 +287,11 @@ const loginUser=async (req, res) => {
       if (!user) {
           return res.status(400).json({ message: "User not found!" });
       }
+      if(!user.is_verified){
+        return res.status(400).json({message:"user is not verified"})
+      }
 
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = bcrypt.compare(password, user.password);
       if (!isMatch) {
           return res.status(400).json({ message: "Invalid Credentials!" });
       }
@@ -306,9 +309,13 @@ const loginUser=async (req, res) => {
 
      //We can change the url paths when they finalised  
       if (user.role === 'admin') {
-          return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/admin/dashboard' });
+          return res.status(200).json({message: `Login Successfull!!!, AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/admin/dashboard' });
       } else {
-          return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/user/dashboard' });
+        return res.status(200).json({
+          message: `AccessToken: ${token} and refreshToken: ${refToken}`,
+          redirect: '/user/dashboard'
+      });
+      
       }
 
   } catch (error) {
