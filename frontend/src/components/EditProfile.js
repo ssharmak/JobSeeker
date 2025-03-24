@@ -19,24 +19,63 @@ const EditProfile = ({ onClose, userData, setUserData }) => {
         left: 0,
         width: "100%",
         height: "100%",
-        background: "rgba(0,0,0,0.5)",
+        background: "rgba(0, 0, 0, 0.5)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
       <div
-        style={{ background: "white", padding: "20px", borderRadius: "10px" }}
+        style={{
+          background: "#ffffff",
+          padding: "20px",
+          borderRadius: "10px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+          width: "300px",
+          textAlign: "center",
+        }}
       >
-        <h2>Edit Profile</h2>
+        <h2 style={{ color: "#0077b6" }}>Edit Profile</h2>
         <input
           type="text"
           name="name"
           value={formData.name}
           onChange={handleChange}
+          style={{
+            width: "100%",
+            padding: "8px",
+            margin: "10px 0",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
         />
-        <button onClick={handleSave}>Save</button>
-        <button onClick={onClose}>Cancel</button>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <button
+            onClick={handleSave}
+            style={{
+              padding: "8px 15px",
+              background: "#0077b6",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Save
+          </button>
+          <button
+            onClick={onClose}
+            style={{
+              padding: "8px 15px",
+              background: "#ccc",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );

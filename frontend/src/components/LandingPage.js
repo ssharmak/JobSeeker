@@ -25,20 +25,20 @@ const LandingPage = ({ user }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "inherit",
-        color: "inherit",
+        background: "#f5f5f5", // Light background
+        color: "#333", // Dark text for readability
       }}
     >
       <div
         style={{
           maxWidth: "800px",
           width: "100%",
-          background: "#fff",
+          background: "#fff", // White card background
           padding: "25px",
           borderRadius: "12px",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
           border: "1px solid #ddd",
-          color: "#000",
+          color: "#000", // Ensuring text stays dark
           textAlign: "center",
         }}
       >

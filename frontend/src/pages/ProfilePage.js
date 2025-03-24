@@ -33,8 +33,8 @@ const ProfilePage = () => {
   const profileContainerStyle = {
     display: "flex",
     minHeight: "100vh",
-    backgroundColor: "#121212",
-    color: "white",
+    backgroundColor: "#f5f5f5", // ✅ Light background
+    color: "#333", // ✅ Dark text
   };
 
   const contentStyle = {

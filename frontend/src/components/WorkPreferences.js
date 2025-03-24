@@ -7,21 +7,21 @@ import Modal from "react-modal";
 const customStyles = {
   control: (provided) => ({
     ...provided,
-    backgroundColor: "#333",
-    borderColor: "#444",
-    color: "#fff",
+    backgroundColor: "#fff",
+    borderColor: "#ccc",
+    color: "#333",
   }),
   multiValue: (provided) => ({
     ...provided,
-    backgroundColor: "#555",
+    backgroundColor: "#ddd",
   }),
   multiValueLabel: (provided) => ({
     ...provided,
-    color: "#fff",
+    color: "#333",
   }),
   placeholder: (provided) => ({
     ...provided,
-    color: "#bbb",
+    color: "#666",
   }),
 };
 
@@ -61,10 +61,11 @@ const WorkPreferences = () => {
     <div
       style={{
         padding: "20px",
-        background: "#1e1e2f",
+        background: "#fff", // ✅ White background
         borderRadius: "10px",
         marginBottom: "20px",
-        color: "#fff",
+        color: "#333", // ✅ Dark text
+        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", // ✅ Subtle shadow
       }}
     >
       {/* Header with Edit Icon */}
@@ -168,9 +169,10 @@ const WorkPreferences = () => {
             height: "150px",
             margin: "auto",
             textAlign: "center",
-            background: "#2a2a3a",
-            color: "#fff",
+            background: "#fff", // ✅ White modal background
+            color: "#333", // ✅ Dark text
             borderRadius: "10px",
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", // ✅ Subtle shadow
           },
         }}
       >

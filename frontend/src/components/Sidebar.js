@@ -1,4 +1,4 @@
-import React from "react";
+// import React, { useState } from "react";
 import {
   FaUser,
   FaUserGraduate,
@@ -10,15 +10,15 @@ import {
   FaFileAlt,
 } from "react-icons/fa";
 
-const Sidebar = ({ setSelectedSection, theme }) => {
-  // Theme-based Styles
-  //const isDarkMode = theme === "dark";
+const Sidebar = ({ setSelectedSection }) => {
+  // const [isDarkMode] = useState(false); // Dark mode is disabled
 
+  // Styles
   const sidebarStyle = {
     width: "250px",
     height: "100vh",
-    backgroundColor: "white", // Dark Mode / Light Mode
-    color: "white",
+    backgroundColor: "#ffffff", // Always light mode
+    color: "black",
     padding: "20px",
     position: "fixed",
     left: "0",
@@ -40,14 +40,14 @@ const Sidebar = ({ setSelectedSection, theme }) => {
     fontSize: "16px",
     borderRadius: "5px",
     transition: "background 0.3s, transform 0.2s",
-    color: "white",
+    color: "black",
   };
 
   const listItemHoverStyle = {
-    backgroundColor: "white", // Hover effect based on theme
+    backgroundColor: "#ddd",
   };
 
-  const iconStyle = { marginRight: "10px" };
+  // const iconStyle = { marginRight: "10px" };
 
   return (
     <div style={sidebarStyle}>
@@ -55,7 +55,7 @@ const Sidebar = ({ setSelectedSection, theme }) => {
         style={{
           marginBottom: "15px",
           fontSize: "20px",
-          color: "white", // Different colors for dark/light mode
+          color: "#0077b6",
           transition: "color 0.3s ease",
         }}
       >
@@ -63,113 +63,52 @@ const Sidebar = ({ setSelectedSection, theme }) => {
       </h2>
 
       <ul style={listStyle}>
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("landing")}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.background =
-              listItemHoverStyle.backgroundColor)
-          }
-          onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <FaUser style={iconStyle} /> Profile Overview
-        </li>
-
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("personalProfile")}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.background =
-              listItemHoverStyle.backgroundColor)
-          }
-          onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <FaFileAlt style={iconStyle} /> Personal Profile
-        </li>
-
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("education")}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.background =
-              listItemHoverStyle.backgroundColor)
-          }
-          onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <FaUserGraduate style={iconStyle} /> Education
-        </li>
-
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("experience")}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.background =
-              listItemHoverStyle.backgroundColor)
-          }
-          onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <FaBriefcase style={iconStyle} /> Experience
-        </li>
-
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("skills")}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.background =
-              listItemHoverStyle.backgroundColor)
-          }
-          onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <FaTools style={iconStyle} /> Skills
-        </li>
-
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("languages")}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.background =
-              listItemHoverStyle.backgroundColor)
-          }
-          onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <FaLanguage style={iconStyle} /> Languages
-        </li>
-
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("profileSummary")}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.background =
-              listItemHoverStyle.backgroundColor)
-          }
-          onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <FaUser style={iconStyle} /> Profile Summary
-        </li>
-
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("workPreferences")}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.background =
-              listItemHoverStyle.backgroundColor)
-          }
-          onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <FaClipboardList style={iconStyle} /> Work Preferences
-        </li>
-
-        <li
-          style={listItemStyle}
-          onClick={() => setSelectedSection("internships")}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.background =
-              listItemHoverStyle.backgroundColor)
-          }
-          onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <FaBuilding style={iconStyle} /> Internships
-        </li>
+        {[
+          { section: "landing", icon: <FaUser />, label: "Profile Overview" },
+          {
+            section: "personalProfile",
+            icon: <FaFileAlt />,
+            label: "Personal Profile",
+          },
+          {
+            section: "education",
+            icon: <FaUserGraduate />,
+            label: "Education",
+          },
+          { section: "experience", icon: <FaBriefcase />, label: "Experience" },
+          { section: "skills", icon: <FaTools />, label: "Skills" },
+          { section: "languages", icon: <FaLanguage />, label: "Languages" },
+          {
+            section: "profileSummary",
+            icon: <FaUser />,
+            label: "Profile Summary",
+          },
+          {
+            section: "workPreferences",
+            icon: <FaClipboardList />,
+            label: "Work Preferences",
+          },
+          {
+            section: "internships",
+            icon: <FaBuilding />,
+            label: "Internships",
+          },
+        ].map(({ section, icon, label }) => (
+          <li
+            key={section}
+            style={listItemStyle}
+            onClick={() => setSelectedSection(section)}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.background =
+                listItemHoverStyle.backgroundColor)
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.background = "transparent")
+            }
+          >
+            {icon} {label}
+          </li>
+        ))}
       </ul>
     </div>
   );

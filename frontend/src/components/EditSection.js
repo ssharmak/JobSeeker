@@ -14,26 +14,31 @@ const EditSection = ({ section, userData, setUserData, onClose }) => {
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
-        <h2>Edit {section.replace(/([A-Z])/g, " $1")}</h2>
+        <h2 style={styles.title}>Edit {section.replace(/([A-Z])/g, " $1")}</h2>
         {Object.keys(userData).map((key) =>
           section === key || (section === "skills" && key === "skills") ? (
             <div key={key} style={styles.inputGroup}>
-              <label>{key.charAt(0).toUpperCase() + key.slice(1)}:</label>
+              <label style={styles.label}>
+                {key.charAt(0).toUpperCase() + key.slice(1)}:
+              </label>
               <input
                 type="text"
                 name={key}
                 value={formData[key]}
                 onChange={handleChange}
+                style={styles.input}
               />
             </div>
           ) : null
         )}
-        <button style={styles.saveButton} onClick={handleSave}>
-          Save
-        </button>
-        <button style={styles.closeButton} onClick={onClose}>
-          Cancel
-        </button>
+        <div style={styles.buttonContainer}>
+          <button style={styles.saveButton} onClick={handleSave}>
+            Save
+          </button>
+          <button style={styles.closeButton} onClick={onClose}>
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -46,18 +51,44 @@ const styles = {
     left: 0,
     width: "100%",
     height: "100%",
-    background: "rgba(0,0,0,0.5)",
+    background: "rgba(0, 0, 0, 0.5)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
   modal: {
-    background: "white",
+    background: "#ffffff",
     padding: "20px",
     borderRadius: "10px",
-    width: "300px",
+    width: "350px",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+    textAlign: "center",
   },
-  inputGroup: { marginBottom: "10px" },
+  title: {
+    color: "#0077b6",
+    marginBottom: "15px",
+  },
+  inputGroup: {
+    marginBottom: "12px",
+    textAlign: "left",
+  },
+  label: {
+    display: "block",
+    fontWeight: "bold",
+    marginBottom: "5px",
+  },
+  input: {
+    width: "100%",
+    padding: "8px",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+    fontSize: "14px",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "15px",
+  },
   saveButton: {
     background: "#007bff",
     color: "white",
@@ -65,7 +96,8 @@ const styles = {
     borderRadius: "5px",
     cursor: "pointer",
     border: "none",
-    marginRight: "10px",
+    flex: 1,
+    marginRight: "5px",
   },
   closeButton: {
     background: "#dc3545",
@@ -74,6 +106,8 @@ const styles = {
     borderRadius: "5px",
     cursor: "pointer",
     border: "none",
+    flex: 1,
+    marginLeft: "5px",
   },
 };
 

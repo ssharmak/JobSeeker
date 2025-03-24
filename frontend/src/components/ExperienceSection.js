@@ -9,39 +9,29 @@ const ExperienceSection = () => {
   const [endDate, setEndDate] = useState("");
   const [totalDuration, setTotalDuration] = useState("");
 
-  // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
 
-  // Helper function to check if a date is a Sunday
-  const isSunday = (date) => new Date(date).getDay() === 0; // 0 represents Sunday
+  const isSunday = (date) => new Date(date).getDay() === 0;
 
-  // Helper function to calculate duration between two dates
   const calculateDuration = (start, end) => {
     if (!start || !end) return "";
-
     const startObj = new Date(start);
     const endObj = new Date(end);
     const diffTime = endObj - startObj;
-
     if (diffTime < 0) return "Invalid dates";
-
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     const years = Math.floor(diffDays / 365);
     const days = diffDays % 365;
-
     return { years, days, totalDays: diffDays };
   };
 
-  // Helper function to calculate total experience
   const calculateTotalExperience = (experiences) => {
     const totalDays = experiences.reduce((acc, job) => {
       const duration = calculateDuration(job.startDate, job.endDate);
       return acc + duration.totalDays;
     }, 0);
-
     const years = Math.floor(totalDays / 365);
     const days = totalDays % 365;
-
     return `${years} year(s) and ${days} day(s)`;
   };
 
@@ -56,13 +46,8 @@ const ExperienceSection = () => {
       return;
     }
 
-    if (startDate > today) {
-      alert("Start date cannot be in the future!");
-      return;
-    }
-
-    if (endDate > today) {
-      alert("End date cannot be in the future!");
+    if (startDate > today || endDate > today) {
+      alert("Dates cannot be in the future!");
       return;
     }
 
@@ -76,14 +61,10 @@ const ExperienceSection = () => {
     const newExperience = { company, role, startDate, endDate, duration };
     const updatedExperience = [...experience, newExperience];
     setExperience(updatedExperience);
-
-    // Clear input fields
     setCompany("");
     setRole("");
     setStartDate("");
     setEndDate("");
-
-    // Update total experience
     setTotalDuration(calculateTotalExperience(updatedExperience));
   };
 
@@ -91,9 +72,9 @@ const ExperienceSection = () => {
     <div
       style={{
         padding: "20px",
-        background: "#fff",
+        backgroundColor: "#ffffff",
         borderRadius: "12px",
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.08)",
         color: "#333",
         width: "90%",
         margin: "20px auto",
@@ -129,6 +110,7 @@ const ExperienceSection = () => {
             border: "1px solid #ddd",
             fontSize: "14px",
           }}
+          aria-label="Company Name"
         />
         <input
           type="text"
@@ -142,6 +124,7 @@ const ExperienceSection = () => {
             border: "1px solid #ddd",
             fontSize: "14px",
           }}
+          aria-label="Job Role"
         />
       </div>
 
@@ -169,6 +152,7 @@ const ExperienceSection = () => {
               fontSize: "14px",
             }}
             max={today}
+            aria-label="Start Date"
           />
         </div>
 
@@ -195,6 +179,7 @@ const ExperienceSection = () => {
               fontSize: "14px",
             }}
             max={today}
+            aria-label="End Date"
           />
         </div>
       </div>
@@ -210,7 +195,10 @@ const ExperienceSection = () => {
           borderRadius: "5px",
           fontSize: "14px",
           cursor: "pointer",
+          transition: "0.3s",
         }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = "#d97706")}
+        onMouseOut={(e) => (e.target.style.backgroundColor = "#f59e0b")}
       >
         Add Experience
       </button>
@@ -256,17 +244,10 @@ const ExperienceSection = () => {
             padding: "15px",
             backgroundColor: "#fff3cd",
             borderRadius: "8px",
-            border: "1px solid #f8d7da",
             textAlign: "center",
-            boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <h4
-            style={{
-              color: "#856404",
-              fontWeight: "bold",
-            }}
-          >
+          <h4 style={{ color: "#856404", fontWeight: "bold" }}>
             Total Work Experience: {totalDuration}
           </h4>
         </div>
