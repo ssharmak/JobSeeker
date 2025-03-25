@@ -17,16 +17,17 @@ const registerInstitution = async (req, res) => {
     }
 
     // If institution exists but is not verified, update details
-    if (institution && !institution.is_verified) {
-      institution.name = name;
-      institution.country = country;
-      institution.mobile_number = mobile_number;
-      await institution.save();
-    } else if (!institution) {
-      // Create a new institution record (without password)
-      institution = new Institution({ name, country, mobile_number, email });
-      await institution.save();
-    }
+      if (institution && !institution.is_verified) {
+        institution.name = name;
+        institution.address.country = country;
+        institution.mobile_number = mobile_number;
+        await institution.save();
+      } else if (!institution) {
+        // Create a new institution record (without password)
+       // institution = new Institution({ name, country, mobile_number, email });
+        institution = new Institution({ name, address: { country:country }, mobile_number, email })
+        await institution.save();
+      }
 
     // Check if OTP was already sent and is still valid
     const existingOtp = await otp.findOne({ email });
