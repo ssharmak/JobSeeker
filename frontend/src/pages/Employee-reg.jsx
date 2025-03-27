@@ -9,7 +9,9 @@ const EmployeeRegistrationForm = () => {
     const [tempToken, setTempToken] = useState("");
     const navigate = useNavigate();
     const [resendDisabled, setResendDisabled] = useState(false);
-    const [countdown, setCountdown] = useState(30);
+    const [countdown, setCountdown] = useState(60);
+    const [selectedType, setSelectedType] = useState("user");
+
 
     const API_BASE_URL = "http://localhost:5000";
 
@@ -146,6 +148,30 @@ const EmployeeRegistrationForm = () => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
+                <div className="flex justify-center my-4">
+                    <button
+                        className={`px-4 py-2 w-1/2 ${
+                            selectedType === "user" ? "bg-blue-600 text-white" : "bg-gray-200"
+                        }`}
+                        onClick={() => {
+                            setSelectedType("user");
+                            navigate("/user");
+                        }}
+                    >
+                        Register as User
+                    </button>
+                    <button
+                        className={`px-4 py-2 w-1/2 ${
+                            selectedType === "institution" ? "bg-blue-600 text-white" : "bg-gray-200"
+                        }`}
+                        onClick={() => {
+                            setSelectedType("institution");
+                            navigate("/inst");
+                        }}
+                    >
+                        Register as Institution
+                    </button>
+                </div>
                 <h2 className="text-xl font-bold text-center mb-4">Apply for job for free</h2>
 
                 <div className="flex items-center justify-between w-full mb-6">
@@ -275,7 +301,8 @@ const EmployeeRegistrationForm = () => {
                     <div className="flex-grow border-t border-gray-300"></div>
                 </div>
                 <p className="text-center text-sm mt-4">
-                    Already have an account? <span className="text-blue-600 cursor-pointer" onClick={() => navigate("/login")}>Login</span>
+                    Already have an account? <span className="text-blue-600 cursor-pointer"
+                                                   onClick={() => navigate("/login")}>Login</span>
                 </p>
             </div>
         </div>
