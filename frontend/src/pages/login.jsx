@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [userType, setUserType] = useState("user"); // "user" or "institution"
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     const API_BASE_URL = "http://localhost:5000";
 
@@ -69,7 +71,7 @@ const LoginPage = () => {
                         <input
                             type="email"
                             className="w-full p-2 border rounded mt-1"
-                            placeholder={userType==="user" ? "Enter your Email" : "Enter your Registered Email"}
+                            placeholder={userType === "user" ? "Enter your Email" : "Enter your Registered Email"}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -95,6 +97,10 @@ const LoginPage = () => {
                         Login
                     </button>
                 </form>
+                <p className="text-center text-sm mt-4">
+                    Don't have an account? <span className="text-blue-600 cursor-pointer"
+                                                   onClick={() => navigate(userType === "user" ? "/user" : "/inst")}>Register</span>
+                </p>
             </div>
         </div>
     );
