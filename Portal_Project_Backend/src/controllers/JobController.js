@@ -1,6 +1,6 @@
 const Category=require("../models/job_category");
 const Job=require("../models/job");
-
+const {Candidate}=require("../models/candidates");
 //To get all categories and their job counts
 const JobCountByCategory=async (req, res) => {
     try {
@@ -107,6 +107,42 @@ const filterJobs = async (req, res) => {
   }
 };
 
-module.exports={ JobCountByCategory,allCity,filterJobs,allDesignations }
+
+//find jobs by distance
+const findJobByDistance = async (req, res) => {
+  try {
+      const { distance } = req.query; // Distance in km
+      const { userId }= req.user?.id;
+
+      // Find Institution by ID
+      const candidate = await Candidate.findOne(userId);
+      if (!candidate) {
+          return res.status(404).json({ message: "candidate not found" });
+      }
+
+      // Extract institution coordinates
+      const [candidateLon, candidateLat] = [candidate.longitude,candidate.latitude];
+
+      // Fetch all candidates and filter them using the Haversine formula
+      const jobs = await Job.find({
+          latitude: { $ne: null }, // Ensure valid coordinates exist
+          longitude: { $ne: null }
+      });
+
+      // Filter candidates within the specified distance
+      const filteredJobs = Job.filter(job => {
+          const jobLat = job.latitude;
+          const candidateLon = job.longitude;
+          return haversine(candidateLat, candidateLon, job.latitude,job.longitude) <= distance;
+      });
+
+      res.status(200).json({ jobs: filteredJobs });
+
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports={ JobCountByCategory,allCity,filterJobs,allDesignations,findJobByDistance }
 
 

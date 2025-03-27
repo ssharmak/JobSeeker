@@ -1,5 +1,6 @@
-const {Candidate}=require("../models/candidates");
-const {Institution}=require("../models/Institution");
+const Candidate=require("../models/candidates");
+const Institution=require("../models/Institution");
+const Job =require("../models/job");
 
 const findCandidates = async (req, res) => {
     try {
@@ -50,6 +51,65 @@ function haversine(lat1, lon1, lat2, lon2) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c; // Distance in km
-}
+};
 
-module.exports={findCandidates};
+//To add a new job
+const addJob = async (req, res) => {
+    try {
+        const instId = req.user?.id; // Get institution ID from authenticated user
+        
+        // Extract job details from request body
+        const {
+            title, department, address, category, employment_type, experience_level,
+            min_experience, max_experience, description, requirements,
+            prefered_qualifications, responsibilities, benefits,
+            posted_date, closing_date, status, hiring_manager,
+            recruiters, max_applications, is_active,
+            allow_multiple_applications, salary_range
+        } = req.body;
+        
+        // Ensure address fields are provided
+        if (!address || !address.street || !address.city || !address.state || !address.country) {
+            return res.status(400).json({ error: "Incomplete address details." });
+        }
+        
+        // Create new job instance (geocoding handled in schema pre-save hook)
+        const newJob = new Job({
+            Institution_id:instId,
+            title,
+            department,
+            address,
+            category,
+            employment_type,
+            experience_level,
+            min_experience,
+            max_experience,
+            description,
+            requirements,
+            prefered_qualifications,
+            responsibilities,
+            benefits,
+            posted_date,
+            closing_date,
+            status,
+            hiring_manager,
+            recruiters,
+            max_applications,
+            is_active,
+            allow_multiple_applications,
+            salary_range
+        });
+        
+        // Save job to the database (triggers pre-save geocoding)
+        await newJob.save();
+        res.status(201).json({ message: "Job created successfully", job: newJob });
+    } catch (error) {
+        console.error("Error adding job:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+
+
+
+module.exports={findCandidates,addJob};

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const axios = require("axios");
 
 const InstitutionSchema = new mongoose.Schema({
   name: {
@@ -12,9 +13,9 @@ const InstitutionSchema = new mongoose.Schema({
   //   trim: true
   // },
   address: {
-    street: { type: String },
-    city: { type: String },
-    state: { type: String },
+    street: { type: String,required:true},
+    city: { type: String,required:true },
+    state: { type: String,required:true },
     postal_code: { type: String },
     country: {
         type: String,
