@@ -1,32 +1,31 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const { getNames } = require('country-list');
-const axios = require("axios");
 
 const validCountries = getNames();
 
 const educationSchema = new mongoose.Schema({
-    degree: { type: String, required: true },
-    field_of_study: { type: String, required: true },
-    university: { type: String, required: true },
-    start_date: { type: Date, required: true },
-    end_date: { type: Date, required: true },
+    degree: { type: String },
+    field_of_study: { type: String},
+    university: { type: String},
+    start_date: { type: Date},
+    end_date: { type: Date},
     grade: { type: String }
 });
 
 const workExperienceSchema = new mongoose.Schema({
-    company: { type: String, required: true },
-    position: { type: String, required: true },
-    start_date: { type: Date, required: true },
+    company: { type: String  },
+    position: { type: String },
+    start_date: { type: Date},
     end_date: { type: Date },
-    responsibilities: { type: [String], required: true },
+    responsibilities: { type: [String]},
     technologies_used: { type: [String] }
 });
 
 const certificationSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    issuer: { type: String, required: true },
-    issue_date: { type: Date, required: true },
+    name: { type: [String] },
+    issuer: { type: String},
+    issue_date: { type: Date},
     certificate_url: {
         type: String,
         validate: {
@@ -37,23 +36,22 @@ const certificationSchema = new mongoose.Schema({
 });
 
 const resumeSchema = new mongoose.Schema({
-    file_name: { type: String, required: true },
+    file_name: { type: String},
     file_url: {
         type: String,
-        required: true,
-        validate: {
-            validator: (value) => validator.isURL(value),
-            message: "Invalid URL"
-        }
+        // validate: {
+        //     validator: (value) => validator.isURL(value),
+        //     message: "Invalid URL"
+        // }
     },
-    uploaded_at: { type: Date, required: true }
+    uploaded_at: { type: Date,}
 });
 
 const applicationSchema = new mongoose.Schema({
-    job_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: true },
-    job_title: { type: String, required: true },
-    applied_date: { type: Date, required: true, default: Date.now },
-    status: { type: String, required: true },
+    job_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Job'},
+    job_title: { type: String },
+    applied_date: { type: Date,default:Date.now() },
+    Status: { type: String,},
     recruiter_comments: { type: String }
 });
 
@@ -85,7 +83,7 @@ const candidateSchema = new mongoose.Schema({
         country: {
             type: String,
             required: true,
-            enum: validCountries
+            // enum: validCountries
         }
     },
     linkedin_profile: {
@@ -112,39 +110,13 @@ const candidateSchema = new mongoose.Schema({
     email_verified: { type: Boolean, required: true },
     phone_verified: { type: Boolean, required: true },
     admin_verified: { type: Boolean, required: true },
-    latitude: { type: Number },
-    longitude: { type: Number }
+    approval: { type: Number, default: 0 },  // Default is 0
+    reject: { type: Number, default: 0 },    // Default is 0
+    flag : {type:Number,default:0} //Default is 0 for soft delete if 1 means delete
 }, { timestamps: true });
 
-// Function to get coordinates using OpenStreetMap
-async function getCoordinates(address) {
-    const formattedAddress = `${address.street}, ${address.city}, ${address.state}, ${address.postal_code}, ${address.country}`;
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(formattedAddress)}`;
-
-    try {
-        const response = await axios.get(url);
-        if (response.data.length > 0) {
-            return { lat: parseFloat(response.data[0].lat), lon: parseFloat(response.data[0].lon) };
-        } else {
-            throw new Error("Location not found");
-        }
-    } catch (error) {
-        console.error("Error fetching coordinates:", error);
-        return { lat: null, lon: null };
-    }
-}
-
-// Pre-save hook to fetch coordinates before saving
-candidateSchema.pre("save", async function (next) {
-    if (this.address && this.address.city) {
-        const { lat, lon } = await getCoordinates(this.address);
-        if (lat !== null && lon !== null) {
-            this.latitude = lat;
-            this.longitude = lon;
-        }
-    }
-    next();
-});
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
-module.exports = { Candidate };
+
+
+module.exports = {Candidate};

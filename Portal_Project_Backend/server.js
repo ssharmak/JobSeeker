@@ -1,27 +1,40 @@
-const express=require("express")
-const dotenv=require("dotenv")
-const connectDB=require("../Portal_Project_Backend/src/config/db")
-const bcrypt=require("bcryptjs");
-const jwt= require("jsonwebtoken")
+const express = require("express");
+const dotenv = require("dotenv");
+const connectDB = require("./src/config/db");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const cors = require("cors"); // Add this line
 const authRoute = require("./src/routes/authRoutes");
 const adminRoute = require("./src/routes/admin_routes");
 const userRoute = require("./src/routes/user_routes");
-const job_apply_routes=require("./src/routes/job_apply_routes");
-const haversineRoutes=require("./src/routes/haversine_route");
+const job_apply_routes = require("./src/routes/job_apply_routes");
+const bulkCandidaterouter = require("./src/routes/bulkCandidateRoute");
+const bulkRequirementrouter = require("./src/routes/bulkRequirementRoute");
 
 dotenv.config();
 connectDB();
 
-const app= express()
+const app = express();
 
-//Middleware 
+// CORS Middleware: Allow requests from http://localhost:3000
+app.use(cors({
+    origin: "http://localhost:3000", 
+    methods: ["GET", "POST", "PUT", "DELETE"], 
+    credentials: true, 
+}));
 
-app.use(express.json())
-app.use("/api/auth",authRoute);
-app.use("/api/admin",adminRoute);
-app.use("/api/user",userRoute);
-app.use("/job/apply",job_apply_routes);
-app.use("/distance",haversineRoutes);
+app.get('/', (req, res) => {
+    res.send('Teacher api running new deploy');
+});
 
-const PORT= process.env.PORT || 5000;
-app.listen(PORT, ()=> console.log(`server is running on port ${PORT}`))
+// Middleware 
+app.use(express.json());
+app.use("/api/auth", authRoute);
+app.use("/api/admin", adminRoute);
+app.use("/api/user", userRoute);
+app.use("/job/apply", job_apply_routes);
+app.use("/api/bulkcandidate", bulkCandidaterouter);
+app.use("/api/bulkRequirement", bulkRequirementrouter);
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

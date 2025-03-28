@@ -1,6 +1,6 @@
 const express= require("express");
 
-const {registerUser,loginUser, verifyOtp,setPassword,resendOTP} = require("../controllers/authController");
+const {registerUser,loginUser, verifyOtp,setPassword} = require("../controllers/authController");
 const { authenticateTempToken } = require("../middleware/authMiddleware");
 const {
     registerInstitution,
@@ -23,7 +23,6 @@ router.post("/register-user",registerUser);
 router.post("/login-user",loginUser);
 router.post("/verify",verifyOtp);
 router.post("/set-password",singleToken,setPassword);
-router.post("/resendOtp",singleToken,resendOTP)
 
 //register routes for institution
 router.post("/register-inst", registerInstitution);
@@ -34,7 +33,7 @@ router.post("/verify-otp-inst", verifyOtpInstitution);
 // // Set Password: Only password is required; institution email comes from token
 router.post("/password-inst", singleToken, setPasswordInstitution);
 
-router.post("/login-inst",loginInstitution);
+router.post("/login-inst",loginInstitution)
 
 //login route for user and admin [Specify role="admin while inserting admin record in database"]
 router.post("/login-user",loginUser);

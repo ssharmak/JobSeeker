@@ -18,7 +18,7 @@ country: {
     password:{type:String},
     resume: {
       type: String, // Stores file path as a string
-      
+      required: true
     },
     otp_verified:{type:Boolean,required:true,default:false},
     is_verified:{type:Boolean,required:true,default:false},
