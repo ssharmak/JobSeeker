@@ -1,42 +1,35 @@
 import React, { useState } from 'react';
 import { Home, Building2, Briefcase, MapPin, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
 
 const JobSeekerHomepage = () => {
   const [isJobsOpen, setJobsOpen] = useState(false);
   const [isCategoryOpen, setCategoryOpen] = useState(false);
   const [isLocationOpen, setLocationOpen] = useState(false);
   const [isDesignationOpen, setDesignationOpen] = useState(false);
+  const navigate = useNavigate();
 
   const trendingCategories = [
-    { icon: <Home className="w-8 h-8 text-purple-500" />, label: 'Remote', jobs: '5.3k + jobs' },
-    { icon: <Building2 className="w-8 h-8 text-blue-500" />, label: 'MNC', jobs: '19.3k + jobs' },
-    { icon: <Briefcase className="w-8 h-8 text-yellow-500" />, label: 'Engineering', jobs: '16.3k + jobs' }
+    { icon: <Home className="w-8 h-8 text-purple-500" />, label: 'Pre-School', jobs: '5.3k + jobs' },
+    { icon: <Building2 className="w-8 h-8 text-blue-500" />, label: 'EdTech', jobs: '19.3k + jobs' },
+    { icon: <Briefcase className="w-8 h-8 text-yellow-500" />, label: 'University', jobs: '16.3k + jobs' }
   ];
 
   const featuredCompanies = [
-    { name: 'L&T Infotech (LTI)', reviews: '3.4 reviews', logo: './images/lti_logo.png' },
-    { name: 'FIITJEE', reviews: '3.5 reviews', logo: './images/fiitjee_logo.png' },
-    { name: 'Capgemini', reviews: '16.3k reviews', logo: './images/capgemini_logo.png' },
-    { name: 'amazon', reviews: '204.5k reviews', logo: './images/amazon_logo.png' }
+    { name: 'National Public School ', reviews: '3.4 reviews', logo: './images/NPS.png' },
+    { name: 'Ryan International School ', reviews: '3.5 reviews', logo: './images/RIS.png' },
+    { name: 'Basil Woods International', reviews: '16.3k reviews', logo: './images/BW.png' },
+    { name: 'Emerald International School', reviews: '204.5k reviews', logo: './images/EIS.png' }
   ];
   
   const categories = [
-    'Mathematics Teacher Jobs',
-    'Science Teacher Jobs',
-    'Chemistry Teacher Jobs',
-    'Computer Teacher Jobs',
-    'English Teacher Jobs',
-    'Hindi Teacher Jobs',
-    'Assistant Teacher Jobs',
-    'Commerce Teacher Jobs',
-    'Teacher Jobs',
-    'Social Science Teacher Jobs',
-    'Computer Science Teacher Jobs',
-    'Economics Teacher Jobs',
-    'Biology Teacher Jobs',
-    'Physics Teacher Jobs',
-    'History Teacher Jobs',
-    'Accountancy Teacher Jobs'
+    'Coaching',
+    'School',
+    'Pre-School',
+    'EdTech',
+    'College/University',
+    'Vocational Training Institute',
   ];
 
   const locations = [
@@ -58,14 +51,31 @@ const JobSeekerHomepage = () => {
   ];
 
   const designations = [
+    'Mathematics Teacher Jobs',
+    'English Teacher Jobs',
     'Teacher Jobs',
-    'Social Science Teacher Jobs',
-    'Computer Science Teacher Jobs',
-    'Economics Teacher Jobs',
     'Biology Teacher Jobs',
+    'Science Teacher Jobs',
+    'Hindi Teacher Jobs',
+    'Social Science Teacher Jobs',
     'Physics Teacher Jobs',
+    'Chemistry Teacher Jobs',
+    'Assistant Teacher Jobs',
+    'Computer Science Teacher Jobs',
     'History Teacher Jobs',
-    'Accountancy Teacher Jobs'
+    'Computer Teacher Jobs',
+    'Commerce Teacher Jobs',
+    'Economics Teacher Jobs',
+    'Accountancy Teacher Jobs',
+    'Academic Coordinator Jobs',
+    'English Language Teacher Jobs',
+    'General Teacher Jobs',
+    'Geography Teacher Jobs',
+    'Academic Counsellor Jobs',
+    'Accountant Jobs',
+    'Administration Executive Jobs',
+    'Physical Education Teacher Jobs',
+    'Political Science Teacher Jobs',
   ];
 
   return (
@@ -189,10 +199,10 @@ const JobSeekerHomepage = () => {
 
           {/* Login/Register Buttons */}
           <div className="flex space-x-2">
-            <button className="text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition">
+            <button className="text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition" onClick={() => navigate("/login")}>
               Login
             </button>
-            <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+            <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition" onClick={() => navigate("/user")}>
               Register
             </button>
           </div>
@@ -211,7 +221,7 @@ const JobSeekerHomepage = () => {
             <div className="relative w-1/3">
               <input 
                 type="text" 
-                placeholder="Enter Skills / designations / companies" 
+                placeholder="Type your job title.." 
                 className="w-full px-4 py-2 border rounded-md pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <MapPin className="h-5 w-5 absolute left-3 top-3 text-gray-400" />
@@ -262,7 +272,7 @@ const JobSeekerHomepage = () => {
         {/* Featured Companies */}
         <section>
           <h2 className="text-2xl font-semibold text-center mb-8 text-gray-800">
-            Featured Companies Actively Hiring
+            Teaching Job Vacancies From
           </h2>
           <div className="flex justify-center space-x-8">
             {featuredCompanies.map((company, index) => (
@@ -295,16 +305,12 @@ const JobSeekerHomepage = () => {
             <ul className="space-y-2">
               <li><a href="#" className="text-gray-600 hover:text-blue-600">About us</a></li>
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Careers</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Employer home</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Credits</a></li>
             </ul>
           </div>
           <div>
             <h3 className="font-semibold mb-4 text-gray-800">Help & Support</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Help center</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Summons/Notices</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Grievances</a></li>
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Report Issue</a></li>
             </ul>
           </div>
@@ -313,8 +319,6 @@ const JobSeekerHomepage = () => {
             <ul className="space-y-2">
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Privacy policy</a></li>
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Terms & conditions</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Fraud alert</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Trust & safety</a></li>
             </ul>
           </div>
         </div>
