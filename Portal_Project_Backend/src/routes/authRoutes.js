@@ -1,6 +1,6 @@
 const express= require("express");
 
-const {registerUser,loginUser, verifyOtp,setPassword} = require("../controllers/authController");
+const {loginUser, verifyOtp,setPassword, registerUser} = require("../controllers/authController");
 const { authenticateTempToken } = require("../middleware/authMiddleware");
 const {
     registerInstitution,

@@ -124,7 +124,6 @@ const multer = require("multer");
     }
   };
   
-  module.exports = registerUser;
     
 
 
@@ -307,7 +306,7 @@ const loginUser=async (req, res) => {
       if (user.role === 'admin') {
           return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`});
       } else {
-          return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`},{ redirect: '/user/dashboard' });
+          return res.json({message: `AccessToken: ${token} and refreshToken: ${refToken}`});
       }
 
   } catch (error) {
