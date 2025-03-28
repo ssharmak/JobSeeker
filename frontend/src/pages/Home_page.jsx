@@ -1,7 +1,9 @@
-import React from 'react';
-import { Home, Building2, Briefcase, MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { Home, Building2, Briefcase, MapPin, ChevronDown } from 'lucide-react';
 
 const JobSeekerHomepage = () => {
+  const [isJobsOpen, setJobsOpen] = useState(false);
+
   const trendingCategories = [
     { icon: <Home className="w-8 h-8 text-purple-500" />, label: 'Remote', jobs: '5.3k + jobs' },
     { icon: <Building2 className="w-8 h-8 text-blue-500" />, label: 'MNC', jobs: '19.3k + jobs' },
@@ -24,6 +26,54 @@ const JobSeekerHomepage = () => {
     { name: 'Software <', reviews: '204.5k' }
   ];
 
+  const categories = [
+    'Mathematics Teacher Jobs',
+    'Science Teacher Jobs',
+    'Chemistry Teacher Jobs',
+    'Computer Teacher Jobs',
+    'English Teacher Jobs',
+    'Hindi Teacher Jobs',
+    'Assistant Teacher Jobs',
+    'Commerce Teacher Jobs',
+    'Teacher Jobs',
+    'Social Science Teacher Jobs',
+    'Computer Science Teacher Jobs',
+    'Economics Teacher Jobs',
+    'Biology Teacher Jobs',
+    'Physics Teacher Jobs',
+    'History Teacher Jobs',
+    'Accountancy Teacher Jobs'
+  ];
+
+  const locations = [
+    'Teacher jobs in Bangalore',
+    'Teacher jobs in Hyderabad',
+    'Teacher jobs in Lucknow',
+    'Teacher jobs in Coimbatore',
+    'Teacher jobs in Pune',
+    'Teacher jobs in Ahmedabad',
+    'Teacher jobs in Delhi',
+    'Teacher jobs in Patna',
+    'Teacher jobs in Chennai',
+    'Teacher jobs in Mumbai',
+    'Teacher jobs in Indore',
+    'Teacher jobs in Agra',
+    'Teacher jobs in Kolkata',
+    'Teacher jobs in Jaipur',
+    'Teacher jobs in Bhubaneswar'
+  ];
+
+  const designations = [
+    'Teacher Jobs',
+    'Social Science Teacher Jobs',
+    'Computer Science Teacher Jobs',
+    'Economics Teacher Jobs',
+    'Biology Teacher Jobs',
+    'Physics Teacher Jobs',
+    'History Teacher Jobs',
+    'Accountancy Teacher Jobs'
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       <header className="bg-white shadow-sm">
@@ -37,7 +87,48 @@ const JobSeekerHomepage = () => {
           </div>
           <div className="flex space-x-4">
             <a href="#" className="text-gray-700 hover:text-blue-600">Home</a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">Jobs</a>
+            <div className="relative">
+              <button 
+                onClick={() => setJobsOpen(!isJobsOpen)} 
+                className="text-gray-700 hover:text-blue-600 flex items-center"
+              >
+                Jobs <ChevronDown className="ml-1 w-4 h-4" />
+              </button>
+              {isJobsOpen && (
+                <div className="absolute top-10 left-0 bg-white shadow-lg rounded p-4 w-[600px] z-10 flex space-x-4">
+                  <div className="w-1/3">
+                    <h3 className="text-blue-500 font-semibold mb-2">JOBS BY CATEGORY</h3>
+                    <ul className="space-y-1">
+                      {categories.map((category, index) => (
+                        <li key={index}>
+                          <a href="#" className="text-gray-600 hover:text-blue-600">{category}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="w-1/3">
+                    <h3 className="text-blue-500 font-semibold mb-2">JOBS BY LOCATIONS</h3>
+                    <ul className="space-y-1">
+                      {locations.map((location, index) => (
+                        <li key={index}>
+                          <a href="#" className="text-gray-600 hover:text-blue-600">{location}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="w-1/3">
+                    <h3 className="text-blue-500 font-semibold mb-2">JOBS BY DESIGNATIONS</h3>
+                    <ul className="space-y-1">
+                      {designations.map((designation, index) => (
+                        <li key={index}>
+                          <a href="#" className="text-gray-600 hover:text-blue-600">{designation}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
             <a href="#" className="text-gray-700 hover:text-blue-600">Plans</a>
             <button className="bg-blue-500 text-white px-3 py-1 rounded">Book a Demo</button>
           </div>
