@@ -11,8 +11,6 @@ const { singleToken } = require("../middleware/singleTokenMiddleware");
 
 
 
-
-
 const router=express.Router();
 
 
