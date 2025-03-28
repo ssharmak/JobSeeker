@@ -23,9 +23,7 @@ app.use(cors({
     credentials: true, 
 }));
 
-app.get('/', (req, res) => {
-    res.send('Teacher api running new deploy');
-});
+
 
 // Middleware 
 app.use(express.json());
