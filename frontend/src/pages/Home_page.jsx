@@ -79,30 +79,30 @@ const JobSeekerHomepage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen font-sans bg-gray-50">
       {/* Header Navigation */}
       <header className="bg-white shadow-sm">
-        <nav className="container mx-auto flex justify-between items-center p-4">
+        <nav className="container flex items-center justify-between p-4 mx-auto">
           {/* Logo */}
           <div className="flex items-center">
             <img 
               src="./images/jobseeker_logo.jpg" 
               className="mx-auto mb-4 rounded" 
-              style={{ width: '100px', height: '50px' }}
+              style={{ width: '7rem', height: '4rem' }}
             />
           </div>
 
           {/* Navigation Links */}
-          <div className="flex space-x-4 items-center">
-            <a href="#" className="text-gray-700 hover:text-blue-600">Home</a>
+          <div className="flex items-center space-x-4">
+            <a href="/" className="text-gray-700 hover:text-blue-600">Home</a>
             
             {/* Jobs Dropdown */}
             <div className="relative">
               <button 
                 onClick={() => setJobsOpen(!isJobsOpen)} 
-                className="text-gray-700 hover:text-blue-600 flex items-center"
+                className="flex items-center text-gray-700 hover:text-blue-600"
               >
-                Jobs <ChevronDown className="ml-1 w-4 h-4" />
+                Jobs <ChevronDown className="w-4 h-4 ml-1" />
               </button>
               
               {isJobsOpen && (
@@ -113,18 +113,18 @@ const JobSeekerHomepage = () => {
                     <div className="relative w-1/3">
                       <button 
                         onClick={() => setCategoryOpen(!isCategoryOpen)} 
-                        className="text-blue-500 font-semibold mb-3 text-sm uppercase flex items-center w-full"
+                        className="flex items-center w-full mb-3 text-sm font-semibold text-blue-500 uppercase"
                       >
-                        JOBS BY CATEGORY <ChevronDown className="ml-1 w-4 h-4" />
+                        JOBS BY CATEGORY <ChevronDown className="w-4 h-4 ml-1" />
                       </button>
                       {isCategoryOpen && (
-                        <div className="absolute top-8 left-0 bg-white shadow-lg rounded-lg p-4 w-full z-20">
+                        <div className="absolute left-0 z-20 w-full p-4 bg-white rounded-lg shadow-lg top-8">
                           <ul className="space-y-2">
                             {categories.map((item, index) => (
                               <li key={index}>
                                 <a 
                                   href="#" 
-                                  className="text-gray-600 hover:text-blue-600 text-xs hover:underline"
+                                  className="text-xs text-gray-600 hover:text-blue-600 hover:underline"
                                 >
                                   {item}
                                 </a>
@@ -139,18 +139,18 @@ const JobSeekerHomepage = () => {
                     <div className="relative w-1/3">
                       <button 
                         onClick={() => setLocationOpen(!isLocationOpen)} 
-                        className="text-blue-500 font-semibold mb-3 text-sm uppercase flex items-center w-full"
+                        className="flex items-center w-full mb-3 text-sm font-semibold text-blue-500 uppercase"
                       >
-                        JOBS BY LOCATIONS <ChevronDown className="ml-1 w-4 h-4" />
+                        JOBS BY LOCATIONS <ChevronDown className="w-4 h-4 ml-1" />
                       </button>
                       {isLocationOpen && (
-                        <div className="absolute top-8 left-0 bg-white shadow-lg rounded-lg p-4 w-full z-20">
+                        <div className="absolute left-0 z-20 w-full p-4 bg-white rounded-lg shadow-lg top-8">
                           <ul className="space-y-2">
                             {locations.map((item, index) => (
                               <li key={index}>
                                 <a 
                                   href="#" 
-                                  className="text-gray-600 hover:text-blue-600 text-xs hover:underline"
+                                  className="text-xs text-gray-600 hover:text-blue-600 hover:underline"
                                 >
                                   {item}
                                 </a>
@@ -165,18 +165,18 @@ const JobSeekerHomepage = () => {
                     <div className="relative w-1/3">
                       <button 
                         onClick={() => setDesignationOpen(!isDesignationOpen)} 
-                        className="text-blue-500 font-semibold mb-3 text-sm uppercase flex items-center w-full"
+                        className="flex items-center w-full mb-3 text-sm font-semibold text-blue-500 uppercase"
                       >
-                        JOBS BY DESIGNATIONS <ChevronDown className="ml-1 w-4 h-4" />
+                        JOBS BY DESIGNATIONS <ChevronDown className="w-4 h-4 ml-1" />
                       </button>
                       {isDesignationOpen && (
-                        <div className="absolute top-8 left-0 bg-white shadow-lg rounded-lg p-4 w-full z-20">
+                        <div className="absolute left-0 z-20 w-full p-4 bg-white rounded-lg shadow-lg top-8">
                           <ul className="space-y-2">
                             {designations.map((item, index) => (
                               <li key={index}>
                                 <a 
                                   href="#" 
-                                  className="text-gray-600 hover:text-blue-600 text-xs hover:underline"
+                                  className="text-xs text-gray-600 hover:text-blue-600 hover:underline"
                                 >
                                   {item}
                                 </a>
@@ -192,17 +192,17 @@ const JobSeekerHomepage = () => {
             </div>
 
             <a href="#" className="text-gray-700 hover:text-blue-600">Plans</a>
-            <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition">
+            <button className="px-3 py-1 text-white transition bg-blue-500 rounded hover:bg-blue-600">
               Book a Demo
             </button>
           </div>
 
           {/* Login/Register Buttons */}
           <div className="flex space-x-2">
-            <button className="text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition" onClick={() => navigate("/login")}>
+            <button className="px-4 py-2 text-blue-600 transition border border-blue-600 rounded hover:bg-blue-50" onClick={() => navigate("/login")}>
               Login
             </button>
-            <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition" onClick={() => navigate("/user")}>
+            <button className="px-4 py-2 text-white transition bg-green-600 rounded hover:bg-green-700" onClick={() => navigate("/user")}>
               Register
             </button>
           </div>
@@ -210,30 +210,30 @@ const JobSeekerHomepage = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container px-4 py-8 mx-auto">
         {/* Hero Section */}
-        <section className="text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4 text-gray-800">Find your dream job now</h1>
-          <p className="text-gray-600 mb-6 text-lg">5 lakh+ jobs for you to explore</p>
+        <section className="mb-16 text-center">
+          <h1 className="mb-4 text-4xl font-bold text-gray-800">Find your dream job now</h1>
+          <p className="mb-6 text-lg text-gray-600">5 lakh+ jobs for you to explore</p>
           
           {/* Search Bar */}
-          <div className="flex justify-center space-x-4 mb-6">
+          <div className="flex justify-center mb-6 space-x-4">
             <div className="relative w-1/3">
               <input 
                 type="text" 
                 placeholder="Type your job title.." 
-                className="w-full px-4 py-2 border rounded-md pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <MapPin className="h-5 w-5 absolute left-3 top-3 text-gray-400" />
+              <MapPin className="absolute w-5 h-5 text-gray-400 left-3 top-3" />
             </div>
             
             <div className="relative w-1/4">
               <input 
                 type="text" 
                 placeholder="Enter location" 
-                className="w-full px-4 py-2 border rounded-md pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <MapPin className="h-5 w-5 absolute left-3 top-3 text-gray-400" />
+              <MapPin className="absolute w-5 h-5 text-gray-400 left-3 top-3" />
             </div>
             
             <select className="w-1/6 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -243,7 +243,7 @@ const JobSeekerHomepage = () => {
               <option>5+ years</option>
             </select>
             
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition">
+            <button className="px-6 py-2 text-white transition bg-blue-500 rounded-md hover:bg-blue-600">
               Search
             </button>
           </div>
@@ -251,18 +251,18 @@ const JobSeekerHomepage = () => {
 
         {/* Trending Categories */}
         <section className="mb-16">
-          <h2 className="text-2xl font-semibold text-center mb-8 text-gray-800">
+          <h2 className="mb-8 text-2xl font-semibold text-center text-gray-800">
             Trending on This Website today
           </h2>
           <div className="flex justify-center space-x-12">
             {trendingCategories.map((category, index) => (
               <div key={index} className="text-center">
-                <div className="bg-white p-5 rounded-full shadow-md inline-block mb-4 hover:shadow-lg transition">
+                <div className="inline-block p-5 mb-4 transition bg-white rounded-full shadow-md hover:shadow-lg">
                   {category.icon}
                 </div>
                 <div>
                   <p className="font-semibold text-gray-700">{category.label}</p>
-                  <p className="text-gray-500 text-sm">{category.jobs}</p>
+                  <p className="text-sm text-gray-500">{category.jobs}</p>
                 </div>
               </div>
             ))}
@@ -271,24 +271,24 @@ const JobSeekerHomepage = () => {
 
         {/* Featured Companies */}
         <section>
-          <h2 className="text-2xl font-semibold text-center mb-8 text-gray-800">
+          <h2 className="mb-8 text-2xl font-semibold text-center text-gray-800">
             Teaching Job Vacancies From
           </h2>
           <div className="flex justify-center space-x-8">
             {featuredCompanies.map((company, index) => (
               <div 
                 key={index} 
-                className="bg-white p-6 rounded-lg shadow hover:shadow-md transition text-center"
+                className="p-6 text-center transition bg-white rounded-lg shadow hover:shadow-md"
               >
                 <img 
                   src={company.logo} // Use the logo property here
                   className="mx-auto mb-4 rounded"
                   style={{ width: '120px', height: '40px' }} // Fixed width and height
                 />
-                <p className="font-semibold text-gray-800 mb-1">
+                <p className="mb-1 font-semibold text-gray-800">
                   {company.name}
                 </p>
-                <p className="text-gray-500 text-sm">
+                <p className="text-sm text-gray-500">
                   {company.reviews}
                 </p>
               </div>
@@ -298,24 +298,24 @@ const JobSeekerHomepage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white shadow-md py-12">
-        <div className="container mx-auto grid grid-cols-3 gap-8 px-4 mb-8">
+      <footer className="py-12 bg-white shadow-md">
+        <div className="container grid grid-cols-3 gap-8 px-4 mx-auto mb-8">
           <div>
-            <h3 className="font-semibold mb-4 text-gray-800">JobSeek</h3>
+            <h3 className="mb-4 font-semibold text-gray-800">JobSeek</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-gray-600 hover:text-blue-600">About us</a></li>
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Careers</a></li>
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4 text-gray-800">Help & Support</h3>
+            <h3 className="mb-4 font-semibold text-gray-800">Help & Support</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Help center</a></li>
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Report Issue</a></li>
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4 text-gray-800">Legal</h3>
+            <h3 className="mb-4 font-semibold text-gray-800">Legal</h3>
             <ul className="space-y-2">
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Privacy policy</a></li>
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Terms & conditions</a></li>
@@ -324,7 +324,7 @@ const JobSeekerHomepage = () => {
         </div>
 
         {/* Copyright */}
-        <div className="text-center text-gray-500 mb-4">
+        <div className="mb-4 text-center text-gray-500">
           © 2025 JobSeek. All rights reserved.
         </div>
 
@@ -339,7 +339,7 @@ const JobSeekerHomepage = () => {
             <a 
               key={index} 
               href="#" 
-              className="text-gray-600 hover:text-blue-600 transition"
+              className="text-gray-600 transition hover:text-blue-600"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d={social.path} />
