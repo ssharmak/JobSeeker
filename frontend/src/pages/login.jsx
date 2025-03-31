@@ -9,7 +9,7 @@ const LoginPage = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const API_BASE_URL = "http://localhost:5000";
+    const API_BASE_URL = "https://app.teachersearch.in";
 
     const handleLogin = async (e) => {
         e.preventDefault();

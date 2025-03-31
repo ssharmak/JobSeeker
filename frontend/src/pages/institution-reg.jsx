@@ -53,7 +53,7 @@ const InstitutionRegistrationForm = () => {
         confirmPassword: "",
     };
 
-    const API_BASE_URL = "http://localhost:5000";
+    const API_BASE_URL = "https://app.teachersearch.in";
 
     const handleNext = async (values, validateForm, setErrors, setSubmitting) => {
         setSubmitting(true);  // Ensure button shows "Processing..."
