@@ -1,6 +1,6 @@
 const express= require("express");
 
-const {loginUser, verifyOtp,setPassword, registerUser} = require("../controllers/authController");
+const {loginUser, verifyOtp,setPassword, registerUser,logoutUser} = require("../controllers/authController");
 const { authenticateTempToken } = require("../middleware/authMiddleware");
 const {
     registerInstitution,
@@ -21,7 +21,7 @@ router.post("/register-user",registerUser);
 router.post("/login-user",loginUser);
 router.post("/verify",verifyOtp);
 router.post("/set-password",singleToken,setPassword);
-
+router.post("/logoutUser",authenticateTempToken,logoutUser);
 //register routes for institution
 router.post("/register-inst", registerInstitution);
 

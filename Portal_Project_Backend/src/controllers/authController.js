@@ -6,8 +6,11 @@ const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
 const Candidate=require("../models/candidates");
 const multer = require("multer");
+const redis=require("redis");
+const { appendFile } = require("fs");
+const redisClient = redis.createClient();
 
-  
+
   // const registerUser = async (req, res) => {
   //   const { username, country, mobile_number, email, role } = req.body;
   
@@ -102,7 +105,7 @@ const multer = require("multer");
         }
   
         // Check if OTP was already sent and is still valid
-        const existingOtp = await Otp.findOne({ email });
+        const existingOtp = await otp.findOne({ email });
         if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_EXPIRY * 1000) {
           const timeLeft = process.env.OTP_EXPIRY - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
           return res.status(400).json({
@@ -112,7 +115,7 @@ const multer = require("multer");
   
         // Generate a 6-digit OTP
         const otpCode = crypto.randomInt(100000, 999999).toString();
-        await Otp.create({ email, otp: otpCode });
+        await otp.create({ email, otp: otpCode });
   
         // Send OTP to user email
         await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
@@ -293,7 +296,7 @@ const loginUser=async (req, res) => {
 
       
       const token= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET,{expiresIn:"15m"});
-      const refToken= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET_REFRESH);
+      const refToken= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET_REFRESH,{expiresIn:"7d"});
 
       //Storing the refresh Token in cookies to use it later
       res.cookie("refreshToken", refToken, {
@@ -315,8 +318,35 @@ const loginUser=async (req, res) => {
   }
 };
 
+const logoutUser= async(req,res)=>{
+  try{
+  const refToken= req.cookies.refreshToken;
 
-module.exports={ loginUser,setPassword,verifyOtp,registerUser }
+  if(!refToken){
+    return res.sendStatus(204);
+  }
+
+  //Blacklist the refresh token in Redis (expires after 7 days)
+  jwt.verify(refToken,process.env.JWT_SECRET_REFRESH,(err,decoded)=>{
+    if(!err){
+      redisClient.setEx(refToken,7*24*60*60,"Blacklisted");
+    }
+  });
+  res.clearCookie("refreshToken",{
+    httpOnly:true,
+    secure:true,
+    sameSite:"Strict",
+  });
+  res.json({message:"Logged out successfully"});
+   
+  }
+  catch(error){
+
+  }
+
+}
+
+module.exports={ loginUser,setPassword,verifyOtp,registerUser,logoutUser }
 
 
 
