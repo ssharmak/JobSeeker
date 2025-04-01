@@ -5,7 +5,7 @@ const { authenticateTempToken } = require("../middleware/authMiddleware");
 const {
     registerInstitution,
     verifyOtpInstitution,
-    setPasswordInstitution,loginInstitution
+    setPasswordInstitution,loginInstitution,resendOtp
   } = require("../controllers/institutionController");
 const { singleToken } = require("../middleware/singleTokenMiddleware");
 
@@ -27,6 +27,9 @@ router.post("/register-inst", registerInstitution);
 
 // // OTP Verification: Provide OTP (otp1) to verify institution
 router.post("/verify-otp-inst", verifyOtpInstitution);
+
+//resend otp
+router.post("/resend-otp", resendOtp);
 
 // // Set Password: Only password is required; institution email comes from token
 router.post("/password-inst", singleToken, setPasswordInstitution);
