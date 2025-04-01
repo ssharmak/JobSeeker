@@ -5,7 +5,7 @@ const { authenticateTempToken } = require("../middleware/authMiddleware");
 const {
     registerInstitution,
     verifyOtpInstitution,
-    setPasswordInstitution,loginInstitution
+    setPasswordInstitution,loginInstitution,resendOtp
   } = require("../controllers/institutionController");
 const { singleToken } = require("../middleware/singleTokenMiddleware");
 
