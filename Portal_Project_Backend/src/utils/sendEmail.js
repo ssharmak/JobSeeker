@@ -8,7 +8,7 @@ const sendEmail= async(to,subject,text) => {
         auth:{
             user:process.env.EMAIL_USER,
             //pass:"ccrf cdqy zuhi kjlp",
-            pass:"Shri@2025"
+            pass:"ldvk siax rueh jaqk"
         },
     });
 
