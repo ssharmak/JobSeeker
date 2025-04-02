@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -44,6 +45,9 @@ const LoginPage = () => {
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <div className="bg-white p-8 shadow-lg rounded-lg w-96">
+                <button className="absolute top-3 right-3" onClick={() => navigate("/")}>
+                    <X size={24}/>
+                </button>
                 <h2 className="text-2xl font-semibold text-center mb-6">
                     {userType === "user" ? "User Login" : "Institution Login"}
                 </h2>
