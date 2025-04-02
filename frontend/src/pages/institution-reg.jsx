@@ -3,6 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
+
 
 const validationSchema = {
     0: yup.object({
@@ -156,6 +158,9 @@ const InstitutionRegistrationForm = () => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
+                <button className="absolute top-3 right-3" onClick={() => navigate("/")}>
+                    <X size={24}/>
+                </button>
                 <div className="flex justify-center my-4">
                     <button
                         className={`px-4 py-2 w-1/2 ${
