@@ -114,7 +114,7 @@ const InstitutionNavbar = () => {
                   <a href="/my-profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                     <User className="mr-2" /> My Profile
                   </a>
-                  <a href="/logout" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  <a href="/" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                     <LogOut className="mr-2" /> Logout
                   </a>
                 </div>
