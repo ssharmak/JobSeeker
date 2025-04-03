@@ -124,7 +124,7 @@ const JobSeekerHomepage = () => {
                             {categories.map((item, index) => (
                               <li key={index}>
                                 <a 
-                                  href="#" 
+                                  href="/" 
                                   className="text-xs text-gray-600 hover:text-blue-600 hover:underline"
                                 >
                                   {item}
