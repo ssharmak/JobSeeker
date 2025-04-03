@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { X } from "lucide-react";
+import { X, Eye, EyeOff} from "lucide-react";
 
 
 const EmployeeRegistrationForm = () => {
@@ -13,6 +13,9 @@ const EmployeeRegistrationForm = () => {
     const [resendDisabled, setResendDisabled] = useState(false);
     const [countdown, setCountdown] = useState(60);
     const [selectedType, setSelectedType] = useState("user");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
 
 
     const API_BASE_URL = "https://app.teachersearch.in";
@@ -274,15 +277,32 @@ const EmployeeRegistrationForm = () => {
                             {step === 2 && (
                                 <>
                                     <label className="font-semibold">Password</label>
-                                    <Field name="password" type="password" placeholder="Enter Password"
-                                           className="w-full p-2 border rounded-md"/>
-                                    <ErrorMessage name="password" component="p" className="text-red-500 text-sm"/>
+                                    <div className="relative w-full">
+                                        <Field name="password" type={showPassword ? "text" : "password"} placeholder="Enter Password"
+                                               className="w-full p-2 border rounded-md"/>
+                                        <button
+                                            type="button"
+                                            className="absolute inset-y-0 right-2 flex items-center"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <Eye size={20}/> : <EyeOff size={20}/>}
+                                        </button>
+                                        <ErrorMessage name="password" component="p" className="text-red-500 text-sm"/>
+                                    </div>
 
                                     <label className="font-semibold">Confirm Password</label>
-                                    <Field name="confirmPassword" type="password" placeholder="Confirm Password"
-                                           className="w-full p-2 border rounded-md"/>
-                                    <ErrorMessage name="confirmPassword" component="p"
-                                                  className="text-red-500 text-sm"/>
+                                    <div>
+                                        <Field name="confirmPassword" type={showPassword ? "text" : "password"} placeholder="Confirm Password"
+                                               className="w-full p-2 border rounded-md"/>
+                                        <button
+                                            type="button"
+                                            className="absolute inset-y-0 right-2 flex items-center"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        >
+                                            {showConfirmPassword ? <Eye size={20}/> : <EyeOff size={20}/>}
+                                        </button>
+                                        <ErrorMessage name="confirmPassword" component="p" className="text-red-500 text-sm"/>
+                                    </div>
                                 </>
                             )}
                             <div className="flex justify-between">
