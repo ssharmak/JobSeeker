@@ -88,6 +88,7 @@ const JobSeekerHomepage = () => {
             <img 
               src="./images/jobseeker_logo.jpg" 
               className="mx-auto mb-4 rounded" 
+              alt="TeacherSearch.in"
               style={{ width: '7rem', height: '4rem' }}
             />
           </div>
@@ -283,6 +284,7 @@ const JobSeekerHomepage = () => {
                 <img 
                   src={company.logo} // Use the logo property here
                   className="mx-auto mb-4 rounded"
+                  alt="logo"
                   style={{ width: '120px', height: '40px' }} // Fixed width and height
                 />
                 <p className="mb-1 font-semibold text-gray-800">
