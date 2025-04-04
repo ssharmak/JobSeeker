@@ -50,9 +50,32 @@ const InstSidebar = () => {
       {/* Sidebar */}
       <div className="w-64 min-h-full p-4 space-y-4 bg-white border-r border-gray-300 shadow-lg">
         {/* Profile */}
-        <div className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-gray-100">
-          <User className="text-blue-500" />
-          <span className="text-sm font-medium text-gray-700">Profile</span>
+        {/* Profile Section */}
+        <div className="flex flex-col items-center p-4 space-y-2 bg-gray-100 rounded-md">
+          {/* Profile Picture */}
+          <div className="relative">
+            <img
+              src="https://via.placeholder.com/80" // Replace with dynamic profile image URL
+              alt="Profile"
+              className="w-16 h-16 rounded-full border-2 border-blue-500"
+            />
+            <button className="absolute bottom-0 right-0 bg-white p-1 rounded-full shadow-md">
+              <Edit2 className="w-4 h-4 text-blue-500" />
+            </button>
+          </div>
+
+          {/* Profile Info */}
+          <div className="text-center">
+            <h3 className="text-sm font-semibold text-gray-800">
+              Institute Name
+            </h3>
+            <p className="text-xs text-gray-600">institute@example.com</p>
+          </div>
+
+          {/* Edit Profile Button */}
+          <button className="px-4 py-1 text-xs font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600">
+            Edit Profile
+          </button>
         </div>
 
         {/* Candidates */}
