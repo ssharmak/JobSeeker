@@ -16,7 +16,7 @@ function App() {
         <Route path="/user" element={<EmployeeRegistrationForm />} />
         <Route path="/inst" element={<InstitutionRegistrationForm />} />
         <Route path="/ProfilePage" element={<ProfilePage />} />
-        <Route path="/InstitutionHompage" element={<InstitutionHomePage />} />
+        <Route path="/InstitutionHomepage" element={<InstitutionHomePage />} />
       </Routes>
     </Router>
   );
