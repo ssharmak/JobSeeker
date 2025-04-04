@@ -8,7 +8,6 @@ const InstitutionNavbar = () => {
   const [isHiringFor, setIsHiringFor] = useState(""); // State for "Hiring For" dropdown
   const [selectedSearchOption, setSelectedSearchOption] = useState(""); // Track which option is selected
   const [isSearchWithinDomain, setIsSearchWithinDomain] = useState(false); // State for "Search within My own domain"
-  const [isEntireDatabase, setIsEntireDatabase] = useState(false); // State for "Entire Database" selection
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -20,14 +19,10 @@ const InstitutionNavbar = () => {
     setSelectedSearchOption(option);
     if (option === 'My Own Domain') {
       setIsSearchWithinDomain(true);
-      setIsEntireDatabase(false);
-    } else if (option === 'Entire Database') {
+    } else {
       setIsSearchWithinDomain(false);
-      setIsEntireDatabase(true);
     }
   };
-
-  const handleEntireDatabaseChange = () => setIsEntireDatabase(!isEntireDatabase);
 
   return (
     <div className="font-sans bg-gray-50">
@@ -184,21 +179,15 @@ const InstitutionNavbar = () => {
               </div>
             </div>
 
-            {/* Search within My Own Domain and Entire Database */}
+            {/* Search within My Own Domain */}
             <div className="mb-4">
-              <span className="text-gray-700">Search within My own domain or Entire Database?</span>
+              <span className="text-gray-700">Search within My own domain?</span>
               <div className="flex justify-center mt-2 space-x-4">
                 <button
                   onClick={() => handleSearchOptionChange('My Own Domain')}
                   className={`flex items-center p-2 font-semibold text-blue-700 border rounded-md ${selectedSearchOption === 'My Own Domain' ? 'bg-blue-500 text-white' : 'bg-sky-100'} w-40`}
                 >
                   {selectedSearchOption === 'My Own Domain' && <Check className="mr-2" />} My Own Domain
-                </button>
-                <button
-                  onClick={() => handleSearchOptionChange('Entire Database')}
-                  className={`flex items-center p-2 font-semibold text-blue-700 border rounded-md ${selectedSearchOption === 'Entire Database' ? 'bg-blue-500 text-white' : 'bg-sky-100'} w-40`}
-                >
-                  {selectedSearchOption === 'Entire Database' && <Check className="mr-2" />} Entire Database
                 </button>
               </div>
             </div>
