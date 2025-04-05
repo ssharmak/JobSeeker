@@ -7,9 +7,9 @@ const sendEmail= async(to,subject,text) => {
          secure:false,
         auth:{
             user:process.env.EMAIL_USER,
-            pass:"ccrf cdqy zuhi kjlp",
+            pass:"ccrf cdqy zuhi kjlp"
             // pass:"ldvk siax rueh jaqk"
-        },
+        }
     });
 
     const mailOptions = {
