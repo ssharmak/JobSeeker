@@ -6,6 +6,8 @@ import EmployeeRegistrationForm from "./pages/Employee-reg";
 import InstitutionRegistrationForm from "./pages/institution-reg";
 import ProfilePage from "./pages/ProfilePage";
 import InstitutionHomePage from "./pages/InstitutionHomePage";
+import InstSidebar from "./components/instSidebar";
+import ProfilePageInst from "./components/ProfilePageInst";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/inst" element={<InstitutionRegistrationForm />} />
         <Route path="/ProfilePage" element={<ProfilePage />} />
         <Route path="/InstitutionHomepage" element={<InstitutionHomePage />} />
+        <Route path="/" element={<InstSidebar />} />
+        <Route path="/InstitutionProfile" element={<ProfilePageInst />} />
       </Routes>
     </Router>
   );

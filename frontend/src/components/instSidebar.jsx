@@ -1,6 +1,7 @@
+// InstSidebar.js
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
-  User,
   ChevronDown,
   MapPin,
   Users,
@@ -46,16 +47,15 @@ const InstSidebar = () => {
   };
 
   return (
-    <div className="relative">
-      {/* Sidebar */}
+    <div className="flex h-screen">
+      {/* Sidebar (Fixed) */}
       <div className="w-64 min-h-full p-4 space-y-4 bg-white border-r border-gray-300 shadow-lg">
-        {/* Profile */}
         {/* Profile Section */}
         <div className="flex flex-col items-center p-4 space-y-2 bg-gray-100 rounded-md">
           {/* Profile Picture */}
           <div className="relative">
             <img
-              src="https://via.placeholder.com/80" // Replace with dynamic profile image URL
+              src="https://via.placeholder.com/80"
               alt="Profile"
               className="w-16 h-16 rounded-full border-2 border-blue-500"
             />
@@ -67,15 +67,18 @@ const InstSidebar = () => {
           {/* Profile Info */}
           <div className="text-center">
             <h3 className="text-sm font-semibold text-gray-800">
-              Institute Name
+              Evoltech EdTech Consultancy
             </h3>
-            <p className="text-xs text-gray-600">institute@example.com</p>
+            <p className="text-xs text-gray-600">shri@evoltech.in</p>
           </div>
 
           {/* Edit Profile Button */}
-          <button className="px-4 py-1 text-xs font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600">
+          <Link
+            to="/InstitutionProfile"
+            className="block px-4 py-1 text-xs font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 text-center"
+          >
             Edit Profile
-          </button>
+          </Link>
         </div>
 
         {/* Candidates */}
