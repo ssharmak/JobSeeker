@@ -40,9 +40,9 @@ const InstitutionNavbar = () => {
 
           {/* Desktop Navigation Links */}
           <div className="items-center hidden space-x-6 md:flex">
-            <a href="/InstitutionHompage" className="text-gray-700 hover:text-black-800">Home</a>
-            <a href="/InstitutionHompage" className="text-gray-700 hover:text-black-800">Contact Us</a>
-            <a href="/InstitutionHompage" className="text-gray-700 hover:text-black-800">FAQ's</a>
+            <a href="/InstitutionHomepage" className="text-gray-700 hover:text-black-800">Home</a>
+            <a href="/InstitutionHomepage" className="text-gray-700 hover:text-black-800">Contact Us</a>
+            <a href="/InstitutionHomepage" className="text-gray-700 hover:text-black-800">FAQ's</a>
 
             <button className="flex items-center p-2 font-semibold text-blue-700 border rounded-md bg-sky-100 hover:text-black-600" onClick={togglePopUp}>
               <Search className="mr-1" /> Find a Candidate
