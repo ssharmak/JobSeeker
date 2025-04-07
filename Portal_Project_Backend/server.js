@@ -13,6 +13,7 @@ const userRoute = require("./src/routes/user_routes");
 const job_apply_routes = require("./src/routes/job_apply_routes");
 const bulkCandidaterouter = require("./src/routes/bulkCandidateRoute");
 const bulkRequirementrouter = require("./src/routes/bulkRequirementRoute");
+const profileRoutes=require("./src/routes/profile_Routes");
 
 dotenv.config();
 connectDB();
@@ -38,6 +39,8 @@ app.use("/api/user", userRoute);
 app.use("/job/apply", job_apply_routes);
 app.use("/api/bulkcandidate", bulkCandidaterouter);
 app.use("/api/bulkRequirement", bulkRequirementrouter);
+app.use("/api/profile")
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
