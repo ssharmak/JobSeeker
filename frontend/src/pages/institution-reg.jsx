@@ -159,8 +159,8 @@ const InstitutionRegistrationForm = () => {
 
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-            <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 overflow-y-auto p-4">
+            <div className="w-full max-w-lg sm:max-w-xl lg:max-w-2xl mx-auto p-6 sm:p-8 bg-white shadow-lg rounded-lg relative">
                 <button className="absolute top-3 right-3" onClick={() => navigate("/")}>
                     <X size={24}/>
                 </button>
