@@ -171,7 +171,30 @@ const loginInstitution = async (req, res) => {
 };
 
 
+const resendOtp = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const existingOtp = await otp.findOne({ email });
+    if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_Expiry * 1000) {
+      const timeLeft = process.env.OTP_Expiry - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
+      return res.status(400).json({
+        message: `OTP already sent! Please wait ${timeLeft} seconds before requesting again`,
+      });
+    }
+
+    // Generate a 6-digit OTP
+    const otpCode = crypto.randomInt(100000, 999999).toString();
+    await otp.create({ email, otp: otpCode });
+
+    // Send OTP to institution email
+    await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
+
+    res.status(200).json({ message: "OTP sent successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 
-
-module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution,loginInstitution };
+module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution,loginInstitution,resendOtp };
