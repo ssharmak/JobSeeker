@@ -49,10 +49,10 @@ const certificationSchema = new mongoose.Schema({
 });
 
 const resumeSchema = new mongoose.Schema({
-    file_name: { type: String, required: true },
+    file_name: { type: String },
     file_url: {
-        type: String,
-        required: true,
+        type: String
+        // required: true,
         // validate: {
         //     validator: (value) => validator.isURL(value),
         //     message: "Invalid URL"
@@ -72,7 +72,7 @@ const applicationSchema = new mongoose.Schema({
 const candidateSchema = new mongoose.Schema({
     main_user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true },
     first_name: { type: String, required: true },
-    last_name: { type: String, required: true },
+    last_name: { type: String},
     gender:{type: String},
     languages:{type:[String]},
     professional_Description:{ type: String},
@@ -87,10 +87,9 @@ const candidateSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        unique: true,
-        match: [/^\+?[1-9]\d{6,14}$/, "Invalid phone number format"]
+        //match: [/^\+?[1-9]\d{6,14}$/, "Invalid phone number format"]
     },
-    date_of_birth: { type: Date, required: true },
+    date_of_birth: { type: Date },
     address: {
         street: { type: String },
         city: { type: String },
@@ -98,7 +97,7 @@ const candidateSchema = new mongoose.Schema({
         postal_code: { type: String },
         country: {
             type: String,
-            required: true,
+            
             // enum: validCountries
         }
     },
@@ -161,4 +160,4 @@ candidateSchema.pre("save", async function (next) {
 });
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
-module.exports = { Candidate };
+module.exports =  Candidate;

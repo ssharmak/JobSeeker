@@ -4,7 +4,7 @@ const User= require("../models/Users");
 const otp=require("../models/otp");
 const sendEmail= require("../utils/sendEmail");
 const crypto= require('crypto');
-const Candidate=require("../models/candidates");
+const Candidate =require("../models/candidates");
 const multer = require("multer");
 const redis=require("redis");
 const { appendFile } = require("fs");
@@ -94,7 +94,7 @@ const upload = multer({storage, fileFilter,
         const resume = req.file ? req.file.path : null;
   
         // Validate required fields
-        if (!name || !phone_number || !email || !resume) {
+        if (!name || !phone_number || !email) {
           return res.status(400).json({ message: "All fields are required" });
         }
   
@@ -109,7 +109,7 @@ const upload = multer({storage, fileFilter,
         if (user && !user.is_verified) {
           user.name = name;
           user.phone_number = phone_number;
-          user.resume = resume;
+         if (resume){ user.resume = resume};
           await user.save();
         } else if (!user) {
           // Create a new user record
@@ -196,7 +196,7 @@ const verifyOtp = async (req, res) => {
       const { password } = req.body; // Only password is taken as input
   
       // Retrieve email from the authenticated session (or request object)
-      const userEmail = req.user?.email; // Ensure email is stored in req.user after OTP verification
+      const userEmail = req.user.email; // Ensure email is stored in req.user after OTP verification
   
       if (!userEmail) {
         return res.status(400).json({ message: "User email not found in session" });
@@ -217,15 +217,14 @@ const verifyOtp = async (req, res) => {
   
       // Update the user's password field
       user.password = hashedPassword;
-      user.is_verified=true;
-      await user.save();
+      
 
       if(user.role==="user"){
-        const newCandidate = new Candidate({
+        const newCandidate = {
           main_user: user._id,  
-          first_name: username,  
+          first_name: user.name,  
           last_name: "",
-          email: email,
+          email: user.email,
           phone: "",
           date_of_birth: null,
           address: {
@@ -233,7 +232,7 @@ const verifyOtp = async (req, res) => {
               city: "",
               state: "",
               postal_code: "",
-              country: country
+              country:""
           },
           linkedin_profile: "",
           portfolio_website: "",
@@ -244,12 +243,15 @@ const verifyOtp = async (req, res) => {
           resume: null,
           applications: [],
           status: "pending",
-          email_verified: false,
+          email_verified: true,
           phone_verified: false,
           admin_verified: false
-      });
+      };
+      const newCandidateData = new Candidate(newCandidate);
 
-      await newCandidate.save();
+      await newCandidateData.save();
+      user.is_verified=true;
+      await user.save();
 
       }
   

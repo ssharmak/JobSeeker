@@ -19,6 +19,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cookieParser());
 
 // CORS Middleware: Allow requests from http://localhost:3000
 app.use(cors({
@@ -39,7 +40,7 @@ app.use("/api/user", userRoute);
 app.use("/job/apply", job_apply_routes);
 app.use("/api/bulkcandidate", bulkCandidaterouter);
 app.use("/api/bulkRequirement", bulkRequirementrouter);
-app.use("/api/profile")
+app.use("/api/profile",profileRoutes)
 
 
 const PORT = process.env.PORT || 5000;

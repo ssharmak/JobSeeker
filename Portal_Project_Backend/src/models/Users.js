@@ -1,7 +1,7 @@
 const mongoose= require('mongoose')
 
 const User_Schema= new mongoose.Schema({
-    username:{type:String,required:true},
+    name:{type:String,required:true},
     email:{type:String,unique:true, match:[/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._%+-]+\.[a-zA-Z]{2,}$/,'Please fill a valid email address']
 
 },
@@ -10,7 +10,7 @@ country: {
     default:"India",
     trim: true
   },
-  phone: {
+  phone_number: {
     type: String,
     required: true,
     unique: true,
@@ -18,7 +18,6 @@ country: {
     password:{type:String},
     resume: {
       type: String, // Stores file path as a string
-      required: true
     },
     otp_verified:{type:Boolean,required:true,default:false},
     is_verified:{type:Boolean,required:true,default:false},

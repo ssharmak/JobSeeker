@@ -18,7 +18,7 @@ address: {
     country: {
         type: String,
         required: true,
-        enum: validCountries
+        // enum: validCountries
     }},
     latitude:{type:String},
     longitude:{type:String},

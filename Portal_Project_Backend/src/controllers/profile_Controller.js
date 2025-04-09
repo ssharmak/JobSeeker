@@ -1,4 +1,4 @@
-const {Candidate}= require("../models/candidates");
+const Candidate = require("../models/candidates");
 
 //To update personnel information in profile
 
@@ -24,9 +24,13 @@ if (languages) {
         ? languages
         : languages.split(','); 
 }
-
-await Candidate.findOneAndUpdate({main_user:userId},{$set:upDict});
-return res.status(200).json({message:"Profile updated"});
+const cand=await Candidate.findOne({main_user:userId});
+if(!cand){
+    console.log("Candidate not found");
+    return res.status(401).json({message:"profile not found"});
+}
+await Candidate.findOneAndUpdate({main_user:userId},{$set:upDict},{new:true});
+return res.status(200).json({message:"Profile updated",Candidate:cand.first_name});
 
     }
     catch(error){
@@ -139,6 +143,26 @@ const updateCertificates= async(req,res)=>{
         console.error("Error updating certification details:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
+};
+
+const getProfile= async(req,res)=>{
+    try{
+        const userId=req.user.id;
+        if(!userId){
+            return res.status(401).json({message:"user id not provided"});
+        }
+
+        const can=await Candidate.findOne({main_user:userId});
+        if (!can) {
+            return res.status(404).json({ message: "Candidate not found" });
+        };
+         return res.status(200).json({candidate:can});
+
+    }
+    catch(error){
+        return res.status(400).json({message:"Error occured"});
+
+    }
 }
 
-module.exports={updatePersonnel,updateWorkExperience,updateEducation,updateCertificates};
+module.exports={updatePersonnel,updateWorkExperience,updateEducation,updateCertificates,getProfile};

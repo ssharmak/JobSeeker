@@ -22,7 +22,7 @@ router.post("/login-user",loginUser);
 router.post("/verify",verifyOtp);
 router.post("/set-password",singleToken,setPassword);
 router.post("/logoutUser",authenticateTempToken,logoutUser);
-//register routes for institution
+//register routes for institutions
 router.post("/register-inst", registerInstitution);
 
 // // OTP Verification: Provide OTP (otp1) to verify institution

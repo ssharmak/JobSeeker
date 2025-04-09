@@ -64,7 +64,7 @@ const InstitutionSchema = new mongoose.Schema({
     country: {
         type: String,
         required: true,
-        enum: validCountries
+        // enum: validCountries
     }},
   mobile_number: {
     type: String,
