@@ -45,8 +45,8 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 sm:px-6 lg:px-8">
-            <div className="bg-white p-6 sm:p-8 shadow-lg rounded-lg w-full max-w-md relative">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 overflow-y-auto p-4">
+            <div className="w-full max-w-lg sm:max-w-xl lg:max-w-2xl mx-auto p-6 sm:p-8 bg-white shadow-lg rounded-lg relative">
                 <button className="absolute top-3 right-3" onClick={() => navigate("/")}> <X size={24} /> </button>
                 <h2 className="text-2xl font-semibold text-center mb-6">{userType === "user" ? "User Login" : "Institution Login"}</h2>
                 <div className="flex justify-center mb-4">
