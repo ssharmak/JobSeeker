@@ -23,7 +23,8 @@ app.use(cookieParser());
 
 // CORS Middleware: Allow requests from http://localhost:3000
 app.use(cors({
-    origin: "http://localhost:3000", 
+    // origin: "http://localhost:3000", 
+    origin: "https://teachersearch.in",
     methods: ["GET", "POST", "PUT", "DELETE"], 
     credentials: true, 
 }));
