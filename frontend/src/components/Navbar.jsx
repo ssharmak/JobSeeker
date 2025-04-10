@@ -130,20 +130,54 @@ const Navbar = () => {
                     {isLocationOpen && (
                       <div className="absolute top-8 left-0 bg-white shadow-lg rounded-lg p-4 w-full z-20">
                         <ul className="space-y-2">
-                        {locations.map((item, index) => (
-                          <li key={index}>
-                          <a href="#" className="text-xs text-gray-600 hover:text-blue-600 hover:underline"
-                            onClick={(e) => {
-                                  e.preventDefault();
-                                  if (item === 'Teacher jobs in Bangalore') {
-                                  navigate('/jobs/bangalore');
-                          }
-                        }}
-                          >
-                            {item}
-                          </a>
-                        </li>
-                      ))}
+                      {locations.map((item, index) => (
+                      <li key={index}>
+                    <a 
+                       href="#" 
+                      className="text-xs text-gray-600 hover:text-blue-600 hover:underline"
+                        onClick={(e) => {
+                        e.preventDefault();
+        
+                          // Extract location name from the string
+                          const locationText = item.toLowerCase();
+        
+        if (locationText.includes('bangalore')) {
+          navigate('/jobs/bangalore');
+        } else if (locationText.includes('hyderabad')) {
+          navigate('/jobs/hyderabad');
+        } else if (locationText.includes('delhi')) {
+          navigate('/jobs/delhi');
+        } else if (locationText.includes('mumbai')) {
+          navigate('/jobs/mumbai');
+        } else if (locationText.includes('chennai')) {
+          navigate('/jobs/chennai');
+        } else if (locationText.includes('kolkata')) {
+          navigate('/jobs/kolkata');
+        } else if (locationText.includes('pune')) {
+          navigate('/jobs/pune');
+        } else if (locationText.includes('jaipur')) {
+          navigate('/jobs/jaipur');
+        } else if (locationText.includes('lucknow')) {
+          navigate('/jobs/lucknow');
+        } else if (locationText.includes('indore')) {
+          navigate('/jobs/indore');
+        } else if (locationText.includes('agra')) {
+          navigate('/jobs/agra');
+        } else if (locationText.includes('patna')) {
+          navigate('/jobs/patna');
+        } else if (locationText.includes('coimbatore')) {
+          navigate('/jobs/coimbatore');
+        } else if (locationText.includes('ahmedabad')) {
+          navigate('/jobs/ahmedabad');
+        } else if (locationText.includes('bhubaneswar')) {
+          navigate('/jobs/bhubaneswar');
+        }
+      }}
+    >
+      {item}
+    </a>
+  </li>
+))}
                         </ul>
                       </div>
                     )}
