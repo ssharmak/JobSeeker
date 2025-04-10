@@ -8,12 +8,18 @@ import ProfilePage from "./pages/ProfilePage";
 import InstitutionHomePage from "./pages/InstitutionHomePage";
 import InstSidebar from "./components/instSidebar";
 import ProfilePageInst from "./components/ProfilePageInst";
+import Navbar from './components/Navbar';
+import TeacherJobsPage from './pages/TeacherJobsPage';
+
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<JobSeekerHomepage />} />
+        <Route path="/jobs/bangalore" element={<TeacherJobsPage />} />
+        <Route path="/jobs/:location" element={<TeacherJobsPage />} />
+        <Route path="/" element={< Navbar/>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/user" element={<EmployeeRegistrationForm />} />
         <Route path="/inst" element={<InstitutionRegistrationForm />} />
