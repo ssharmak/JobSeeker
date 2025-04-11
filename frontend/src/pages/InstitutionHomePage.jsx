@@ -24,7 +24,7 @@ const InstitutionHomePage = () => {
 
       {/* Floating WhatsApp Icon */}
       <a 
-        href="https://wa.me/1234567890"  // Replace with your WhatsApp number
+        href="https://wa.me/+919739866955"  // Replace with your WhatsApp number
         target="_blank"
         rel="noopener noreferrer"
         className="fixed p-3 transition duration-300 bg-green-500 rounded-full shadow-lg bottom-5 right-5 hover:bg-green-600"

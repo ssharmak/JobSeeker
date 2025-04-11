@@ -57,9 +57,9 @@ const InstSidebar = () => {
             <img
               src="https://via.placeholder.com/80"
               alt="Profile"
-              className="w-16 h-16 rounded-full border-2 border-blue-500"
+              className="w-16 h-16 border-2 border-blue-500 rounded-full"
             />
-            <button className="absolute bottom-0 right-0 bg-white p-1 rounded-full shadow-md">
+            <button className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-md">
               <Edit2 className="w-4 h-4 text-blue-500" />
             </button>
           </div>
@@ -75,7 +75,7 @@ const InstSidebar = () => {
           {/* Edit Profile Button */}
           <Link
             to="/InstitutionProfile"
-            className="block px-4 py-1 text-xs font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 text-center"
+            className="block px-4 py-1 text-xs font-medium text-center text-white bg-blue-500 rounded-md hover:bg-blue-600"
           >
             Edit Profile
           </Link>
@@ -149,7 +149,7 @@ const InstSidebar = () => {
         <div className="mt-4">
           <button
             onClick={handleBookDemo}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 font-semibold text-black transition duration-300 bg-orange-100 rounded-lg shadow-md hover:bg-orange-200"
+            className="flex items-center justify-center w-full gap-2 px-4 py-2 font-semibold text-black transition duration-300 bg-orange-100 rounded-lg shadow-md hover:bg-orange-200"
           >
             <Calendar className="w-5 h-5 text-orange-500" />
             Book a Demo
@@ -161,7 +161,7 @@ const InstSidebar = () => {
       {isSettingsOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-[350px] p-4 bg-white rounded-lg shadow-lg">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Settings</h2>
               <button onClick={toggleSettingsPopup}>
                 <X className="w-5 h-5 text-gray-500 hover:text-gray-700" />
@@ -170,7 +170,7 @@ const InstSidebar = () => {
 
             <div className="mt-4 space-y-3">
               {/* Two-Factor Authentication */}
-              <div className="p-2 bg-gray-100 rounded-md flex items-center justify-between">
+              <div className="flex items-center justify-between p-2 bg-gray-100 rounded-md">
                 <div className="flex items-center space-x-2">
                   <Shield className="text-blue-500" />
                   <span className="text-sm font-medium">
@@ -181,12 +181,12 @@ const InstSidebar = () => {
                   type="checkbox"
                   checked={isTwoFactorEnabled}
                   onChange={toggleTwoFactor}
-                  className="w-4 h-4 accent-blue-500 cursor-pointer"
+                  className="w-4 h-4 cursor-pointer accent-blue-500"
                 />
               </div>
 
               {/* Promotional Mails */}
-              <div className="p-2 bg-gray-100 rounded-md flex items-center justify-between">
+              <div className="flex items-center justify-between p-2 bg-gray-100 rounded-md">
                 <div className="flex items-center space-x-2">
                   <Mail className="text-blue-500" />
                   <span className="text-sm font-medium">Promotional Mails</span>
@@ -195,7 +195,7 @@ const InstSidebar = () => {
                   type="checkbox"
                   checked={isPromotionalMailsEnabled}
                   onChange={togglePromotionalMails}
-                  className="w-4 h-4 accent-blue-500 cursor-pointer"
+                  className="w-4 h-4 cursor-pointer accent-blue-500"
                 />
               </div>
 
@@ -224,7 +224,7 @@ const InstSidebar = () => {
                 </div>
 
                 {isEditingPassword && (
-                  <div className="mt-2 flex items-center space-x-2">
+                  <div className="flex items-center mt-2 space-x-2">
                     <input
                       type="password"
                       value={newPassword}

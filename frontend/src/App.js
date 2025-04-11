@@ -10,6 +10,7 @@ import InstSidebar from "./components/instSidebar";
 import ProfilePageInst from "./components/ProfilePageInst";
 import Navbar from './components/Navbar';
 import TeacherJobsPage from './pages/TeacherJobsPage';
+import CandidateResults from "./pages/CandidateResults";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/InstitutionHomepage" element={<InstitutionHomePage />} />
         <Route path="/" element={<InstSidebar />} />
         <Route path="/InstitutionProfile" element={<ProfilePageInst />} />
+        <Route path="/candidate-results" element={<CandidateResults/>}/>
       </Routes>
     </Router>
   );

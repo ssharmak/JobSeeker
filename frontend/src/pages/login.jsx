@@ -35,7 +35,7 @@ const LoginPage = () => {
                 localStorage.setItem("token", response.data.accessToken);
             }
 
-            window.location.href = userType === "user" ? "/user/dashboard" : "/institution/dashboard";
+            window.location.href = userType === "user" ? "/user/dashboard" : "/InstitutionHomepage";
         } catch (error) {
             console.error("Login error:", error);
             setErrors({ general: error.response?.data?.message || "Login failed. Please check your credentials." });
@@ -45,10 +45,10 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 overflow-y-auto p-4">
-            <div className="w-full max-w-lg sm:max-w-xl lg:max-w-2xl mx-auto p-6 sm:p-8 bg-white shadow-lg rounded-lg relative">
+        <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto bg-gray-900 bg-opacity-50">
+            <div className="relative w-full max-w-lg p-6 mx-auto bg-white rounded-lg shadow-lg sm:max-w-xl lg:max-w-2xl sm:p-8">
                 <button className="absolute top-3 right-3" onClick={() => navigate("/")}> <X size={24} /> </button>
-                <h2 className="text-2xl font-semibold text-center mb-6">{userType === "user" ? "User Login" : "Institution Login"}</h2>
+                <h2 className="mb-6 text-2xl font-semibold text-center">{userType === "user" ? "User Login" : "Institution Login"}</h2>
                 <div className="flex justify-center mb-4">
                     <button className={`p-2 w-1/2 ${userType === "user" ? "bg-blue-500 text-white" : "bg-gray-300"}`} onClick={() => setUserType("user")}>
                         User Login
@@ -64,33 +64,33 @@ const LoginPage = () => {
                 >
                     {({ isSubmitting, errors }) => (
                         <Form>
-                            {errors.general && <p className="text-red-500 text-center mb-4">{errors.general}</p>}
+                            {errors.general && <p className="mb-4 text-center text-red-500">{errors.general}</p>}
                             <div className="mb-4">
                                 <label className="block text-gray-700">Email ID</label>
-                                <Field type="email" name="email" className="w-full p-2 border rounded mt-1"
+                                <Field type="email" name="email" className="w-full p-2 mt-1 border rounded"
                                        placeholder={userType === "user" ? "Enter your Email" : "Enter your Registered Email"}/>
-                                <ErrorMessage name="email" component="p" className="text-red-500 text-sm"/>
+                                <ErrorMessage name="email" component="p" className="text-sm text-red-500"/>
                             </div>
 
                             <label className="block text-gray-700">Password</label>
-                            <div className="mb-4 relative">
+                            <div className="relative mb-4">
                                 <Field type={showPassword ? "text" : "password"} name="password"
-                                       className="w-full p-2 border rounded mt-1" placeholder="Enter Password"/>
-                                <button type="button" className="absolute inset-y-0 right-2 flex items-center"
+                                       className="w-full p-2 mt-1 border rounded" placeholder="Enter Password"/>
+                                <button type="button" className="absolute inset-y-0 flex items-center right-2"
                                         onClick={() => setShowPassword(!showPassword)}>
                                     {showPassword ? <Eye size={20}/> : <EyeOff size={20}/>}
                                 </button>
-                                <ErrorMessage name="password" component="p" className="text-red-500 text-sm"/>
+                                <ErrorMessage name="password" component="p" className="text-sm text-red-500"/>
                             </div>
                             <button type="submit"
-                                    className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                                    className="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600"
                                     disabled={isSubmitting}>
                                 {isSubmitting ? "Logging in..." : "Login"}
                             </button>
                         </Form>
                     )}
                 </Formik>
-                <p className="text-center text-sm mt-4">
+                <p className="mt-4 text-sm text-center">
                     Don't have an account? <span className="text-blue-600 cursor-pointer" onClick={() => navigate(userType === "user" ? "/user" : "/inst")}>
                         Register
                     </span>
