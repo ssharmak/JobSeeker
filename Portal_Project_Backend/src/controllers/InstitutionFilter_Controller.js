@@ -2,7 +2,7 @@ const Candidate=require("../models/candidates");
 const Institution=require("../models/Institution");
 const Job =require("../models/job");
 
-const findCandidates = async (req, res) => {
+const findCandidatesByDistance = async (req, res) => {
     try {
         const { distance } = req.query; // Distance in km
         const {institutionId}= req.user?.id;
@@ -109,7 +109,40 @@ const addJob = async (req, res) => {
     }
 };
 
+const filterCandidates = async (req, res) => {
+    try {
+      const { skill, education, city } = req.body;
+  
+      let filter = {};
+  
+      if (city) {
+        filter["address.city"] = city;
+      }
+  
+      if (skill) {
+         filter["skills"] = { $in: skill };
+      }
+  
+      if (education) {
+        filter["education"] = {
+          $elemMatch: {
+            education: { $regex: education, $options: "i" }
+          }
+        };
+      }
+  
+      const cand = await Candidate.find(filter, { _id: 0 });
+  
+      if (cand.length === 0) {
+        return res.status(404).json({ message: "No candidate found matching the criteria" });
+      }
+  
+      res.status(200).json(cand);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching candidates", error: error.message });
+    }
+  };
+  
 
 
-
-module.exports={findCandidates,addJob};
+module.exports={findCandidatesByDistance,addJob,filterCandidates};
