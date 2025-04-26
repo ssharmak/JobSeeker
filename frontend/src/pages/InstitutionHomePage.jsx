@@ -5,34 +5,34 @@ import InstHeroComponent from '../components/InstHeroComponent';
 
 const InstitutionHomePage = () => {
   return (
-    <div className="relative flex flex-col min-h-screen"> {/* Added 'relative' for positioning */}
-      {/* Navbar at the top */}
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Navbar */}
       <InstitutionNavbar />
 
-      {/* Main Content Area */}
-      <div className="flex">
+      {/* Content Layout */}
+      <div className="flex flex-col flex-1 md:flex-row">
         {/* Sidebar */}
-        <div className="w-[16rem] p-1 bg-[#fff]">
+        <aside className="md:w-64 bg-[#f8f9fa] p-4 shadow md:min-h-[calc(100vh-4rem)]">
           <InstSidebar />
-        </div>
+        </aside>
 
         {/* Main Content */}
-        <div className="flex-1 p-6 bg-white">
+        <main className="flex-1 p-4 overflow-auto md:p-6">
           <InstHeroComponent />
-        </div>
+        </main>
       </div>
 
       {/* Floating WhatsApp Icon */}
-      <a 
-        href="https://wa.me/+919739866955"  // Replace with your WhatsApp number
+      <a
+        href="https://wa.me/+919739866955"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed p-3 transition duration-300 bg-green-500 rounded-full shadow-lg bottom-5 right-5 hover:bg-green-600"
+        className="fixed z-50 p-3 transition-colors duration-300 bg-green-500 rounded-full shadow-lg bottom-5 right-5 hover:bg-green-600"
       >
-        <img 
-          src="./images/whatsapp.svg"
-          alt="WhatsApp" 
-          className="w-10 h-10" 
+        <img
+          src="/images/WhatsApp.svg"
+          alt="WhatsApp"
+          className="w-10 h-10"
         />
       </a>
     </div>

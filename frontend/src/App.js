@@ -11,6 +11,10 @@ import ProfilePageInst from "./components/ProfilePageInst";
 import Navbar from './components/Navbar';
 import TeacherJobsPage from './pages/TeacherJobsPage';
 import CandidateResults from "./pages/CandidateResults";
+import AdminLogin from "./pages/admin/adminlogin";
+import Dashboard from "./pages/admin/dashboard";
+import PrivacyPolicy from "./pages/privacy-policy";
+import TermsAndConditions from "./pages/terms-conditions";
 
 
 function App() {
@@ -29,6 +33,10 @@ function App() {
         <Route path="/" element={<InstSidebar />} />
         <Route path="/InstitutionProfile" element={<ProfilePageInst />} />
         <Route path="/candidate-results" element={<CandidateResults/>}/>
+        <Route path="/adminlogin" element={<AdminLogin/>}/>
+        <Route path="/admin/dashboard" element={<Dashboard/>}/>
+        <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
+        <Route path="/terms-conditions" element={<TermsAndConditions/>}/>
       </Routes>
     </Router>
   );

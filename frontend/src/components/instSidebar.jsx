@@ -1,4 +1,3 @@
-// InstSidebar.js
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -15,6 +14,7 @@ import {
   Check,
   Shield,
   Calendar,
+  Menu,
 } from "lucide-react";
 
 const InstSidebar = () => {
@@ -23,14 +23,13 @@ const InstSidebar = () => {
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
-  const [isPromotionalMailsEnabled, setIsPromotionalMailsEnabled] =
-    useState(false);
+  const [isPromotionalMailsEnabled, setIsPromotionalMailsEnabled] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // New state for sidebar toggle
 
   const toggleCandidatesMenu = () => setCandidatesOpen(!candidatesOpen);
   const toggleSettingsPopup = () => setIsSettingsOpen(!isSettingsOpen);
   const toggleTwoFactor = () => setIsTwoFactorEnabled(!isTwoFactorEnabled);
-  const togglePromotionalMails = () =>
-    setIsPromotionalMailsEnabled(!isPromotionalMailsEnabled);
+  const togglePromotionalMails = () => setIsPromotionalMailsEnabled(!isPromotionalMailsEnabled);
 
   const handleEditPassword = () => setIsEditingPassword(true);
   const handleCancelEdit = () => {
@@ -47,9 +46,23 @@ const InstSidebar = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
+      {/* Mobile Hamburger Menu */}
+      <div className="p-4 lg:hidden">
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="text-blue-500"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+      </div>
+
       {/* Sidebar (Fixed) */}
-      <div className="w-64 min-h-full p-4 space-y-4 bg-white border-r border-gray-300 shadow-lg">
+      <div
+        className={`${
+          isSidebarOpen ? "block" : "hidden"
+        } lg:block w-64 min-h-full p-4 space-y-4 bg-white border-r border-gray-300 shadow-lg`}
+      >
         {/* Profile Section */}
         <div className="flex flex-col items-center p-4 space-y-2 bg-gray-100 rounded-md">
           {/* Profile Picture */}

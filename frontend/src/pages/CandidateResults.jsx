@@ -7,16 +7,12 @@ const CandidateResults = () => {
   const location = useLocation();
   const candidates = location.state?.candidates || [];
 
-  // Manage expanded details for each candidate
-  const [expandedCandidate, setExpandedCandidate] = useState(null);
+  // Manage expanded details for each candidate using an object
+  const [expandedCandidates, setExpandedCandidates] = useState({});
 
-  // Handle the toggle for view details
-  const toggleViewDetails = (index) => {
-    if (expandedCandidate === index) {
-      setExpandedCandidate(null); // Close the details if the same candidate is clicked
-    } else {
-      setExpandedCandidate(index); // Open the details for the clicked candidate
-    }
+  // Handle expanding details for a specific candidate
+  const expandCandidate = (index) => {
+    setExpandedCandidates((prev) => ({ ...prev, [index]: true }));
   };
 
   return (
@@ -44,7 +40,6 @@ const CandidateResults = () => {
                     <h3 className="text-lg font-semibold">
                       {candidate.first_name} {candidate.last_name}
                     </h3>
-                    <p className="text-sm text-gray-600">{candidate.email}</p>
 
                     {/* Display current job (work experience) */}
                     {candidate.work_experience && candidate.work_experience.length > 0 && (
@@ -57,18 +52,19 @@ const CandidateResults = () => {
                     )}
                   </div>
 
-                  {/* View Button to Toggle Details */}
-                  <button
-                    className="mt-2 font-semibold text-blue-600"
-                    onClick={() => toggleViewDetails(index)}
-                  >
-                    {expandedCandidate === index ? 'Hide Details' : 'View'}
-                  </button>
+                  {/* Show View button only if not expanded yet */}
+                  {!expandedCandidates[index] && (
+                    <button
+                      className="mt-2 font-semibold text-blue-600"
+                      onClick={() => expandCandidate(index)}
+                    >
+                      View
+                    </button>
+                  )}
 
-                  {/* Additional details that are revealed on View */}
-                  {expandedCandidate === index && (
+                  {/* Additional details shown after View is clicked */}
+                  {expandedCandidates[index] && (
                     <div className="grid grid-cols-3 gap-2 mt-4 ml-10">
-                      {/* View Resume Button */}
                       <button
                         className="w-[10rem] p-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
                         onClick={() => window.open(candidate.resume_link, '_blank')}
@@ -76,7 +72,6 @@ const CandidateResults = () => {
                         View Resume
                       </button>
 
-                      {/* View Profile Button */}
                       <button
                         className="w-[10rem] p-2 text-white bg-green-500 rounded-md hover:bg-green-600"
                         onClick={() => window.open(candidate.profile_link, '_blank')}
@@ -84,7 +79,6 @@ const CandidateResults = () => {
                         View Profile
                       </button>
 
-                      {/* Clickable Phone Number */}
                       <button
                         className="w-[10rem] p-2 text-white bg-gray-500 rounded-md hover:bg-gray-600"
                         onClick={() => window.location.href = `tel:${candidate.phone}`}
@@ -96,7 +90,7 @@ const CandidateResults = () => {
 
                   {/* Display LinkedIn Profile */}
                   {candidate.linkedin_profile && (
-                    <p className="text-sm text-blue-600">
+                    <p className="mt-2 text-sm text-blue-600">
                       <a
                         href={
                           candidate.linkedin_profile.startsWith('http')
