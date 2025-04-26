@@ -14,6 +14,7 @@ const job_apply_routes = require("./src/routes/job_apply_routes");
 const bulkCandidaterouter = require("./src/routes/bulkCandidateRoute");
 const bulkRequirementrouter = require("./src/routes/bulkRequirementRoute");
 const profileRoutes=require("./src/routes/profile_Routes");
+const miscelleniousRoutes=require("./src/routes/miscellanious_routes");
 
 dotenv.config();
 connectDB();
@@ -41,7 +42,9 @@ app.use("/api/user", userRoute);
 app.use("/job/apply", job_apply_routes);
 app.use("/api/bulkcandidate", bulkCandidaterouter);
 app.use("/api/bulkRequirement", bulkRequirementrouter);
-app.use("/api/profile",profileRoutes)
+app.use("/api/profile",profileRoutes);
+app.use("/api/mis",miscelleniousRoutes);
+
 
 
 const PORT = process.env.PORT || 5000;
