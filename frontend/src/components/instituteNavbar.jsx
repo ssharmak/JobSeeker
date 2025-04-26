@@ -3,7 +3,6 @@ import { Search, Plus, MapPin, User, LogOut, Menu, X, Check } from 'lucide-react
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
 const InstitutionNavbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -11,7 +10,6 @@ const InstitutionNavbar = () => {
   const [isHiringFor, setIsHiringFor] = useState("");
   const [selectedSearchOption, setSelectedSearchOption] = useState("");
   const [jobTitleSearch, setJobTitleSearch] = useState('');
-  const [isSearchWithinDomain, setIsSearchWithinDomain] = useState(false);
 
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,12 +17,11 @@ const InstitutionNavbar = () => {
 
   const navigate = useNavigate();
 
-
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const togglePopUp = () => {
     setIsPopUpOpen(!isPopUpOpen);
-    setCandidates([]); // Clear results when opening/closing
+    setCandidates([]);
     setError('');
   };
 
@@ -32,20 +29,30 @@ const InstitutionNavbar = () => {
 
   const handleSearchOptionChange = (option) => {
     setSelectedSearchOption(option);
-    setIsSearchWithinDomain(option === 'My Own Domain');
   };
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('https://app.teachersearch.in/api/auth/logoutUser');
+      const token = localStorage.getItem('authToken');
+      const response = await axios.post(
+        'https://app.teachersearch.in/api/auth/logoutUser',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
       if (response.status === 200) {
         localStorage.removeItem('authToken');
         window.location.href = '/login';
       }
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error('Error logging out:', error.response?.data || error.message);
     }
   };
+  
 
   const handleCandidateSearch = async () => {
     try {
@@ -54,12 +61,11 @@ const InstitutionNavbar = () => {
       const payload = {
         position: jobTitleSearch,
       };
-  
-      const response = await axios.post('http://localhost:5000/api/searchcandidate/search-Candidate', payload);
-  
+
+      const response = await axios.post('https://app.teachersearch.in/api/searchcandidate/search-Candidate', payload);
+
       if (response.status === 200) {
         const candidatesData = response.data;
-        // 👇 Navigate to CandidateResults with data
         navigate('/candidate-results', { state: { candidates: candidatesData } });
       }
     } catch (err) {
@@ -69,7 +75,6 @@ const InstitutionNavbar = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="font-sans bg-gray-50">
@@ -111,7 +116,7 @@ const InstitutionNavbar = () => {
 
               {isDropdownOpen && (
                 <div className="absolute right-0 z-10 w-48 mt-2 bg-white border rounded-md shadow-lg">
-                  <a href="/my-profile" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  <a href="/InstitutionProfile" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
                     <User className="mr-2" /> My Profile
                   </a>
                   <button onClick={handleLogout} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
@@ -184,9 +189,6 @@ const InstitutionNavbar = () => {
                 ))}
               </div>
             </div>
-
-           
-           
 
             {/* Job Title Search Bar */}
             <div className="mb-4">
