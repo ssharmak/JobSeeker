@@ -72,6 +72,10 @@ const InstitutionRegistrationForm = () => {
           const response = await axios.post(`${API_BASE_URL}/api/auth/register-inst`, {
             name: values.name,
             address: {
+                  street: "",
+                  city: "",
+                  state: "",
+                  postal_code: "",
                   country: values.country
               },
             mobile_number: values.mobile,
