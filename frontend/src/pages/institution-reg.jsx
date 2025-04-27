@@ -48,18 +48,12 @@ const InstitutionRegistrationForm = () => {
   
     const initialValues = {
       name: "",
+      country: "India",
       mobile: "",
       email: "",
       otp1: "",
       password: "",
       confirmPassword: "",
-      address: {
-        street: "",
-        city: "",
-        state: "",
-        postal_code: "",
-        country: "India",
-      }
     };
   
     const API_BASE_URL = "https://app.teachersearch.in";
@@ -77,7 +71,7 @@ const InstitutionRegistrationForm = () => {
         if (step === 0) {
           const response = await axios.post(`${API_BASE_URL}/api/auth/register-inst`, {
             name: values.name,
-            address:values.address,
+            country:values.country,
             mobile_number: values.mobile,
             email: values.email,
           });
@@ -217,7 +211,7 @@ const InstitutionRegistrationForm = () => {
                     <ErrorMessage name="name" component="p" className="text-xs text-red-500" />
       
                     <label className="block text-sm font-medium">Country</label>
-                    <Field as="select" name="address.country" className="w-full p-2 border rounded-md">
+                    <Field as="select" name="country" className="w-full p-2 border rounded-md">
                       <option value="India">India</option>
                     </Field>
       
