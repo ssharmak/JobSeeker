@@ -71,7 +71,7 @@ const InstitutionRegistrationForm = () => {
         if (step === 0) {
           const response = await axios.post(`${API_BASE_URL}/api/auth/register-inst`, {
             name: values.name,
-            country: values.country,
+            country:values.country,
             mobile_number: values.mobile,
             email: values.email,
           });
