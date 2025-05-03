@@ -8,16 +8,18 @@ const {
     setPasswordInstitution,loginInstitution,resendOtp
   } = require("../controllers/institutionController");
 const { singleToken } = require("../middleware/singleTokenMiddleware");
+const upload=require("../utils/upload");
 
 
 
 const router=express.Router();
 
 
+
 // routes
 
 // Register routes for user
-router.post("/register-user",registerUser);
+router.post("/register-user",upload.single("resume"),registerUser);
 router.post("/login-user",loginUser);
 router.post("/verify",verifyOtp);
 router.post("/set-password",singleToken,setPassword);

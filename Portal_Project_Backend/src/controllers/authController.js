@@ -58,84 +58,55 @@ const redisClient = redis.createClient();
   
   
   
-  // Configure file storage for resume uploads
-  const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/resumes/"); // Change to your upload directory
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
-  },
-});
+  
 
-const fileFilter = (req, file, cb) => {
-  const allowedMimeTypes = ["application/msword", "application/pdf", "image/jpeg", "image/png"];
-
-  if (allowedMimeTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error("Invalid file type. Only DOC, PDF, JPG, PNG allowed."), false);
-  }
-};
-
-const upload = multer({storage, fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
-});
   
   // Register User Function
   const registerUser = async (req, res) => {
     try {
-      upload.single("resume")(req, res, async (err) => {
-        if (err) {
-          return res.status(400).json({ message: "File upload error" });
-        }
+      const { name, phone_number, email } = req.body;
+      const resume = req.file ? req.file.path : null;
   
-        const { name, phone_number, email } = req.body;
-        const resume = req.file ? req.file.path : null;
+      if (!name || !phone_number || !email) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
   
-        // Validate required fields
-        if (!name || !phone_number || !email) {
-          return res.status(400).json({ message: "All fields are required" });
-        }
+      let user = await User.findOne({ email });
   
-        // Check if a user with the provided email already exists
-        let user = await User.findOne({ email });
+      if (user && user.is_verified) {
+        return res.status(400).json({ message: "User already exists" });
+      }
   
-        if (user && user.is_verified) {
-          return res.status(400).json({ message: "User already exists" });
-        }
+      if (user && !user.is_verified) {
+        user.name = name;
+        user.phone_number = phone_number;
+        if (resume) user.resume = resume;
+        await user.save();
+      } else if (!user) {
+        user = new User({ name, phone_number, email, resume });
+        await user.save();
+      }
   
-        // If user exists but is not verified, update details
-        if (user && !user.is_verified) {
-          user.name = name;
-          user.phone_number = phone_number;
-         if (resume){ user.resume = resume};
-          await user.save();
-        } else if (!user) {
-          // Create a new user record
-          user = new User({ name, phone_number, email, resume });
-          await user.save();
-        }
+      // Check if OTP was already sent and valid
+      const existingOtp = await otp.findOne({ email });
+      if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_EXPIRY * 1000) {
+        const timeLeft = process.env.OTP_EXPIRY - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
+        return res.status(400).json({
+          message: `OTP already sent! Please wait ${timeLeft} seconds before requesting again`,
+        });
+      }
   
-        // Check if OTP was already sent and is still valid
-        const existingOtp = await otp.findOne({ email });
-        if (existingOtp && (Date.now() - existingOtp.createdAt) < process.env.OTP_EXPIRY * 1000) {
-          const timeLeft = process.env.OTP_EXPIRY - Math.floor((Date.now() - existingOtp.createdAt) / 1000);
-          return res.status(400).json({
-            message: `OTP already sent! Please wait ${timeLeft} seconds before requesting again`,
-          });
-        }
+      // Generate OTP
+      const otpCode = crypto.randomInt(100000, 999999).toString();
+      await otp.create({ email, otp: otpCode });
   
-        // Generate a 6-digit OTP
-        const otpCode = crypto.randomInt(100000, 999999).toString();
-        await otp.create({ email, otp: otpCode });
+      // Send Email
+      await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
   
-        // Send OTP to user email
-        await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
+      res.status(200).json({ message: "OTP sent successfully" });
   
-        res.status(200).json({ message: "OTP sent successfully" });
-      });
     } catch (err) {
+      console.error(err);
       res.status(500).json({ message: err.message });
     }
   };
