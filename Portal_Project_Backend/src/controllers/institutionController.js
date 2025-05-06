@@ -202,7 +202,7 @@ const Jobs = require("../models/jobs");  // Adjust path if needed
 const addJob = async (req, res) => {
   try {
     // 1. Extract Institution_id from token (assuming you set it in req.user during authentication)
-    const Institution_id = req.user && req.user.Institution_id;
+    const Institution_id =req.user?.id;
 
     if (!Institution_id) {
       return res.status(401).json({ message: "Unauthorized: Institution ID missing from token" });
