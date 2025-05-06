@@ -1,4 +1,5 @@
 const Candidate = require("../models/candidates");
+const Institution = require("../models/Institution");
 
 //To update personnel information in profile
 
@@ -145,24 +146,26 @@ const updateCertificates= async(req,res)=>{
     }
 };
 
-const getProfile= async(req,res)=>{
+const getInstProfile= async(req,res)=>{
     try{
-        const userId=req.user.id;
-        if(!userId){
-            return res.status(401).json({message:"user id not provided"});
+        const inst_id=req.user.id;
+        if(!inst_id){
+            return res.status(401).json({message:"institute id not provided"});
         }
 
-        const can=await Candidate.findOne({main_user:userId});
-        if (!can) {
-            return res.status(404).json({ message: "Candidate not found" });
+        const inst = await Institution.findById(inst_id).select("-password -__v");
+
+        if (!inst) {
+            return res.status(404).json({ message: "Institute not found" });
         };
-         return res.status(200).json({candidate:can});
+         return res.status(200).json({Institute:inst});
 
     }
     catch(error){
-        return res.status(400).json({message:"Error occured"});
+        console.error("Error fetching institution profile:", error);
+    return res.status(400).json({ message: error.message || "Error occurred" });
 
     }
 }
 
-module.exports={updatePersonnel,updateWorkExperience,updateEducation,updateCertificates,getProfile};
+module.exports={updatePersonnel,updateWorkExperience,updateEducation,updateCertificates,getInstProfile};
