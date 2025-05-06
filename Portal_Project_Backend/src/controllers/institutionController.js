@@ -196,5 +196,88 @@ const resendOtp = async (req, res) => {
   }
 };
 
+// controllers/jobController.js
+const Jobs = require("../models/jobs");  // Adjust path if needed
 
-module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution,loginInstitution,resendOtp };
+const addJob = async (req, res) => {
+  try {
+    // 1. Extract Institution_id from token (assuming you set it in req.user during authentication)
+    const Institution_id = req.user && req.user.Institution_id;
+
+    if (!Institution_id) {
+      return res.status(401).json({ message: "Unauthorized: Institution ID missing from token" });
+    }
+
+    // 2. Extract the rest from body
+    const {
+      title,
+      department,
+      address,
+      category,
+      employment_type,
+      experience_level,
+      min_experience,
+      max_experience,
+      description,
+      requirements,
+      prefered_qualifications,
+      responsibilities,
+      benefits,
+      posted_date,
+      closing_date,
+      status,
+      hiring_manager,
+      recruiters,
+      max_applications,
+      is_active,
+      allow_multiple_applications,
+      salary_range
+    } = req.body;
+
+    // 3. Create new job instance
+    const newJob = new Jobs({
+      Institution_id,
+      title,
+      department,
+      address,
+      category,
+      employment_type,
+      experience_level,
+      min_experience,
+      max_experience,
+      description,
+      requirements,
+      prefered_qualifications,
+      responsibilities,
+      benefits,
+      posted_date,
+      closing_date,
+      status,
+      hiring_manager,
+      recruiters,
+      max_applications,
+      is_active,
+      allow_multiple_applications,
+      salary_range
+    });
+
+    // 4. Save to database
+    const savedJob = await newJob.save();
+
+    res.status(201).json({
+      message: "Job posted successfully",
+      data: savedJob
+    });
+  } catch (error) {
+    console.error("Error posting job:", error);
+    res.status(500).json({
+      message: error.message || "Something went wrong while posting job"
+    });
+  }
+};
+
+
+
+
+
+module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution,loginInstitution,resendOtp,addJob };
