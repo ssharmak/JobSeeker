@@ -42,7 +42,7 @@
 
 // module.exports = mongoose.model("Institution", InstitutionSchema);
 
-
+const axios=require("axios");
 const mongoose = require("mongoose");
 
 const InstitutionSchema = new mongoose.Schema({
@@ -139,4 +139,5 @@ InstitutionSchema.pre("save", async function (next) {
 
 
 
-module.exports = mongoose.model("Institution", InstitutionSchema);
+const Institution = mongoose.model("Institution", InstitutionSchema);
+module.exports=Institution;

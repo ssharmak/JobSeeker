@@ -4,10 +4,11 @@ const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Jobs=require("../models/job");
 
 // Registration (without password)
 const registerInstitution = async (req, res) => {
-  const { name, country, mobile_number, email } = req.body;
+  const { name,street,city,state,postal_code, country, mobile_number, email } = req.body;
 
   try {
     // Check if an institution with the provided email already exists
@@ -19,12 +20,15 @@ const registerInstitution = async (req, res) => {
     // If institution exists but is not verified, update details
     if (institution && !institution.is_verified) {
       institution.name = name;
+      institution.address.street=street;
+      institution.address.city=city;
+      institution.address.state=state;
       institution.address.country = country;
       institution.mobile_number = mobile_number;
       await institution.save();
     } else if (!institution) {
       // Create a new institution record (without password)
-      institution = new Institution({ name, country, mobile_number, email });
+      institution = new Institution({ name, address:{street:street,city:city,state:state,postal_code:postal_code,country:country}, mobile_number, email });
       await institution.save();
     }
 
@@ -196,8 +200,7 @@ const resendOtp = async (req, res) => {
   }
 };
 
-// controllers/jobController.js
-const Jobs = require("../models/jobs");  // Adjust path if needed
+
 
 const addJob = async (req, res) => {
   try {
@@ -240,7 +243,6 @@ const addJob = async (req, res) => {
       title,
       department,
       address,
-      category,
       employment_type,
       experience_level,
       min_experience,

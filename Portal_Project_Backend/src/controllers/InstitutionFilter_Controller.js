@@ -1,6 +1,6 @@
 const Candidate=require("../models/candidates");
 const Institution=require("../models/Institution");
-const Job =require("../models/job");
+
 
 const findCandidatesByDistance = async (req, res) => {
     try {

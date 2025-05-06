@@ -153,7 +153,7 @@ const getInstProfile= async(req,res)=>{
             return res.status(401).json({message:"institute id not provided"});
         }
 
-        const inst = await Institution.findById(inst_id).select("-password -__v");
+        const inst = await Institution.findById(inst_id).select("name address mobile_number email ");
 
         if (!inst) {
             return res.status(404).json({ message: "Institute not found" });

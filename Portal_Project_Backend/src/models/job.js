@@ -3,7 +3,7 @@ const axios = require("axios");
 
 const recruiter_details=new mongoose.Schema({
     name:{type:String},
-    email:{type:String,unique:true, match:[/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._%+-]+\.[a-zA-Z]{2,}$/,'Please fill a valid email address']}
+    email:{type:String, match:[/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._%+-]+\.[a-zA-Z]{2,}$/,'Please fill a valid email address']}
 });
 
 const jobs_schema= new mongoose.Schema({
@@ -95,6 +95,6 @@ async function geocodeAddress(address) {
     next();
   });
 
-const jobs=mongoose.model('jobs',jobs_schema);
+const Jobs=mongoose.model('Jobs',jobs_schema);
 
-module.exports=jobs;
+module.exports=Jobs;
