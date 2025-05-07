@@ -24,7 +24,7 @@ address: {
     longitude:{type:String},
 category:{type:mongoose.Schema.Types.ObjectId,ref: "Category",
     default: null,},
-employment_type:{type:String,enum:["Full_time","Internship"],required:true},
+employment_type:{type:String,enum:["Full_time","Internship","Part_time"],required:true},
 experience_level:{type:String,enum:["Fresher","Junior","Mid-Senior","Senior"],required:true},
 min_experience:{type:Number,default:0},
 max_experience:{type:Number,default:null},
