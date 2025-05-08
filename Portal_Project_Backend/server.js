@@ -13,9 +13,9 @@ const userRoute = require("./src/routes/user_routes");
 const job_apply_routes = require("./src/routes/job_apply_routes");
 const bulkCandidaterouter = require("./src/routes/bulkCandidateRoute");
 const bulkRequirementrouter = require("./src/routes/bulkRequirementRoute");
-const profileRoutes=require("./src/routes/profile_Routes");
-const miscelleniousRoutes=require("./src/routes/miscellanious_routes");
-const institutionRoutes=require("./src/routes/institution_routes");
+const profileRoutes = require("./src/routes/profile_Routes");
+const miscelleniousRoutes = require("./src/routes/miscellanious_routes");
+const institutionRoutes = require("./src/routes/institution_routes");
 
 dotenv.config();
 connectDB();
@@ -25,10 +25,10 @@ app.use(cookieParser());
 
 // CORS Middleware: Allow requests from http://localhost:3000
 app.use(cors({
-    origin: "http://localhost:3000", 
+    origin: "http://localhost:3000",
     // origin: "https://teachersearch.in",
-    methods: ["GET", "POST", "PUT", "DELETE"], 
-    credentials: true, 
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
 }));
 
 app.get('/', (req, res) => {
@@ -43,9 +43,14 @@ app.use("/api/user", userRoute);
 app.use("/job/apply", job_apply_routes);
 app.use("/api/bulkcandidate", bulkCandidaterouter);
 app.use("/api/bulkRequirement", bulkRequirementrouter);
-app.use("/api/profile",profileRoutes);
-app.use("/api/mis",miscelleniousRoutes);
-app.use("/api/instR",institutionRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/api/mis", miscelleniousRoutes);
+app.use("/api/instR", institutionRoutes);
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
+})
 
 
 
