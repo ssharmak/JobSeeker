@@ -96,7 +96,6 @@ if (existingOtp && (Date.now() - existingOtp.createdAt.getTime()) < process.env.
   });
 }
 
-
     // Generate OTP
     const otpCode = crypto.randomInt(100000, 999999).toString();
     await otp.create({ email, otp: otpCode });
@@ -106,7 +105,6 @@ if (existingOtp && (Date.now() - existingOtp.createdAt.getTime()) < process.env.
 
     res.status(200).json({ message: "OTP sent successfully" });
 };
-
 
 
 
