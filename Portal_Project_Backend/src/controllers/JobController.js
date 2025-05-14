@@ -73,7 +73,7 @@ res.status(500).json({message:"Error fetching Designations"});
 //Job filtering based on query parameters
 const filterJobs = async (req, res) => {
   try {
-    const { city, designation , category,min_salary, experience,job_type,employment_type } = req.query;
+    const { city, designation , category,min_salary, experience,job_type,employment_type,subject,institution_type } = req.query;
 
     // Build dynamic filter object
     let filter = {};
@@ -84,6 +84,8 @@ const filterJobs = async (req, res) => {
     if(experience) filter["min_experience"]= experience;
     if(employment_type) filter["employment_type"]=employment_type;
     if(job_type) filter["job_type"]=job_type;
+    if(subject) filter["Department"]=subject;
+    if(institution_type) filter["institution_type"]=institution_type;
 
 
     if (category) {
@@ -163,6 +165,56 @@ function haversine(lat1, lon1, lat2, lon2) {
   return R * c; // Distance in km
 };
 
-module.exports={ JobCountByCategory,allCity,filterJobs,allDesignations,findJobByDistance }
+const SingleJobByCategory = async (req, res) => {
+  try {
+    const { search } = req.query;
+
+    const matchStage = {};
+
+    // If search text is provided, add a case-insensitive regex filter on title
+    if (search) {
+      matchStage.title = { $regex: search, $options: 'i' };
+    }
+
+    const jobCounts = await Job.aggregate([
+      { $match: matchStage }, 
+      {
+        $group: {
+          _id: "$category", 
+          jobCount: { $sum: 1 }, 
+        },
+      },
+      {
+        $lookup: {
+          from: "categories", 
+          localField: "_id",
+          foreignField: "_id",
+          as: "categoryDetails",
+        },
+      },
+      {
+        $unwind: {
+          path: "$categoryDetails",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          categoryName: "$categoryDetails.CategoryName",
+          jobCount: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json(jobCounts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching job category counts", error });
+  }
+};
+
+
+module.exports={ JobCountByCategory,allCity,filterJobs,allDesignations,findJobByDistance,SingleJobByCategory }
 
 

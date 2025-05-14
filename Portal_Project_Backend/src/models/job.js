@@ -10,6 +10,7 @@ const jobs_schema= new mongoose.Schema({
 Institution_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Institution', required: true },
 title:{type: String, required:true},
 department:{type: String, required:true},
+institution_type:{type: String,enum:["School","Pre-School","Coaching","EdTech","College/University"], required:true},
 address: {
     street: { type: String,required:true },
     city: { type: String,required:true},
