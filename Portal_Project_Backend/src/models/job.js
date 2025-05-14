@@ -11,6 +11,7 @@ Institution_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Institution', requ
 title:{type: String, required:true},
 department:{type: String, required:true},
 institution_type:{type: String,enum:["School","Pre-School","Coaching","EdTech","College/University"], required:true},
+exam_type:{type:String,enum:["TGT","PGT","PRT","NDA","JEE","NEET","CET","UPSC","SSC"]},
 address: {
     street: { type: String,required:true },
     city: { type: String,required:true},

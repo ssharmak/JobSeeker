@@ -214,7 +214,61 @@ const SingleJobByCategory = async (req, res) => {
   }
 };
 
+const SingleJobBySubject = async (req, res) => {
+  try {
+    const { search } = req.query;
 
-module.exports={ JobCountByCategory,allCity,filterJobs,allDesignations,findJobByDistance,SingleJobByCategory }
+    const matchStage = {};
+
+    // If search text is provided, add a case-insensitive regex filter on title
+    if (search) {
+      matchStage.subject = { $regex: search, $options: 'i' };
+    }
+    const jobCounts=await Job.aggregate([{$match:matchStage},{$group:{_id:"$subject",jobcount:{$sum:1}}},{$project:{_id:0,subject:"$_id",jobcount:1}}]);
+    res.status(200).json(jobCounts);
+  }
+  catch(error){ console.error(error);
+    res.status(500).json({ message: "Error fetching job by subject counts", error });
+  }
+};
+const SingleJobByInstType = async (req, res) => {
+  try {
+    const { search } = req.query;
+
+    const matchStage = {};
+
+    // If search text is provided, add a case-insensitive regex filter on title
+    if (search) {
+      matchStage.institution_type = { $regex: search, $options: 'i' };
+    }
+    const jobCounts=await Job.aggregate([{$match:matchStage},{$group:{_id:"$institution_type",jobcount:{$sum:1}}},{$project:{_id:0,institution_type:"$_id",jobcount:1}}]);
+    res.status(200).json(jobCounts);
+  }
+  catch(error){ console.error(error);
+    res.status(500).json({ message: "Error fetching job by institution type counts", error });
+  }
+};
+
+const SingleJobByExamType = async (req, res) => {
+  try {
+    const { search } = req.query;
+
+    const matchStage = {};
+
+    // If search text is provided, add a case-insensitive regex filter on title
+    if (search) {
+      matchStage.exam_type = { $regex: search, $options: 'i' };
+    }
+    const jobCounts=await Job.aggregate([{$match:matchStage},{$group:{_id:"$exam_type",jobcount:{$sum:1}}},{$project:{_id:0,exam_type:"$exam_type",jobcount:1}}]);
+    res.status(200).json(jobCounts);
+  }
+  catch(error){ console.error(error);
+    res.status(500).json({ message: "Error fetching job by exam type counts", error });
+  }
+};
+
+
+
+module.exports={ JobCountByCategory,allCity,filterJobs,allDesignations,findJobByDistance,SingleJobByCategory,SingleJobBySubject,SingleJobByInstType,SingleJobByExamType }
 
 
