@@ -106,7 +106,11 @@ async function geocodeAddress(address) {
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${formattedAddress}`;
 
   try {
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+      headers: {
+        'User-Agent': 'InstitutionLocatorApp/1.0 (goutn2023@gmail.com)'
+      }
+    });
 
       // Check if response data exists and has a valid result
       if (response.data && response.data.length > 0) {
@@ -125,13 +129,17 @@ async function geocodeAddress(address) {
 }
 
 // Pre-save hook to fetch coordinates before saving
-InstitutionSchema.pre("save", async function (next) {
+InstitutionSchema.pre("validate", async function (next) {
   if (!this.isModified("address")) return next(); // Skip if address hasn't changed
 
   const fullAddress = `${this.address.street}, ${this.address.city}, ${this.address.state}, ${this.address.country}`;
   const geoData = await geocodeAddress(fullAddress);
 
-  if (!geoData) return next(new Error("Invalid address, unable to get location"));
+  if (!geoData) {
+  console.error("Geocoding failed for address:", fullAddress);
+  return next(new Error("Invalid address, unable to get location"));
+}
+
 
   this.location.coordinates = [geoData.longitude, geoData.latitude]; // MongoDB expects [lng, lat]
   next();
