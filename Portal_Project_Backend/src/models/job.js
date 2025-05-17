@@ -10,8 +10,6 @@ const jobs_schema= new mongoose.Schema({
 Institution_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Institution', required: true },
 title:{type: String, required:true},
 department:{type: String, required:true},
-institution_type:{type: String,enum:["School","Pre-School","Coaching","EdTech","College/University"], required:true},
-exam_type:{type:String,enum:["TGT","PGT","PRT","NDA","JEE","NEET","CET","UPSC","SSC"]},
 address: {
     street: { type: String,required:true },
     city: { type: String,required:true},
@@ -26,8 +24,7 @@ address: {
     longitude:{type:String},
 category:{type:mongoose.Schema.Types.ObjectId,ref: "Category",
     default: null,},
-job_type:{type:String,enum:["Teaching","Non-Teaching"]},
-employment_type:{type:String,enum:["Full_time","Part_time","Contractual","Visiting"],required:true},
+employment_type:{type:String,enum:["Full_time","Internship"],required:true},
 experience_level:{type:String,enum:["Fresher","Junior","Mid-Senior","Senior"],required:true},
 min_experience:{type:Number,default:0},
 max_experience:{type:Number,default:null},

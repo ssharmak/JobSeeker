@@ -1,5 +1,5 @@
 const express=require("express");
-const router=express();
+const router=express.Router();
 const {termss,createTerm,abUs,createinfo,createHelp,Helpp}=require("../controllers/miscellanious_controller");
 
 router.get("/terms",termss);

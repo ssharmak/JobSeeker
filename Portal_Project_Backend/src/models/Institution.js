@@ -42,30 +42,19 @@
 
 // module.exports = mongoose.model("Institution", InstitutionSchema);
 
-const axios=require("axios");
+
 const mongoose = require("mongoose");
+const axios = require('axios')
 
 const InstitutionSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  // country: {
-  //   type: String,
-  //   required: true,
-  //   trim: true
-  // },
+  name: { type: String, required: true, trim: true },
   address: {
     street: { type: String },
     city: { type: String },
     state: { type: String },
     postal_code: { type: String },
-    country: {
-        type: String,
-        required: true,
-        // enum: validCountries
-    }},
+    country: { type: String, required: true },
+  },
   mobile_number: {
     type: String,
     required: true,
@@ -80,72 +69,44 @@ const InstitutionSchema = new mongoose.Schema({
     trim: true,
     match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"]
   },
-  is_verified: {
-    type: Boolean,
-    default: false
-  },
-  password: {
-    type: String,
-    required: false,
-    minlength: 6
-  },
-  otp_verified: {
-    type: Boolean,
-    default: false
-  },
+  is_verified: { type: Boolean, default: false },
+  password: { type: String, minlength: 6 },
+  otp_verified: { type: Boolean, default: false },
   location: {
     type: { type: String, enum: ["Point"], default: "Point" },
-    coordinates: { type: [Number], index: "2dsphere" } // [longitude, latitude]
-}
+    coordinates: { type: [Number], index: "2dsphere" }
+  }
 });
 
-
-// Function to geocode the address directly inside the schema
 async function geocodeAddress(address) {
-  const formattedAddress = encodeURIComponent(address); // Encode the address for URL compatibility
+  const formattedAddress = encodeURIComponent(address);
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${formattedAddress}`;
-
   try {
-      const response = await axios.get(url, {
-      headers: {
-        'User-Agent': 'InstitutionLocatorApp/1.0 (goutn2023@gmail.com)'
-      }
-    });
-
-      // Check if response data exists and has a valid result
-      if (response.data && response.data.length > 0) {
-          const { lat, lon } = response.data[0];
-          return {
-              latitude: parseFloat(lat), // Convert latitude to float
-              longitude: parseFloat(lon) // Convert longitude to float
-          };
-      } else {
-          throw new Error('Address not found');
-      }
+    const response = await axios.get(url);
+    if (response.data && response.data.length > 0) {
+      const { lat, lon } = response.data[0];
+      return {
+        latitude: parseFloat(lat),
+        longitude: parseFloat(lon),
+      };
+    }
+    throw new Error("Address not found");
   } catch (error) {
-      console.error('Error during geocoding:', error);
-      return null;
+    console.error("Geocoding error:", error);
+    return null;
   }
 }
 
-// Pre-save hook to fetch coordinates before saving
-InstitutionSchema.pre("validate", async function (next) {
-  if (!this.isModified("address")) return next(); // Skip if address hasn't changed
-
+InstitutionSchema.pre("save", async function (next) {
+  if (!this.isModified("address")) return next();
   const fullAddress = `${this.address.street}, ${this.address.city}, ${this.address.state}, ${this.address.country}`;
   const geoData = await geocodeAddress(fullAddress);
-
-  if (!geoData) {
-  console.error("Geocoding failed for address:", fullAddress);
-  return next(new Error("Invalid address, unable to get location"));
-}
-
-
-  this.location.coordinates = [geoData.longitude, geoData.latitude]; // MongoDB expects [lng, lat]
+  if (!geoData) return next(new Error("Invalid address, unable to get location"));
+  this.location.coordinates = [geoData.longitude, geoData.latitude];
   next();
 });
 
-
-
 const Institution = mongoose.model("Institution", InstitutionSchema);
-module.exports=Institution;
+
+module.exports = Institution;
+

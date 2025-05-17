@@ -10,14 +10,8 @@ const {
 const { singleToken } = require("../middleware/singleTokenMiddleware");
 const upload=require("../utils/upload");
 
-
-
 const router=express.Router();
-
-
-
 // routes
-
 // Register routes for user
 router.post("/register-user",upload.single("resume"),registerUser);
 router.post("/login-user",loginUser);
