@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   ChevronDown,
   MapPin,
@@ -15,16 +16,47 @@ import {
   Shield,
   Calendar,
   Menu,
+  User, // ✅ Added User icon from lucide-react
 } from "lucide-react";
 
 const InstSidebar = () => {
+  const [institution, setInstitution] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [candidatesOpen, setCandidatesOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
   const [isPromotionalMailsEnabled, setIsPromotionalMailsEnabled] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // New state for sidebar toggle
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchInstitution = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setError("No auth token found.");
+          return;
+        }
+
+        const res = await axios.get("https://app.teachersearch.in/api/profile/getInstProfile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setInstitution(res.data?.Institute || {});
+      } catch (err) {
+        console.error("Error fetching institution:", err);
+        setError("Failed to load institution data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInstitution();
+  }, []);
 
   const toggleCandidatesMenu = () => setCandidatesOpen(!candidatesOpen);
   const toggleSettingsPopup = () => setIsSettingsOpen(!isSettingsOpen);
@@ -57,7 +89,7 @@ const InstSidebar = () => {
         </button>
       </div>
 
-      {/* Sidebar (Fixed) */}
+      {/* Sidebar */}
       <div
         className={`${
           isSidebarOpen ? "block" : "hidden"
@@ -65,27 +97,38 @@ const InstSidebar = () => {
       >
         {/* Profile Section */}
         <div className="flex flex-col items-center p-4 space-y-2 bg-gray-100 rounded-md">
-          {/* Profile Picture */}
+          {/* User Icon */}
           <div className="relative">
-            <img
-              src="https://via.placeholder.com/80"
-              alt="Profile"
-              className="w-16 h-16 border-2 border-blue-500 rounded-full"
-            />
-            <button className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-md">
-              <Edit2 className="w-4 h-4 text-blue-500" />
-            </button>
+            <div className="flex items-center justify-center w-16 h-16 bg-white border-2 border-blue-500 rounded-full">
+              <User className="w-8 h-8 text-blue-500" />
+            </div>
           </div>
 
           {/* Profile Info */}
           <div className="text-center">
-            <h3 className="text-sm font-semibold text-gray-800">
-              Evoltech EdTech Consultancy
-            </h3>
-            <p className="text-xs text-gray-600">shri@evoltech.in</p>
+            {loading ? (
+              <>
+                <h3 className="text-sm font-semibold text-gray-800">Loading...</h3>
+                <p className="text-xs text-gray-600">Loading...</p>
+              </>
+            ) : error ? (
+              <>
+                <h3 className="text-sm font-semibold text-red-600">Error</h3>
+                <p className="text-xs text-red-500">{error}</p>
+              </>
+            ) : (
+              <>
+                <h3 className="text-sm font-semibold text-gray-800">
+                  {institution.name || "Unnamed Institute"}
+                </h3>
+                <p className="text-xs text-gray-600">
+                  {institution.email || "No Email"}
+                </p>
+              </>
+            )}
           </div>
 
-          {/* Edit Profile Button */}
+          {/* Edit Profile Link */}
           <Link
             to="/InstitutionProfile"
             className="block px-4 py-1 text-xs font-medium text-center text-white bg-blue-500 rounded-md hover:bg-blue-600"
@@ -94,62 +137,46 @@ const InstSidebar = () => {
           </Link>
         </div>
 
-        {/* Candidates */}
+        {/* Sidebar Items */}
         <div>
           <div
             className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-gray-100"
             onClick={toggleCandidatesMenu}
           >
             <ChevronDown className="text-blue-500" />
-            <span className="text-sm font-medium text-gray-700">
-              Candidates
-            </span>
+            <span className="text-sm font-medium text-gray-700">Candidates</span>
           </div>
           {candidatesOpen && (
             <div className="pl-8 space-y-1 bg-white">
-              <div className="p-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
-                Suggested
-              </div>
-              <div className="p-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
-                Application
-              </div>
-              <div className="p-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
-                On Hold
-              </div>
-              <div className="p-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
-                Not Selected
-              </div>
+              {["Suggested", "Application", "On Hold", "Not Selected"].map((item) => (
+                <div key={item} className="p-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
+                  {item}
+                </div>
+              ))}
             </div>
           )}
         </div>
 
-        {/* Walk-in Drives */}
         <div className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-gray-100">
           <MapPin className="text-blue-500" />
-          <span className="text-sm font-medium text-gray-700">
-            Walk-in Drives
-          </span>
+          <span className="text-sm font-medium text-gray-700">Walk-in Drives</span>
         </div>
 
-        {/* Panelists */}
         <div className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-gray-100">
           <Users className="text-blue-500" />
           <span className="text-sm font-medium text-gray-700">Panelists</span>
         </div>
 
-        {/* Templates */}
         <div className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-gray-100">
           <FileText className="text-blue-500" />
           <span className="text-sm font-medium text-gray-700">Templates</span>
         </div>
 
-        {/* Wallet */}
         <div className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-gray-100">
           <Wallet className="text-blue-500" />
           <span className="text-sm font-medium text-gray-700">Wallet</span>
         </div>
 
-        {/* Settings - Open Popup */}
         <div
           className="flex items-center p-2 space-x-3 rounded-md cursor-pointer hover:bg-gray-100"
           onClick={toggleSettingsPopup}
@@ -158,7 +185,6 @@ const InstSidebar = () => {
           <span className="text-sm font-medium text-gray-700">Settings</span>
         </div>
 
-        {/* Book a Demo Button */}
         <div className="mt-4">
           <button
             onClick={handleBookDemo}
@@ -182,13 +208,10 @@ const InstSidebar = () => {
             </div>
 
             <div className="mt-4 space-y-3">
-              {/* Two-Factor Authentication */}
               <div className="flex items-center justify-between p-2 bg-gray-100 rounded-md">
                 <div className="flex items-center space-x-2">
                   <Shield className="text-blue-500" />
-                  <span className="text-sm font-medium">
-                    Two-Factor Authentication
-                  </span>
+                  <span className="text-sm font-medium">Two-Factor Authentication</span>
                 </div>
                 <input
                   type="checkbox"
@@ -198,7 +221,6 @@ const InstSidebar = () => {
                 />
               </div>
 
-              {/* Promotional Mails */}
               <div className="flex items-center justify-between p-2 bg-gray-100 rounded-md">
                 <div className="flex items-center space-x-2">
                   <Mail className="text-blue-500" />
@@ -212,7 +234,6 @@ const InstSidebar = () => {
                 />
               </div>
 
-              {/* Reset Password */}
               <div className="p-2 bg-gray-100 rounded-md">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
@@ -220,17 +241,11 @@ const InstSidebar = () => {
                     <span className="text-sm font-medium">Reset Password</span>
                   </div>
                   {!isEditingPassword ? (
-                    <button
-                      onClick={handleEditPassword}
-                      className="p-1 text-gray-500 hover:text-gray-700"
-                    >
+                    <button onClick={handleEditPassword} className="p-1 text-gray-500 hover:text-gray-700">
                       <Edit2 className="w-4 h-4" />
                     </button>
                   ) : (
-                    <button
-                      onClick={handleCancelEdit}
-                      className="p-1 text-gray-500 hover:text-gray-700"
-                    >
+                    <button onClick={handleCancelEdit} className="p-1 text-gray-500 hover:text-gray-700">
                       <X className="w-4 h-4" />
                     </button>
                   )}
@@ -245,10 +260,7 @@ const InstSidebar = () => {
                       className="w-full p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Enter new password"
                     />
-                    <button
-                      onClick={handleSavePassword}
-                      className="p-2 text-green-500 hover:text-green-700"
-                    >
+                    <button onClick={handleSavePassword} className="p-2 text-green-500 hover:text-green-700">
                       <Check className="w-5 h-5" />
                     </button>
                   </div>

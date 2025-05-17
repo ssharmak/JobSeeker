@@ -17,15 +17,11 @@ const EmployeeRegistrationForm = () => {
 
   const API_BASE_URL = "https://app.teachersearch.in";
 
-  const validationSchema = yup.object({
+  const validationSchemaStep0 = yup.object({
     name: yup.string().required("Full Name is required"),
     email: yup.string().email("Invalid email format").required("Email is required"),
-    phone_number: yup
-      .string()
-      .matches(/^[0-9]{10}$/, "Enter a valid 10-digit mobile number")
-      .required("Mobile number is required"),
-    resume: yup
-      .mixed()
+    phone_number: yup.string().matches(/^[0-9]{10}$/, "Enter a valid 10-digit mobile number").required("Mobile number is required"),
+    resume: yup.mixed()
       .test("fileFormat", "Invalid file type. Allowed: DOC, PDF, JPG, PNG.", (file) => {
         if (!file) return true;
         const allowedExtensions = ["doc", "docx", "pdf", "jpg", "jpeg", "png"];
@@ -37,72 +33,89 @@ const EmployeeRegistrationForm = () => {
       }),
   });
 
+  const validationSchemaStep2 = yup.object({
+    password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+    confirmPassword: yup.string().oneOf([yup.ref("password"), null], "Passwords must match").required("Confirm your password"),
+  });
+
   const initialValues = {
     name: "",
     email: "",
     phone_number: "",
     resume: null,
+    otp1: "",
+    password: "",
+    confirmPassword: "",
   };
 
   const handleSubmit = async (values, actions) => {
     actions.setSubmitting(true);
+
     try {
-      const response = await axios.post(
+      await axios.post(
         `${API_BASE_URL}/api/auth/set-password`,
         { password: values.password },
-        { headers: { Authorization: `Bearer ${tempToken}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${tempToken}`,
+          },
+        }
       );
+
       alert("Registration complete! You can now log in.");
       navigate("/login");
     } catch (error) {
-      actions.setErrors({ api: error.response?.data?.message || "An error occurred" });
+      console.error("Error during password submission:", error);
+
+      actions.setErrors({
+        api: error.response?.data?.message || "An error occurred",
+      });
     } finally {
       actions.setSubmitting(false);
     }
   };
 
-  const handleNext = async (values, validateForm, setErrors, setSubmitting) => {
-    setSubmitting(true);
-    try {
-      const errors = await validateForm();
-      if (Object.keys(errors).length > 0) {
-        setErrors(errors);
-        setSubmitting(false);
-        return;
-      }
 
-      if (step === 0) {
-        const formData = new FormData();
-        formData.append("name", values.name);
-        formData.append("phone_number", values.phone_number);
-        formData.append("email", values.email);
-        if (values.resume) {
-          formData.append("resume", values.resume);
-        }
-
-        const response = await axios.post(`${API_BASE_URL}/api/auth/register-user`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-
-        if (response.data.message === "OTP sent successfully") {
-          setStep(1);
-        } else {
-          setErrors({ api: response.data.message || "Registration failed" });
-        }
-      } else if (step === 1) {
-        const response = await axios.post(`${API_BASE_URL}/api/auth/verify`, {
-          otp1: values.otp1,
-        });
-
-        setTempToken(response.data.token);
-        setStep(2);
-      }
-    } catch (error) {
-      setErrors({ api: error.response?.data?.message || "An error occurred" });
-    } finally {
+const handleNext = async (values, validateForm, setErrors, setSubmitting) => {
+  setSubmitting(true);
+  try {
+    const errors = await validateForm();
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
       setSubmitting(false);
+      return;
     }
-  };
+
+    if (step === 0) {
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("phone_number", values.phone_number);
+      formData.append("email", values.email);
+      if (values.resume) {
+        formData.append("resume", values.resume);
+      }
+
+      const response = await axios.post(`${API_BASE_URL}/api/auth/register-user`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response.data.message === "OTP sent successfully") {
+        setStep(1);
+      } else {
+        setErrors({ api: response.data.message || "Registration failed" });
+      }
+    } else if (step === 1) {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/verify`, { otp1: values.otp1 });
+      setTempToken(response.data.token);
+      setStep(2);
+    }
+  } catch (error) {
+    console.error("Error during step progression:", error);
+    setErrors({ api: error.response?.data?.message || "An error occurred" });
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   const handleResendOtp = async (email, setErrors) => {
     setResendDisabled(true);
@@ -123,6 +136,12 @@ const EmployeeRegistrationForm = () => {
         setResendDisabled(false);
       }
     }, 1000);
+  };
+
+  const getValidationSchema = () => {
+    if (step === 0) return validationSchemaStep0;
+    if (step === 2) return validationSchemaStep2;
+    return yup.object({});
   };
 
   return (
@@ -158,25 +177,20 @@ const EmployeeRegistrationForm = () => {
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           {["Contact Info", "Verification", "Password"].map((label, index) => (
             <div key={index} className="flex flex-col items-center flex-1 min-w-[80px]">
-              <div
-                className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-white ${
-                  step > index ? "bg-blue-600" : step === index ? "bg-blue-600" : "bg-gray-400"
-                }`}
-              >
+              <div className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-white ${
+                step > index ? "bg-blue-600" : step === index ? "bg-blue-600" : "bg-gray-400"
+              }`}>
                 {step > index ? "✔" : index + 1}
               </div>
               {index < 2 && <div className="flex-1 w-full h-1 my-1 bg-gray-300" />}
-              <span className={`text-sm ${step === index ? "text-blue-600 font-bold" : "text-gray-500"}`}>
-                {label}
-              </span>
+              <span className={`text-sm ${step === index ? "text-blue-600 font-bold" : "text-gray-500"}`}>{label}</span>
             </div>
           ))}
         </div>
 
-        {/* Formik */}
         <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema}
+          validationSchema={getValidationSchema()}
           onSubmit={(values, actions) => {
             if (step === 2) {
               handleSubmit(values, actions);
@@ -207,7 +221,7 @@ const EmployeeRegistrationForm = () => {
                   <input
                     type="file"
                     accept=".doc,.docx,.pdf,.jpg,.jpeg,.png"
-                    onChange={(event) => setFieldValue("resume", event.target.files[0])}
+                    onChange={(event) => setFieldValue("resume", event.currentTarget.files[0])}
                     className="w-full px-3 py-2 border rounded-md"
                   />
                   <ErrorMessage name="resume" component="p" className="text-sm text-red-500" />
@@ -216,15 +230,15 @@ const EmployeeRegistrationForm = () => {
 
               {step === 1 && (
                 <>
-                  <p className="text-gray-600">OTP has been sent to your Email</p>
-                  <Field name="otp1" className="w-full px-3 py-2 mt-2 border rounded-md" placeholder="Enter OTP" />
+                  <label className="font-semibold">Enter OTP</label>
+                  <Field name="otp1" className="w-full px-3 py-2 border rounded-md" placeholder="Enter OTP" />
                   <ErrorMessage name="otp1" component="p" className="text-sm text-red-500" />
 
                   <button
                     type="button"
-                    onClick={() => handleResendOtp(values.email, setErrors)}
                     disabled={resendDisabled}
-                    className="mt-2 text-sm text-blue-600"
+                    className={`text-blue-600 text-sm mt-2 ${resendDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                    onClick={() => handleResendOtp(values.email, setErrors)}
                   >
                     {resendDisabled ? `Resend OTP in ${countdown}s` : "Resend OTP"}
                   </button>
@@ -234,73 +248,45 @@ const EmployeeRegistrationForm = () => {
               {step === 2 && (
                 <>
                   <label className="font-semibold">Password</label>
-                  <div className="relative w-full">
+                  <div className="relative">
                     <Field
                       name="password"
                       type={showPassword ? "text" : "password"}
                       className="w-full px-3 py-2 border rounded-md"
                       placeholder="Enter Password"
                     />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 flex items-center right-3"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                    <button type="button" className="absolute inset-y-0 flex items-center right-3" onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
                   <ErrorMessage name="password" component="p" className="text-sm text-red-500" />
 
                   <label className="font-semibold">Confirm Password</label>
-                  <div className="relative w-full">
+                  <div className="relative">
                     <Field
                       name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       className="w-full px-3 py-2 border rounded-md"
                       placeholder="Confirm Password"
                     />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 flex items-center right-3"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    >
-                      {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                    <button type="button" className="absolute inset-y-0 flex items-center right-3" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                      {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
                   <ErrorMessage name="confirmPassword" component="p" className="text-sm text-red-500" />
                 </>
               )}
 
-              <div className="flex flex-col gap-3 sm:flex-row">
-                {step > 0 && (
-                  <button type="button" onClick={() => setStep(step - 1)} className="w-full py-2 text-white bg-gray-400 rounded-md">
-                    Back
-                  </button>
-                )}
-                <button
-                  type="submit"
-                  className="w-full py-2 text-white bg-blue-600 rounded-md"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Processing..." : step < 2 ? "Next" : "Register"}
-                </button>
-              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              >
+                {step === 2 ? "Submit" : "Next"}
+              </button>
             </Form>
           )}
         </Formik>
-
-        <div className="flex items-center my-6">
-          <div className="flex-grow border-t border-gray-300" />
-          <span className="mx-3 text-gray-500">OR</span>
-          <div className="flex-grow border-t border-gray-300" />
-        </div>
-
-        <p className="text-sm text-center">
-          Already have an account?{" "}
-          <span className="text-blue-600 cursor-pointer" onClick={() => navigate("/login")}>
-            Login
-          </span>
-        </p>
       </div>
     </div>
   );
