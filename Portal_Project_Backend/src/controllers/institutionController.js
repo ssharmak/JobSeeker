@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Jobs=require("../models/job");
+const axios = require('axios');
 
 // Registration (without password)
 const registerInstitution = async (req, res) => {
@@ -165,7 +166,6 @@ const loginInstitution = async (req, res) => {
       message: "Login successful!",
       accessToken: token,
       refreshToken: refreshToken,
-      redirect: "/institution/dashboard",
     });
 
   } catch (error) {
@@ -205,7 +205,7 @@ const resendOtp = async (req, res) => {
 const addJob = async (req, res) => {
   try {
     // 1. Extract Institution_id from token (assuming you set it in req.user during authentication)
-    const Institution_id =req.user?.id;
+    const Institution_id = req.user?.id;
 
     if (!Institution_id) {
       return res.status(401).json({ message: "Unauthorized: Institution ID missing from token" });
@@ -215,11 +215,7 @@ const addJob = async (req, res) => {
     const {
       title,
       department,
-      street,
-      city,
-      state,
-      postal_code,
-      country,
+      address,
       category,
       employment_type,
       experience_level,
@@ -241,12 +237,47 @@ const addJob = async (req, res) => {
       salary_range
     } = req.body;
 
+    // Validate the address fields
+    if (!address || !address.street || !address.city || !address.state || !address.postal_code || !address.country) {
+      return res.status(400).json({ message: "Address is missing required fields" });
+    }
+
+
+    const getGeolocation = async (address) => {
+      const fullAddress = `${address.street}, ${address.city}, ${address.state}, ${address.postal_code}, ${address.country}`;
+      const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+
+      const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
+        params: {
+          address: fullAddress,
+          key: apiKey
+        }
+      });
+
+      if (response.data.status === "OK") {
+        const location = response.data.results[0].geometry.location;
+        return { lat: location.lat, lng: location.lng };
+      } else {
+        console.error("Geocoding failed:", response.data.status);
+        return null;
+      }
+    };
+
+
+    // Optional: Geolocation lookup for address
+    const location = await getGeolocation(address);
+    if (location) {
+      address.latitude = location.lat;
+      address.longitude = location.lng;
+    }
+
     // 3. Create new job instance
     const newJob = new Jobs({
       Institution_id,
       title,
       department,
-      address:{street:street,city:city,state:state,postal_code:postal_code,country:country},
+      address,
+      category,
       employment_type,
       experience_level,
       min_experience,
@@ -281,9 +312,5 @@ const addJob = async (req, res) => {
     });
   }
 };
-
-
-
-
 
 module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution,loginInstitution,resendOtp,addJob };

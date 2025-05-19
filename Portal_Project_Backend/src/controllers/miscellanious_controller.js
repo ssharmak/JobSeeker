@@ -5,18 +5,23 @@ const Help=require("../models/help");
 
 
 
-const termss=async(req,res)=>{
-    try{
-    const t=await Terms.find({isActive:true}).sort({version:-1}).limit(1).select('content -_id');
+const termss = async (req, res) => {
+  try {
+    const term = await Terms.findOne({ isActive: true })
+      .sort({ version: -1 })
+      .select('-_id title version isActive sections'); // exclude _id, include relevant fields
 
-    return res.status(200).json({terms:t});
+    if (!term) {
+      return res.status(404).json({ message: "No active terms found." });
     }
-    catch{
-    res.status(404).json({message:"Colud not find the resource"});
-    }
 
+    return res.status(200).json({ terms: [term] });
+  } catch (error) {
+    console.error("Error fetching terms:", error);
+    res.status(500).json({ message: "Could not fetch terms." });
+  }
+};
 
-}
 
 const createTerm= async(req,res)=>{
     try{

@@ -1,5 +1,5 @@
 const express=require("express");
-const router=express();
+const router=express.Router();
 
 //Importing required models
 const {singleToken}=require("../middleware/singleTokenMiddleware");
@@ -16,10 +16,5 @@ const filterValidationRules = [
 //frontend has to provide token generated when user logins the system .....as of now single Token is used 
 router.post("/:jobId",singleToken,validateRequest(filterValidationRules),applyToJob);
 router.get("/allAppliedJobs",singleToken,allAppliedJobs);
-
-
-
-
-
 
 module.exports=router;

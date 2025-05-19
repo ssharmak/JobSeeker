@@ -85,9 +85,9 @@ const candidateSchema = new mongoose.Schema({
         //     message: "Invalid email address"
         // }
     },
-    phone: {
+    phone_number: {
         type: String,
-        //match: [/^\+?[1-9]\d{6,14}$/, "Invalid phone number format"]
+        match: [/^\+?[1-9]\d{6,14}$/, "Invalid phone number format"]
     },
     date_of_birth: { type: Date },
     address: {

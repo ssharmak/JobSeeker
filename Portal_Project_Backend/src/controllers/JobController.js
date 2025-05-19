@@ -1,6 +1,7 @@
 const Category=require("../models/job_category");
 const Job=require("../models/job");
 const {Candidate}=require("../models/candidates");
+
 //To get all categories and their job counts
 const JobCountByCategory=async (req, res) => {
     try {
@@ -63,7 +64,7 @@ res.status(500).json({message:"Error fetching cities"});
     res.status(200).json(allDesignations);
   }
   catch(error){
-res.status(500).json({message:"Error fetching Designations"});
+  res.status(500).json({message:"Error fetching Designations"});
   }
 
  };
@@ -73,20 +74,15 @@ res.status(500).json({message:"Error fetching Designations"});
 //Job filtering based on query parameters
 const filterJobs = async (req, res) => {
   try {
-    const { city, designation , category,min_salary, experience,job_type,employment_type,subject,institution_type } = req.query;
+    const { city, designation , category,min_salary, experience } = req.query;
 
     // Build dynamic filter object
     let filter = {};
 
-    if (city) filter["address.city"] = city;
+    if (city) filter["location.city"] = city;
     if (designation) filter["title"] = designation;
     if (min_salary) filter["salary_range.min"]= {$gte:Number(min_salary)};
     if(experience) filter["min_experience"]= experience;
-    if(employment_type) filter["employment_type"]=employment_type;
-    if(job_type) filter["job_type"]=job_type;
-    if(subject) filter["Department"]=subject;
-    if(institution_type) filter["institution_type"]=institution_type;
-
 
     if (category) {
       const categoryDoc = await Category.findOne({ CategoryName: category });
@@ -165,110 +161,44 @@ function haversine(lat1, lon1, lat2, lon2) {
   return R * c; // Distance in km
 };
 
-const SingleJobByCategory = async (req, res) => {
+
+//Job Search 
+const jobsearch = async (req, res) => {
   try {
-    const { search } = req.query;
+    const { title, location, minExp = 0, maxExp = 50 } = req.query;
 
-    const matchStage = {};
+    // Build dynamic MongoDB query
+    const query = {
+      is_active: true,
+      status: "open",
+    };
 
-    // If search text is provided, add a case-insensitive regex filter on title
-    if (search) {
-      matchStage.title = { $regex: search, $options: 'i' };
+    if (title) {
+      query.title = { $regex: title, $options: "i" }; // case-insensitive search
     }
 
-    const jobCounts = await Job.aggregate([
-      { $match: matchStage }, 
-      {
-        $group: {
-          _id: "$category", 
-          jobCount: { $sum: 1 }, 
-        },
-      },
-      {
-        $lookup: {
-          from: "categories", 
-          localField: "_id",
-          foreignField: "_id",
-          as: "categoryDetails",
-        },
-      },
-      {
-        $unwind: {
-          path: "$categoryDetails",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          categoryName: "$categoryDetails.CategoryName",
-          jobCount: 1,
-        },
-      },
-    ]);
+    if (location) {
+      query.$or = [
+        { "address.city": { $regex: location, $options: "i" } },
+        { "address.state": { $regex: location, $options: "i" } },
+        { "address.country": { $regex: location, $options: "i" } },
+      ];
+    }
 
-    res.status(200).json(jobCounts);
+    query.min_experience = { $lte: Number(maxExp) };
+    query.max_experience = { $gte: Number(minExp) };
+
+    const jobs = await Job.find(query);
+    res.status(200).json(jobs);
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error fetching job category counts", error });
-  }
-};
-
-const SingleJobBySubject = async (req, res) => {
-  try {
-    const { search } = req.query;
-
-    const matchStage = {};
-
-    // If search text is provided, add a case-insensitive regex filter on title
-    if (search) {
-      matchStage.subject = { $regex: search, $options: 'i' };
-    }
-    const jobCounts=await Job.aggregate([{$match:matchStage},{$group:{_id:"$subject",jobcount:{$sum:1}}},{$project:{_id:0,subject:"$_id",jobcount:1}}]);
-    res.status(200).json(jobCounts);
-  }
-  catch(error){ console.error(error);
-    res.status(500).json({ message: "Error fetching job by subject counts", error });
-  }
-};
-const SingleJobByInstType = async (req, res) => {
-  try {
-    const { search } = req.query;
-
-    const matchStage = {};
-
-    // If search text is provided, add a case-insensitive regex filter on title
-    if (search) {
-      matchStage.institution_type = { $regex: search, $options: 'i' };
-    }
-    const jobCounts=await Job.aggregate([{$match:matchStage},{$group:{_id:"$institution_type",jobcount:{$sum:1}}},{$project:{_id:0,institution_type:"$_id",jobcount:1}}]);
-    res.status(200).json(jobCounts);
-  }
-  catch(error){ console.error(error);
-    res.status(500).json({ message: "Error fetching job by institution type counts", error });
-  }
-};
-
-const SingleJobByExamType = async (req, res) => {
-  try {
-    const { search } = req.query;
-
-    const matchStage = {};
-
-    // If search text is provided, add a case-insensitive regex filter on title
-    if (search) {
-      matchStage.exam_type = { $regex: search, $options: 'i' };
-    }
-    const jobCounts=await Job.aggregate([{$match:matchStage},{$group:{_id:"$exam_type",jobcount:{$sum:1}}},{$project:{_id:0,exam_type:"$exam_type",jobcount:1}}]);
-    res.status(200).json(jobCounts);
-  }
-  catch(error){ console.error(error);
-    res.status(500).json({ message: "Error fetching job by exam type counts", error });
+    console.error("Job search error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 
 
-module.exports={ JobCountByCategory,allCity,filterJobs,allDesignations,findJobByDistance,SingleJobByCategory,SingleJobBySubject,SingleJobByInstType,SingleJobByExamType }
+module.exports={ JobCountByCategory,allCity,filterJobs,allDesignations,findJobByDistance,jobsearch }
 
 

@@ -2,6 +2,7 @@ import React from 'react';
 import InstitutionNavbar from '../components/instituteNavbar';
 import InstSidebar from '../components/instSidebar';
 import InstHeroComponent from '../components/InstHeroComponent';
+import JobsList from '../components/jobslist';
 
 const InstitutionHomePage = () => {
   return (
@@ -19,6 +20,11 @@ const InstitutionHomePage = () => {
         {/* Main Content */}
         <main className="flex-1 p-4 overflow-auto md:p-6">
           <InstHeroComponent />
+
+          {/* Job Listings */}
+          <div className="mt-1">
+            <JobsList />
+          </div>
         </main>
       </div>
 

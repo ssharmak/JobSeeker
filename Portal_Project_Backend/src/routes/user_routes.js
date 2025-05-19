@@ -1,7 +1,7 @@
 const express= require("express");
 const bcrypt=require("bcryptjs");
 const jwt= require("jsonwebtoken");
-const { JobCountByCategory,allCity,filterJobs,allDesignations,findJobByDistance,SingleJobByCategory,SingleJobByExamType,SingleJobByInstType,SingleJobBySubject} = require("../controllers/JobController");
+const { JobCountByCategory,allCity,filterJobs,allDesignations,findJobByDistance} = require("../controllers/JobController");
 const { validateRequest } = require("../middleware/validateRequest");
 const { body, query, param } = require("express-validator");
 const {authenticateTempToken} = require("../middleware/authMiddleware");
@@ -21,10 +21,6 @@ const filterValidationRules = [
 
 router.get("/filterJobs",validateRequest(filterValidationRules), filterJobs);
 router.get("/jobByDistance",authenticateTempToken,findJobByDistance);
-router.get("/singleJobByCategory",SingleJobByCategory);
-router.get("singleJobByExamType",SingleJobByExamType);
-router.get("/singleJobBySubject",SingleJobBySubject);
-router.get("/singleJobByInstType",SingleJobByInstType);
 
 module.exports=router;
 
