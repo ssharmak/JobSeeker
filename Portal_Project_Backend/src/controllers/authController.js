@@ -207,7 +207,7 @@ const verifyOtp = async (req, res) => {
         first_name: user.name,
         last_name: "",
         email: user.email,
-        phone: "",
+        phone: user.phone_number,
         date_of_birth: null,
         address: {
           street: "",
@@ -222,7 +222,7 @@ const verifyOtp = async (req, res) => {
         work_experience: [],
         skills: [],
         certifications: [],
-        resume: null,
+        resume: user.resume,
         applications: [],
         status: "pending",
         email_verified: true,
