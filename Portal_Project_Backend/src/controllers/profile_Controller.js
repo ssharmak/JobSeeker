@@ -7,10 +7,12 @@ const updatePersonnel= async (req,res)=>{
     try{
 const userId=req.user.id;
 const {first,last,dob,linkedIn,portFolio,street,city,postal_code,state,country, gender,description,languages}=req.body;
+const resume = req.file ? req.file.path : null;
 let upDict={};
 if(first) upDict["first_name"]=first;
 if(last) upDict["last_name"]=last;
 if(dob) upDict["date_of_birth"]=dob;
+if(resume) upDict["resume"]=resume;
 if(linkedIn) upDict["linkedin_profile"]=linkedIn;
 if(portFolio) upDict["portfolio_website"]=portFolio;
 if(street) upDict["address.street"]=street;
@@ -38,6 +40,8 @@ return res.status(200).json({message:"Profile updated",Candidate:cand.first_name
          console.log(error);
     }
 }
+
+
 
 //To update work experience
 
@@ -168,4 +172,26 @@ const getInstProfile= async(req,res)=>{
     }
 }
 
-module.exports={updatePersonnel,updateWorkExperience,updateEducation,updateCertificates,getInstProfile};
+const getCandProfile= async(req,res)=>{
+    try{
+        const pro_id=req.user.id;
+        if(!pro_id){
+            return res.status(401).json({message:"candidate id not provided"});
+        }
+
+        const candidate = await Candidate.findById(pro_id);
+
+        if (!candidate) {
+            return res.status(404).json({ message: "candidate not found" });
+        };
+         return res.status(200).json({candidate:candidate});
+
+    }
+    catch(error){
+        console.error("Error fetching candidate profile:", error);
+    return res.status(400).json({ message: error.message || "Error occurred" });
+
+    }
+}
+
+module.exports={updatePersonnel,updateWorkExperience,updateEducation,updateCertificates,getInstProfile,getCandProfile};

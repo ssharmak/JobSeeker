@@ -48,18 +48,18 @@ const certificationSchema = new mongoose.Schema({
     }
 });
 
-const resumeSchema = new mongoose.Schema({
-    file_name: { type: String },
-    file_url: {
-        type: String
-        // required: true,
-        // validate: {
-        //     validator: (value) => validator.isURL(value),
-        //     message: "Invalid URL"
-        // }
-    },
-    uploaded_at: { type: Date, required: true }
-});
+// // const resumeSchema = new mongoose.Schema({
+// //     file_name: { type: String },
+// //     file_url: {
+// //         type: String
+// //         // required: true,
+// //         // validate: {
+// //         //     validator: (value) => validator.isURL(value),
+// //         //     message: "Invalid URL"
+// //         // }
+// //     },
+//     uploaded_at: { type: Date, required: true }
+// });
 
 const applicationSchema = new mongoose.Schema({
     job_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: true },
@@ -119,7 +119,7 @@ const candidateSchema = new mongoose.Schema({
     work_experience: [workExperienceSchema],
     skills: { type: [String] },
     certifications: [certificationSchema],
-    resume: resumeSchema,
+    resume:{type:String},
     applications: [applicationSchema],
     status: { type: String, required: true },
     email_verified: { type: Boolean, required: true },
