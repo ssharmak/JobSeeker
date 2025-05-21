@@ -174,12 +174,12 @@ const getInstProfile= async(req,res)=>{
 
 const getCandProfile= async(req,res)=>{
     try{
-        const pro_id=req.user.id;
-        if(!pro_id){
+        const userId=req.user.id;
+        if(!userId){
             return res.status(401).json({message:"candidate id not provided"});
         }
 
-        const candidate = await Candidate.findById(pro_id);
+        const candidate = await Candidate.findOne({main_user:userId});
 
         if (!candidate) {
             return res.status(404).json({ message: "candidate not found" });
