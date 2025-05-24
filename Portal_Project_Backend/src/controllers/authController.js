@@ -292,7 +292,7 @@ const loginUser=async (req, res) => {
       }
 
       
-      const token= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET,{expiresIn:"15m"});
+      const token= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET,{expiresIn:"1d"});
       const refToken= jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET_REFRESH,{expiresIn:"7d"});
 
       //Storing the refresh Token in cookies to use it later

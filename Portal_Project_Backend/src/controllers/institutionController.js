@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const Jobs=require("../models/job");
 const axios = require('axios');
 
-// Registration (without password)
+
 const registerInstitution = async (req, res) => {
   const { name,street,city,state,postal_code, country, mobile_number, email } = req.body;
 
@@ -55,6 +55,7 @@ const registerInstitution = async (req, res) => {
   }
 };
 
+
 // Verify OTP and mark institution as verified
 const verifyOtpInstitution = async (req, res) => {
   try {
@@ -97,9 +98,9 @@ const verifyOtpInstitution = async (req, res) => {
 // Set Password (only password input; email comes from temporary token)
 const setPasswordInstitution = async (req, res) => {
   try {
-    const { password } = req.body; // Only the password is input by the institution
-    // Retrieve email from temporary token (set via middleware)
-    const institutionEmail = req.user?.email;
+    const { password } = req.body;
+    const institutionEmail = req.user?.email; // Retrieved via middleware
+
     if (!institutionEmail) {
       return res.status(400).json({ message: "User email not found in token" });
     }
@@ -109,23 +110,26 @@ const setPasswordInstitution = async (req, res) => {
       return res.status(400).json({ message: "Institution not found" });
     }
     if (!institution.otp_verified) {
-      return res.status(400).json({ message: "Institution is not otp verified yet" });
+      return res.status(400).json({ message: "Institution is not OTP verified yet" });
     }
 
-    // Hash the password and update the institution record
     const hashedPassword = await bcrypt.hash(password, 10);
     institution.password = hashedPassword;
     institution.is_verified = true;
     await institution.save();
 
-    // Optionally, generate a JWT token for future authentication
-    const token = jwt.sign({ id: institution._id, email: institution.email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    // Generate a JWT token for future authentication
+    const token = jwt.sign(
+      { id: institution._id, email: institution.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     res.status(200).json({ message: "Password set successfully. Registration complete.", token });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
-
 
 
 

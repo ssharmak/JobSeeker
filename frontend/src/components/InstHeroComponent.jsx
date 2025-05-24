@@ -18,19 +18,26 @@ const InstHeroComponent = () => {
   const [candidatesOnHold, setCandidatesOnHold] = useState(0);
 
   // Fetch the job posts count from the API
-  useEffect(() => {
+ useEffect(() => {
     const fetchJobPostCount = async () => {
       try {
-        const response = await axios.get('https://app.teachersearch.in/api/jobs/jobslistcount');
-        // Assuming the response contains a count field with the total number of job posts
-        setJobPosts(response.data.count); // Adjust the path if necessary based on the API response structure
+        const token = localStorage.getItem("token"); 
+        const response = await axios.get('https://app.teachersearch.in/api/jobs/jobslistcount', {
+          headers: {
+            Authorization: `Bearer ${token}`,  
+          },
+          withCredentials: true, 
+        });
+
+        setJobPosts(response.data.count); 
       } catch (error) {
         console.error('Error fetching job post count:', error);
       }
     };
 
     fetchJobPostCount();
-  }, []); // The empty dependency array ensures this runs only once when the component mounts
+  }, []);
+
 
   return (
     <div className="p-4 bg-gray-50">

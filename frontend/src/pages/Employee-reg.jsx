@@ -42,7 +42,7 @@ const EmployeeRegistrationForm = () => {
     name: "",
     email: "",
     phone_number: "",
-    resume: null,
+    resume: "",
     otp1: "",
     password: "",
     confirmPassword: "",

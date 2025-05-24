@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Institution = require('./Institution');
 
 const notesSchema = new mongoose.Schema({
     added_by: { type: String, required: true },
@@ -9,6 +10,7 @@ const notesSchema = new mongoose.Schema({
 const jobApplicationSchema = new mongoose.Schema({
     candidate_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Candidate', required: true },
     job_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: true },
+    institutionId:{type : mongoose.Schema.Types.ObjectId, ref : 'Institution', required: true},
     application_date: { type: Date, required: true, default: Date.now },
     status: { 
         type: String, 

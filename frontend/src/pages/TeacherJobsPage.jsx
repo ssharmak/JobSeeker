@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -8,6 +8,7 @@ import {
   Clock,
   ChevronRight,
   MessageSquareText,
+  CheckCircle,
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -33,6 +34,7 @@ const TeacherJobsPage = () => {
   const [selectedFilters, setSelectedFilters] = useState({
     location: formatLocation(location),
     experience: null,
+    keyword: '',
   });
 
   const [allJobs, setAllJobs] = useState([]);
@@ -44,16 +46,19 @@ const TeacherJobsPage = () => {
 
   const experienceYears = Array.from({ length: 9 }, (_, i) => i);
 
+  const [appliedJobs, setAppliedJobs] = useState(() => {
+    const saved = localStorage.getItem('appliedJobs');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const isLoggedIn = () => !!localStorage.getItem('token');
 
   const fetchJobs = async () => {
     setLoading(true);
-    setError(null);
     try {
       const response = await axios.get('https://app.teachersearch.in/api/jobs/jobpostlist');
-      const jobArray = response?.data?.data || [];
-      setAllJobs(jobArray);
-    } catch (err) {
+      setAllJobs(response?.data?.data || []);
+    } catch {
       setError('Failed to fetch job listings.');
     } finally {
       setLoading(false);
@@ -62,50 +67,45 @@ const TeacherJobsPage = () => {
 
   const fetchMetaData = async () => {
     try {
-      const citiesRes = await axios.get('https://app.teachersearch.in/api/jobs/allCity');
-      const formattedCities = Array.isArray(citiesRes.data)
-        ? citiesRes.data.map((city) =>
-            typeof city === 'string' ? { name: city, count: 0 } : city
-          )
+      const res = await axios.get('https://app.teachersearch.in/api/user/allCity');
+      const formatted = Array.isArray(res.data)
+        ? res.data.map((c) => (typeof c === 'string' ? { name: c } : c))
         : [];
-      setLocations(
-        formattedCities.length
-          ? formattedCities
-          : [
-              { name: 'Bengaluru' },
-              { name: 'Hyderabad' },
-              { name: 'Mumbai' },
-              { name: 'Delhi' },
-            ]
-      );
-    } catch (error) {
-      setLocations([
-        { name: 'Bengaluru' },
-        { name: 'Hyderabad' },
-        { name: 'Mumbai' },
-        { name: 'Delhi' },
-      ]);
+      setLocations(formatted.length ? formatted : defaultCities);
+    } catch {
+      setLocations(defaultCities);
     }
   };
 
-  const filterJobs = () => {
-    const filtered = allJobs.filter((job) => {
-      const matchesLocation = selectedFilters.location
-        ? job.address?.city?.toLowerCase() === selectedFilters.location.toLowerCase()
-        : true;
+  const defaultCities = [
+    { name: 'Bengaluru' },
+    { name: 'Hyderabad' },
+    { name: 'Mumbai' },
+    { name: 'Delhi' },
+  ];
 
-      const matchesExperience =
+  const filterJobs = useCallback(() => {
+    const filtered = allJobs.filter((job) => {
+      const cityMatch =
+        selectedFilters.location &&
+        job.address?.city?.toLowerCase() === selectedFilters.location.toLowerCase();
+
+      const expMatch =
         selectedFilters.experience != null
           ? job.min_experience <= selectedFilters.experience &&
             job.max_experience >= selectedFilters.experience
           : true;
 
-      return matchesLocation && matchesExperience;
+      const keywordMatch = selectedFilters.keyword
+        ? job.title?.toLowerCase().includes(selectedFilters.keyword.toLowerCase())
+        : true;
+
+      return cityMatch && expMatch && keywordMatch;
     });
 
     setJobs(filtered);
     setJobCount(filtered.length);
-  };
+  }, [allJobs, selectedFilters]);
 
   useEffect(() => {
     fetchMetaData();
@@ -114,26 +114,45 @@ const TeacherJobsPage = () => {
 
   useEffect(() => {
     filterJobs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allJobs, selectedFilters.location, selectedFilters.experience]);
+  }, [allJobs, selectedFilters, filterJobs]);
 
-  const handleLocationChange = (loc) => {
-    setSelectedFilters((prev) => ({ ...prev, location: loc }));
-  };
+  const handleApplyClick = async (jobId, jobTitle) => {
+    if (!isLoggedIn()) {
+      navigate('/login');
+      return;
+    }
 
-  const handleExperienceChange = (exp) => {
-    setSelectedFilters((prev) => ({ ...prev, experience: exp }));
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `https://app.teachersearch.in/job/apply/${jobId}`,
+        {
+          job_title: jobTitle,
+          cover: 'I am excited to apply for this role at your institution.',
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      alert(response.data.message);
+      setAppliedJobs((prev) => {
+        const updated = [...prev, jobId];
+        localStorage.setItem('appliedJobs', JSON.stringify(updated));
+        return updated;
+      });
+    } catch (error) {
+      console.error('Error applying to job:', error.response?.data || error.message);
+      alert('Failed to apply. ' + (error.response?.data?.message || 'Internal server error'));
+    }
   };
 
   const handleReset = () => {
     setSelectedFilters({
       location: formatLocation(location),
       experience: null,
+      keyword: '',
     });
-  };
-
-  const handleApplyClick = (jobId) => {
-    isLoggedIn() ? navigate(`/apply/${jobId}`) : navigate('/login');
   };
 
   return (
@@ -147,29 +166,28 @@ const TeacherJobsPage = () => {
               <Search className="absolute w-5 h-5 text-gray-400 left-4 top-3" />
               <input
                 type="text"
-                placeholder={`Teacher jobs near ${selectedFilters.location}`}
+                placeholder={`Search jobs near ${selectedFilters.location}`}
+                value={selectedFilters.keyword}
+                onChange={(e) =>
+                  setSelectedFilters((prev) => ({ ...prev, keyword: e.target.value }))
+                }
                 className="w-full py-3 pl-12 pr-4 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <button className="px-8 py-3 mt-4 text-sm text-white bg-blue-600 rounded-md sm:mt-0 hover:bg-blue-700">
+            <button
+              onClick={filterJobs}
+              className="px-8 py-3 mt-4 text-sm text-white bg-blue-600 rounded-md sm:mt-0 hover:bg-blue-700"
+            >
               Search
             </button>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 mt-4">
-            {['Job Type', 'Institute Type', 'Subcategory', 'Level/Exam Type', 'Role', 'Subject', 'Non Academic Type'].map((item, idx) => (
-              <select
-                key={idx}
-                className="px-3 py-2 text-sm bg-white border border-gray-300 rounded-md"
-              >
-                <option>{item}</option>
-              </select>
-            ))}
             <button
               onClick={handleReset}
               className="px-4 py-2 text-sm text-blue-600 rounded-md hover:bg-blue-100"
             >
-              Reset
+              Reset Filters
             </button>
           </div>
         </div>
@@ -183,9 +201,8 @@ const TeacherJobsPage = () => {
               <h3 className="mb-4 text-lg font-bold text-gray-800">Filters</h3>
 
               <div className="mb-4">
-                <h4 className="mb-2 text-sm font-semibold text-gray-700">Applied Filters</h4>
                 {Object.entries(selectedFilters).map(([key, val]) =>
-                  val !== null ? (
+                  val ? (
                     <span
                       key={key}
                       className="inline-block px-3 py-1 mb-2 mr-2 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full"
@@ -209,7 +226,7 @@ const TeacherJobsPage = () => {
                       id={`loc-${loc.name}`}
                       name="location"
                       checked={selectedFilters.location === loc.name}
-                      onChange={() => handleLocationChange(loc.name)}
+                      onChange={() => setSelectedFilters((p) => ({ ...p, location: loc.name }))}
                       className="w-4 h-4 text-blue-600 border-gray-300"
                     />
                     <label htmlFor={`loc-${loc.name}`} className="ml-2 text-sm">
@@ -226,7 +243,9 @@ const TeacherJobsPage = () => {
                   {experienceYears.map((year) => (
                     <div
                       key={year}
-                      onClick={() => handleExperienceChange(year)}
+                      onClick={() =>
+                        setSelectedFilters((p) => ({ ...p, experience: year }))
+                      }
                       className={`cursor-pointer border rounded-full w-8 h-8 flex items-center justify-center text-sm ${
                         selectedFilters.experience === year
                           ? 'bg-blue-600 text-white'
@@ -247,10 +266,6 @@ const TeacherJobsPage = () => {
               <h2 className="text-xl font-semibold text-gray-800">
                 Showing {jobs.length} of {jobCount} jobs near {selectedFilters.location}
               </h2>
-              <select className="px-3 py-1 text-sm border border-gray-300 rounded-md">
-                <option>Freshness</option>
-                <option>Relevance</option>
-              </select>
             </div>
 
             {loading ? (
@@ -260,13 +275,15 @@ const TeacherJobsPage = () => {
             ) : jobs.length === 0 ? (
               <p className="text-center text-gray-500">No jobs found for selected filters.</p>
             ) : (
-              jobs.map((job, index) => (
-                <div key={index} className="p-6 mb-4 bg-white rounded-lg shadow">
+              jobs.map((job) => (
+                <div key={job._id} className="p-6 mb-4 bg-white rounded-lg shadow">
                   <div className="flex items-center mb-3">
                     <div className="flex items-center justify-center w-12 h-12 mr-4 bg-blue-100 rounded-md">
                       <Building className="w-6 h-6 text-blue-600" />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-800">{job.Institution_id.name}</h3>
+                    <h3 className="text-lg font-bold text-gray-800">
+                      {job.Institution_id?.name || 'Unknown Institute'}
+                    </h3>
                   </div>
 
                   <h4 className="mb-2 font-semibold text-blue-600 text-md">{job.title}</h4>
@@ -293,15 +310,24 @@ const TeacherJobsPage = () => {
 
                   <div className="flex items-start mt-2 text-sm text-gray-700">
                     <MessageSquareText className="w-5 h-5 mr-2 text-gray-500" />
-                    <p>{job.description}</p>
+                    <p>{job.description || 'No description provided.'}</p>
                   </div>
 
-                  <button
-                    onClick={() => handleApplyClick(job._id)}
-                    className="px-4 py-2 mt-4 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                  >
-                    Apply Now
-                  </button>
+                  {appliedJobs.includes(job._id) ? (
+                    <button
+                      className="flex items-center px-4 py-2 mt-4 text-sm text-white bg-green-600 rounded-md cursor-not-allowed"
+                      disabled
+                    >
+                      <CheckCircle className="w-4 h-4 mr-2" /> Applied
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleApplyClick(job._id, job.title)}
+                      className="px-4 py-2 mt-4 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                    >
+                      Apply Now
+                    </button>
+                  )}
                 </div>
               ))
             )}

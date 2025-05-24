@@ -103,7 +103,8 @@ const PostJob = () => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json"
-        }
+        },
+        withCredentials: true, 
       });
 
       alert("Job posted successfully!");

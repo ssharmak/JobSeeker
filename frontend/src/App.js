@@ -16,6 +16,7 @@ import PrivacyPolicy from "./pages/privacy-policy";
 import TermsAndConditions from "./pages/terms-conditions";
 import ContactUs from "./pages/ContactUs";
 import PostJob from "./pages/post-job";
+import AboutUS from "./pages/aboutus";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/terms-conditions" element={<TermsAndConditions />} />
         <Route path="/ContactUs" element={<ContactUs />} />
         <Route path="/post-job" element={<PostJob />} />
+        <Route path="/about-us" element={<AboutUS/>}/>
       </Routes>
     </Router>
   );

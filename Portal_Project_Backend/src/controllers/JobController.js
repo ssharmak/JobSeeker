@@ -40,18 +40,21 @@ const JobCountByCategory=async (req, res) => {
 
 
 //To get all city names
-  const allCity= async(req,res)=>{
-    try{
-      const allCities = await Job.distinct("location.city");
-    if (allCities.length===0){
-      return res.status(404).json({message:" No cities found"});
+ const allCity = async (req, res) => {
+  try {
+    const allCities = await Job.distinct("location.city");
+
+    if (!allCities || allCities.length === 0) {
+      return res.status(404).json({ message: "No cities found" });
     }
-    res.status(200).json(allCities);
+
+    return res.status(200).json({ cities: allCities });
+  } catch (error) {
+    console.error("Error fetching cities:", error); // Log the actual error for debugging
+    return res.status(500).json({ message: "Error fetching cities", error: error.message });
   }
-  catch(error){
-res.status(500).json({message:"Error fetching cities"});
-  }
-  };
+};
+
 
 
   //To get all designations ( Since there is no field separately as designation in the database, job title is considered here as designation)

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, Menu, X, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import images from '../constants/images';
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -82,7 +83,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex-shrink-0">
           <img
-            src="./images/jobseeker_logo.jpg"
+            src={images.logo}
             className="rounded"
             style={{ width: '100px', height: '50px' }}
             alt="Jobseeker Logo"
@@ -137,7 +138,7 @@ const Navbar = () => {
               </button>
               {isProfileOpen && (
                 <div className="absolute right-0 z-20 w-40 py-2 mt-2 bg-white border rounded shadow-md">
-                  <button onClick={() => { setProfileOpen(false); navigate('/profile'); }} className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100">Profile</button>
+                  <button onClick={() => { setProfileOpen(false); navigate('/ProfilePage'); }} className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100">Profile</button>
                   <button onClick={handleLogout} className="block w-full px-4 py-2 text-left text-red-600 hover:bg-gray-100">Logout</button>
                 </div>
               )}

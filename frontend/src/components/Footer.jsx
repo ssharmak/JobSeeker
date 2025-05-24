@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="text-center">
             <h3 className="mb-4 font-semibold text-gray-800">JobSeek</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">About us</a></li>
+              <li><a href="/about-us" className="text-gray-600 hover:text-blue-600">About us</a></li>
               <li><a href="#" className="text-gray-600 hover:text-blue-600">Careers</a></li>
             </ul>
           </div>

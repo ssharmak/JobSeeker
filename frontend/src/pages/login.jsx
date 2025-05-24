@@ -18,16 +18,17 @@ const LoginPage = () => {
   });
 
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
-    const loginUrl = userType === "user"
-      ? `${API_BASE_URL}/api/auth/login-user`
-      : `${API_BASE_URL}/api/auth/login-inst`;
+    const loginUrl =
+      userType === "user"
+        ? `${API_BASE_URL}/api/auth/login-user`
+        : `${API_BASE_URL}/api/auth/login-inst`;
 
     try {
       const response = await axios.post(loginUrl, values, { withCredentials: true });
 
-      console.log("Login Response:", response.data); // Debug log
+      //console.log("Login Response:", response.data);
 
-      // Attempt to extract token from multiple possible formats
+      // Extract accessToken
       let accessToken = null;
       if (response.data?.accessToken) {
         accessToken = response.data.accessToken;
@@ -38,8 +39,16 @@ const LoginPage = () => {
       }
 
       if (accessToken) {
+        // ✅ Store token and refresh token
         localStorage.setItem("token", accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken || "");
+
+        // ✅ Store institution ID or user ID
+        if (userType === "institution" && response.data.institution?._id) {
+          localStorage.setItem("institutionId", response.data.institution._id);
+        } else if (userType === "user" && response.data.user?._id) {
+          localStorage.setItem("userId", response.data.user._id);
+        }
 
         alert("Login Successful!");
         navigate(userType === "user" ? "/" : "/InstitutionHomepage");
@@ -55,6 +64,7 @@ const LoginPage = () => {
 
     setSubmitting(false);
   };
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-gray-900 bg-opacity-70">

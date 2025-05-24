@@ -3,6 +3,7 @@ import InstitutionNavbar from '../components/instituteNavbar';
 import InstSidebar from '../components/instSidebar';
 import InstHeroComponent from '../components/InstHeroComponent';
 import JobsList from '../components/jobslist';
+import images from '../constants/images';
 
 const InstitutionHomePage = () => {
   return (
@@ -36,7 +37,7 @@ const InstitutionHomePage = () => {
         className="fixed z-50 p-3 transition-colors duration-300 bg-green-500 rounded-full shadow-lg bottom-5 right-5 hover:bg-green-600"
       >
         <img
-          src="/images/WhatsApp.svg"
+          src={images.WhatsaApp}
           alt="WhatsApp"
           className="w-10 h-10"
         />

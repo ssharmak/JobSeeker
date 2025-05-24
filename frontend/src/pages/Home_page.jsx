@@ -4,17 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import axios from 'axios';
+import images from '../constants/images';
 
 const JobSeekerHomepage = () => {
   const navigate = useNavigate();
 
-  // 🔧 State for search inputs
+  //  State for search inputs
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [experience, setExperience] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
-  // 🔍 Map experience selection to range
+  //  Map experience selection to range
   const getExperienceRange = (label) => {
     if (label === '0-2 years') return [0, 2];
     if (label === '2-5 years') return [2, 5];
@@ -48,11 +49,11 @@ const JobSeekerHomepage = () => {
   ];
 
   const featuredCompanies = [
-    { name: 'Little Millennium', reviews: '3.9 reviews', logo: './images/little-millennium.jpg' },
-    { name: 'National Public School', reviews: '3.4 reviews', logo: './images/NPS.png' },
-    { name: 'Ryan International School', reviews: '3.5 reviews', logo: './images/RIS.png' },
-    { name: 'Basil Woods International', reviews: '16.3k reviews', logo: './images/BW.png' },
-    { name: 'Emerald International School', reviews: '204.5k reviews', logo: './images/EIS.png' }
+    { name: 'Little Millennium', reviews: '3.9 reviews', logo: images.littlemillennium },
+    { name: 'National Public School', reviews: '3.4 reviews', logo: images.NPS },
+    { name: 'Ryan International School', reviews: '3.5 reviews', logo: images.RIS },
+    { name: 'Basil Woods International', reviews: '16.3k reviews', logo: images.BW },
+    { name: 'Emerald International School', reviews: '204.5k reviews', logo: images.EIS }
   ];
 
   return (

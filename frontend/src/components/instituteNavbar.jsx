@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Plus, MapPin, User, LogOut, Menu, X, Check } from 'lucide-react';
+import { Search, Plus, MapPin, User, LogOut, Menu, X, Check, Bell } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import images from '../constants/images';
 
 const InstitutionNavbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -13,6 +14,8 @@ const InstitutionNavbar = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [institutionName, setInstitutionName] = useState('');
+  const [institutionID, setInstitutionID] = useState('');
+  const [notificationCount, setNotificationCount] = useState(0);
 
   const navigate = useNavigate();
 
@@ -68,44 +71,65 @@ const InstitutionNavbar = () => {
     }
   };
 
+  // Fetch institution profile once on mount
   useEffect(() => {
     const fetchInstitutionProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        //console.log("Navbar",token);
         const response = await axios.get(
           'https://app.teachersearch.in/api/profile/getInstProfile',
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            withCredentials: true, // Only needed if you're using cookies
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
           }
         );
-    
-        //console.log('Institution Profile Response:', response.data); 
-    
+
         const name = response.data?.Institute?.name;
+        const institutionId = response.data?.Institute?._id;
+
         if (name) setInstitutionName(name);
+        if (institutionId) setInstitutionID(institutionId); 
       } catch (err) {
         console.error('Error fetching institution profile:', err);
       }
     };
-    
-  
     fetchInstitutionProfile();
   }, []);
-  
+
+  // Fetch notification count only after institutionID is set
+  useEffect(() => {
+    if (!institutionID) return;
+
+    const fetchNotificationCount = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `https://app.teachersearch.in/api/notification/unseen-applications-count?institutionId=${institutionID}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+          }
+        );
+        console.log(response.data);
+        setNotificationCount(response.data.count || 0);
+      } catch (err) {
+        console.error("Failed to fetch notification count:", err);
+      }
+    };
+
+    fetchNotificationCount();
+  }, [institutionID]);
+
   return (
     <div className="font-sans bg-gray-50">
       <header className="bg-white shadow-sm">
         <nav className="container flex items-center justify-between p-3 mx-auto">
           <div className="flex items-center">
             <img
-              src="./images/jobseeker_logo.jpg"
+              src={images.logo}
               className="rounded"
               alt="TeacherSearch.in"
-              style={{ width: '7rem', height: '4rem' }}
+              style={{ width: '100px', height: '50px' }}
             />
           </div>
 
@@ -126,7 +150,15 @@ const InstitutionNavbar = () => {
               <MapPin className="mr-1" /> Promote Walk Ins
             </button>
 
-            {/* Dropdown */}
+            <button className="relative p-2 text-gray-700 hover:text-black-800">
+              <Bell className="w-6 h-6" />
+              {notificationCount > 0 && (
+                <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-red-600 rounded-full">
+                  {notificationCount}
+                </span>
+              )}
+            </button>
+
             <div className="relative">
               <button className="px-4 py-2 text-gray-700 rounded-md hover:bg-gray-100" onClick={toggleDropdown}>
                 {institutionName || 'Institution'}
@@ -145,7 +177,6 @@ const InstitutionNavbar = () => {
             </div>
           </div>
 
-          {/* Mobile Toggle */}
           <div className="flex items-center md:hidden">
             <button onClick={toggleMobileMenu}>
               {isMobileMenuOpen ? <X className="w-6 h-6 text-gray-700" /> : <Menu className="w-6 h-6 text-gray-700" />}
@@ -153,30 +184,33 @@ const InstitutionNavbar = () => {
           </div>
         </nav>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="bg-white shadow-md md:hidden">
+            {/* Mobile menu items same as desktop */}
             <a href="/InstitutionHomepage" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Home</a>
             <a href="/ContactUs" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Contact Us</a>
             <a href="/InstitutionHomepage" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">FAQ's</a>
-
             <button onClick={togglePopUp} className="flex items-center w-full p-2 font-semibold text-blue-700 border rounded-md bg-sky-100 hover:text-black-600">
               <Search className="mr-2" /> Find a Candidate
             </button>
-
             <button onClick={() => navigate('/post-job')} className="flex items-center p-2 font-semibold text-blue-700 border rounded-md bg-sky-100 hover:text-black-600">
               <Plus className="mr-1" /> Post New Job
             </button>
-
             <button className="flex items-center w-full p-2 font-semibold text-blue-700 border rounded-md bg-sky-100 hover:text-black-600">
               <MapPin className="mr-2" /> Promote Walk Ins
             </button>
-
+            <button className="relative flex items-center w-full p-2 text-gray-700 hover:bg-gray-100">
+              <Bell className="mr-2" /> Notifications
+              {notificationCount > 0 && (
+                <span className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-600 rounded-full right-4 top-2">
+                  {notificationCount}
+                </span>
+              )}
+            </button>
             <div className="relative">
               <button className="w-full px-4 py-2 text-left text-gray-700 rounded-md hover:bg-gray-100" onClick={toggleDropdown}>
                 {institutionName || 'Institution'}
               </button>
-
               {isDropdownOpen && (
                 <div className="w-full bg-white shadow-md">
                   <a href="/InstitutionProfile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
@@ -192,7 +226,6 @@ const InstitutionNavbar = () => {
         )}
       </header>
 
-      {/* Candidate Search Popup */}
       {isPopUpOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative p-6 bg-white rounded-md shadow-lg w-[50rem] max-h-[90vh] overflow-auto">
