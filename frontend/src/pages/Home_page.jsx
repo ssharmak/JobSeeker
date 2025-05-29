@@ -9,7 +9,6 @@ import images from '../constants/images';
 const JobSeekerHomepage = () => {
   const navigate = useNavigate();
 
-  //  State for search inputs
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [experience, setExperience] = useState('');

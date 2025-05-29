@@ -18,7 +18,8 @@ const jobApplicationSchema = new mongoose.Schema({
         required: true 
     },
     cover_letter: { type: String },
-    notes: { type: [notesSchema], default: [] } 
+    notes: { type: [notesSchema], default: [] } ,
+    seenByInstitution: { type: Boolean, default: false }
 });
 
 jobApplicationSchema.index({candidate_id:1,job_id:1},{unique:true});

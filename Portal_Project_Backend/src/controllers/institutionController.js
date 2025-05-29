@@ -47,7 +47,20 @@ const registerInstitution = async (req, res) => {
     await otp.create({ email, otp: otpCode });
 
     // Send OTP to institution email
-    await sendEmail(email, "Your OTP Code", `Your OTP is: ${otpCode}`);
+     await sendEmail(
+      email,
+      "Verify Your Email - Teachersearch.in",
+      `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2>Thank you for registering with <strong>Teachersearch.in</strong>!</h2>
+        <p>Your One-Time Password (OTP) for verification is:</p>
+        <h3 style="color: #2c3e50;">${otpCode}</h3>
+        <p>Please enter this code within the next 10 minutes to complete your registration.</p>
+        <p style="font-size: 0.9em; color: #666;">If you didn’t initiate this request, please ignore this message.</p>
+        <p>– Team Teachersearch.in</p>
+      </div>
+      `
+    );
 
     res.status(200).json({ message: "OTP sent successfully" });
   } catch (err) {
@@ -156,7 +169,7 @@ const loginInstitution = async (req, res) => {
     }
 
     // Generate JWT tokens
-    const token = jwt.sign({ id: institution._id, role: "institution" }, process.env.JWT_SECRET, { expiresIn: "15m" });
+    const token = jwt.sign({ id: institution._id, role: "institution" }, process.env.JWT_SECRET, { expiresIn: "1d" });
     const refreshToken = jwt.sign({ id: institution._id, role: "institution" }, process.env.JWT_SECRET_REFRESH);
 
     // Store refresh token in HTTP-only cookies
@@ -317,4 +330,6 @@ const addJob = async (req, res) => {
   }
 };
 
-module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution,loginInstitution,resendOtp,addJob };
+
+
+module.exports={ registerInstitution,verifyOtpInstitution,setPasswordInstitution,loginInstitution,resendOtp,addJob};

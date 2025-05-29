@@ -56,7 +56,9 @@ const TeacherJobsPage = () => {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('https://app.teachersearch.in/api/jobs/jobpostlist');
+      const response = await axios.get('https://app.teachersearch.in/api/jobs/jobpostlist', {
+        withCredentials: true
+      });
       setAllJobs(response?.data?.data || []);
     } catch {
       setError('Failed to fetch job listings.');
@@ -67,7 +69,9 @@ const TeacherJobsPage = () => {
 
   const fetchMetaData = async () => {
     try {
-      const res = await axios.get('https://app.teachersearch.in/api/user/allCity');
+      const res = await axios.get('https://app.teachersearch.in/api/user/allCity', {
+        withCredentials: true
+      });
       const formatted = Array.isArray(res.data)
         ? res.data.map((c) => (typeof c === 'string' ? { name: c } : c))
         : [];
@@ -76,6 +80,7 @@ const TeacherJobsPage = () => {
       setLocations(defaultCities);
     }
   };
+
 
   const defaultCities = [
     { name: 'Bengaluru' },

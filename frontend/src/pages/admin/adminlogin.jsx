@@ -10,7 +10,7 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const API_BASE_URL = 'http://localhost:5000';
+  const API_BASE_URL = 'https://app.teachersearch.in';
 
   const adminValidationSchema = Yup.object({
     email: Yup.string().email('Invalid email format').required('Email is required'),

@@ -1,4 +1,4 @@
-// import React, { useState } from "react";
+import React from "react";
 import {
   FaUser,
   FaUserGraduate,
@@ -10,107 +10,136 @@ import {
   FaFileAlt,
 } from "react-icons/fa";
 
-const Sidebar = ({ setSelectedSection }) => {
-  // const [isDarkMode] = useState(false); // Dark mode is disabled
-
-  // Styles
-  const sidebarStyle = {
-    width: "250px",
-    height: "100vh",
-    backgroundColor: "#ffffff", // Always light mode
-    color: "black",
-    padding: "20px",
-    position: "fixed",
-    left: "0",
-    top: "0",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    boxShadow: "4px 0px 10px rgba(0, 0, 0, 0.2)",
-    transition: "background 0.3s ease",
-  };
-
-  const listStyle = { listStyle: "none", padding: "0", width: "100%" };
-
-  const listItemStyle = {
-    padding: "12px",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    fontSize: "16px",
-    borderRadius: "5px",
-    transition: "background 0.3s, transform 0.2s",
-    color: "black",
-  };
-
-  const listItemHoverStyle = {
-    backgroundColor: "#ddd",
-  };
-
-  // const iconStyle = { marginRight: "10px" };
+const Sidebar = ({ setSelectedSection, selectedSection }) => {
+  const menuItems = [
+    { section: "landing", icon: <FaUser />, label: "Profile Overview" },
+    { section: "personalProfile", icon: <FaFileAlt />, label: "Personal Profile" },
+    { section: "education", icon: <FaUserGraduate />, label: "Education" },
+    { section: "experience", icon: <FaBriefcase />, label: "Experience" },
+    { section: "skills", icon: <FaTools />, label: "Skills" },
+    { section: "languages", icon: <FaLanguage />, label: "Languages" },
+    { section: "profileSummary", icon: <FaUser />, label: "Profile Summary" },
+    { section: "workPreferences", icon: <FaClipboardList />, label: "Work Preferences" },
+    { section: "internships", icon: <FaBuilding />, label: "Internships" },
+  ];
 
   return (
-    <div style={sidebarStyle}>
-      <h2
-        style={{
-          marginBottom: "15px",
-          fontSize: "20px",
-          color: "#0077b6",
-          transition: "color 0.3s ease",
-        }}
-      >
-        Quick Links
-      </h2>
+    <>
+      <style>
+        {`
+          .layout-container {
+            display: flex;
+            flex-direction: row;
+          }
 
-      <ul style={listStyle}>
-        {[
-          { section: "landing", icon: <FaUser />, label: "Profile Overview" },
-          {
-            section: "personalProfile",
-            icon: <FaFileAlt />,
-            label: "Personal Profile",
-          },
-          {
-            section: "education",
-            icon: <FaUserGraduate />,
-            label: "Education",
-          },
-          { section: "experience", icon: <FaBriefcase />, label: "Experience" },
-          { section: "skills", icon: <FaTools />, label: "Skills" },
-          { section: "languages", icon: <FaLanguage />, label: "Languages" },
-          {
-            section: "profileSummary",
-            icon: <FaUser />,
-            label: "Profile Summary",
-          },
-          {
-            section: "workPreferences",
-            icon: <FaClipboardList />,
-            label: "Work Preferences",
-          },
-          {
-            section: "internships",
-            icon: <FaBuilding />,
-            label: "Internships",
-          },
-        ].map(({ section, icon, label }) => (
-          <li
-            key={section}
-            style={listItemStyle}
-            onClick={() => setSelectedSection(section)}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.background =
-                listItemHoverStyle.backgroundColor)
+          .sidebar {
+            width: 260px;
+            background-color: #ffff;
+            color: #f0f0f0;
+            padding: 1.5rem 1rem;
+            border-right: 1px solid #ffff;
+            height: calc(100vh - 120px); /* viewport minus navbar and footer */
+            overflow-y: auto;
+            position: sticky;
+            top: 60px; /* start below navbar */
+            align-self: flex-start;
+          }
+
+          .sidebar-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color:#000;
+            border-bottom: 2px solid #444;
+            padding-bottom: 0.75rem;
+            text-align: center;
+          }
+
+          .sidebar-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+          }
+
+          .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            margin: 0.4rem 0;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #000;
+          }
+
+          .sidebar-item:hover {
+            background-color: #ccc;
+            color: #000;
+          }
+
+          .sidebar-item.active {
+            background-color: #ccc;
+            color: #000;
+            font-weight: 600;
+          }
+
+          .sidebar-item .icon {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+          }
+
+          @media screen and (max-width: 768px) {
+            .layout-container {
+              flex-direction: column;
             }
-            onMouseOut={(e) =>
-              (e.currentTarget.style.background = "transparent")
+
+            .sidebar {
+              width: 100%;
+              height: auto;
+              position: relative;
+              top: 0;
+              border-right: none;
+              border-bottom: 1px solid #000;
+              padding: 1rem 0.5rem;
             }
-          >
-            {icon} {label}
-          </li>
-        ))}
-      </ul>
-    </div>
+
+            .sidebar-title {
+              display: none;
+            }
+
+            .sidebar-list {
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+            }
+
+            .sidebar-item {
+              flex: 1 1 45%;
+              justify-content: center;
+              margin: 0.25rem;
+            }
+          }
+        `}
+      </style>
+
+      <div className="sidebar">
+        <h2 className="sidebar-title">Quick Links</h2>
+        <ul className="sidebar-list">
+          {menuItems.map(({ section, icon, label }) => (
+            <li
+              key={section}
+              className={`sidebar-item ${selectedSection === section ? "active" : ""}`}
+              onClick={() => setSelectedSection(section)}
+            >
+              <span className="icon">{icon}</span>
+              <span>{label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 

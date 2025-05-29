@@ -17,6 +17,7 @@ import TermsAndConditions from "./pages/terms-conditions";
 import ContactUs from "./pages/ContactUs";
 import PostJob from "./pages/post-job";
 import AboutUS from "./pages/aboutus";
+import Addcredits from "./pages/admin/addcredits";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/ContactUs" element={<ContactUs />} />
         <Route path="/post-job" element={<PostJob />} />
         <Route path="/about-us" element={<AboutUS/>}/>
+        <Route path="/admin/addcredits" element={<Addcredits/>}/>
       </Routes>
     </Router>
   );

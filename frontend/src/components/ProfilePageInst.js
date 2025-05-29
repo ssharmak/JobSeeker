@@ -27,7 +27,6 @@ const ProfilePageInst = () => {
             withCredentials: true,
           }
         );
-
         setInstitution(response.data?.Institute || {});
       } catch (err) {
         console.error("Error fetching institution profile:", err);
@@ -116,7 +115,7 @@ const ProfilePageInst = () => {
                     placeholder="Institute Name"
                   />
                 ) : (
-                  <p className="text-lg font-semibold text-gray-800">{institution.instituteName}</p>
+                  <p className="text-lg font-semibold text-gray-800">{institution.name}</p>
                 )}
               </div>
               <div className="flex items-center space-x-2">
@@ -157,7 +156,7 @@ const ProfilePageInst = () => {
                   placeholder="Email"
                 />
               ) : (
-                <p className="text-sm text-gray-700">{institution.emailId}</p>
+                <p className="text-sm text-gray-700">{institution.email}</p>
               )}
             </div>
 
@@ -173,7 +172,7 @@ const ProfilePageInst = () => {
                   placeholder="Phone"
                 />
               ) : (
-                <p className="text-sm text-gray-700">{institution.phone}</p>
+                <p className="text-sm text-gray-700">{institution.mobile_number}</p>
               )}
             </div>
 

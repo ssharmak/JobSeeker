@@ -90,5 +90,14 @@ const filterCandidates = async (req, res) => {
   };
   
 
+const getInstitute = async (req, res) => {
+  try {
+    const institutes = await Institution.find({}, 'id name'); 
+    res.status(200).json({ data: institutes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching institutes' });
+  }
+};
 
-module.exports={findCandidatesByDistance,filterCandidates};
+module.exports={findCandidatesByDistance,filterCandidates,getInstitute};

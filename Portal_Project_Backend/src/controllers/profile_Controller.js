@@ -2,7 +2,6 @@ const Candidate = require("../models/candidates");
 const Institution = require("../models/Institution");
 
 //To update personnel information in profile
-
 const updatePersonnel= async (req,res)=>{
     try{
 const userId=req.user.id;
@@ -96,7 +95,6 @@ const updateWorkExperience = async (req, res) => {
 };
 
 // To update education details
-
 const updateEducation= async(req,res)=>{
     try{
         const userId=req.user.id;

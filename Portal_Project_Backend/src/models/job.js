@@ -11,9 +11,9 @@ Institution_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Institution', requ
 title:{type: String, required:true},
 department:{type: String, required:true},
 address: {
-    street: { type: String,required:true },
-    city: { type: String,required:true},
-    state: { type: String,required:true },
+    city: { type: String, required: true, trim: true },
+    state: { type: String, required: true, trim: true },
+    country: { type: String, required: true, trim: true },
     postal_code: { type: String },
     country: {
         type: String,

@@ -42,7 +42,7 @@ const JobCountByCategory=async (req, res) => {
 //To get all city names
  const allCity = async (req, res) => {
   try {
-    const allCities = await Job.distinct("location.city");
+    const allCities = await Job.distinct("address.city");
 
     if (!allCities || allCities.length === 0) {
       return res.status(404).json({ message: "No cities found" });

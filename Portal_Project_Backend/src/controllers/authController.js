@@ -59,7 +59,6 @@ const redisClient = redis.createClient();
   
   
   
-
   
   // Register User Function
   const registerUser = async (req, res) => {

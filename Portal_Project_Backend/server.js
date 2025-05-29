@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const path = require("path");
 const connectDB = require("./src/config/db");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -12,38 +13,31 @@ connectDB();
 
 // Initialize Express app
 const app = express();
-app.set("trust proxy", 1); // Trust reverse proxies (e.g. Nginx)
 
-// ✅ CORS Configuration
+// CORS options
 const corsOptions = {
-  origin: "https://teachersearch.in", // Allow frontend domain
+  origin: "https://teachersearch.in", // Allow only this origin
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true, // Allow cookies and auth headers
+  credentials: true,
 };
 
+
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Preflight support for all routes
+app.options("*", cors(corsOptions)); 
 
-// ✅ Middlewares
+// Middlewares
 app.use(cookieParser());
-app.use(express.json()); // Parse incoming JSON
+app.use(express.json());
 
-// ✅ Optional Logging Middleware (for debugging)
+// Optional logging middleware
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
   console.log("Origin:", req.headers.origin || "None");
-  console.log("User-Agent:", req.headers['user-agent'] || "None");
-  console.log("Referer:", req.headers.referer || "None");
   next();
 });
 
-// ✅ Routes
-app.get("/", (req, res) => {
-  res.send("Teacher API is running");
-});
-
-// Import routes
+// Routes imports
 const authRoute = require("./src/routes/authRoutes");
 const adminRoute = require("./src/routes/admin_routes");
 const userRoute = require("./src/routes/user_routes");
@@ -73,13 +67,16 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/jobs", jobPostListRoutes);
 app.use("/api/notification", notificationRoutes);
 
-// ✅ Fallback route for undefined endpoints
+// Serve resume files statically
+//app.use("/uploads/resumes", express.static(path.join(__dirname, "uploads/resumes")));
+
+// Fallback for unknown endpoints
 app.use((req, res) => {
   res.status(404).json({ error: "Not found" });
 });
 
-// ✅ Start Server
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });

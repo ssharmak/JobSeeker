@@ -7,7 +7,7 @@ const PersonalProfile = ({ user, setUser }) => {
 
   // Regex Patterns for Validation
   const nameRegex = /^[A-Za-z\s]+$/; // Only letters and spaces
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com)$/; // Only @gmail.com & @outlook.com allowed
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com)$/; 
   const phoneRegex = /^[0-9]{10}$/; // 10-digit Phone Number
 
   // Handle input changes
