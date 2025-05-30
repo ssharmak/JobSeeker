@@ -5,6 +5,7 @@ import axios from "axios";
 
 const ProfilePageInst = () => {
   const [institution, setInstitution] = useState(null);
+  const [credits, setCredits] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -27,7 +28,9 @@ const ProfilePageInst = () => {
             withCredentials: true,
           }
         );
+        console.log("Institute Details", response.data);
         setInstitution(response.data?.Institute || {});
+        setCredits(response.data?.Credits || {});
       } catch (err) {
         console.error("Error fetching institution profile:", err);
         setError("Failed to fetch institution profile");
@@ -147,33 +150,13 @@ const ProfilePageInst = () => {
             {/* Email */}
             <div className="flex items-center space-x-3">
               <Mail className="w-5 h-5 text-gray-500" />
-              {isEditing ? (
-                <input
-                  type="email"
-                  value={institution.emailId || ""}
-                  onChange={(e) => handleChange("emailId", e.target.value)}
-                  className="w-full p-2 text-sm border rounded-md"
-                  placeholder="Email"
-                />
-              ) : (
-                <p className="text-sm text-gray-700">{institution.email}</p>
-              )}
+              <p className="text-sm text-gray-700">{institution.email}</p>
             </div>
 
             {/* Phone */}
             <div className="flex items-center space-x-3">
               <Phone className="w-5 h-5 text-gray-500" />
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={institution.phone || ""}
-                  onChange={(e) => handleChange("phone", e.target.value)}
-                  className="w-full p-2 text-sm border rounded-md"
-                  placeholder="Phone"
-                />
-              ) : (
-                <p className="text-sm text-gray-700">{institution.mobile_number}</p>
-              )}
+              <p className="text-sm text-gray-700">{institution.mobile_number}</p>
             </div>
 
             {/* Address */}
@@ -184,6 +167,26 @@ const ProfilePageInst = () => {
                 </svg>
                 <p className="text-sm text-gray-700">
                   {institution.address?.street}, {institution.address?.city}, {institution.address?.state}, {institution.address?.country} - {institution.address?.postal_code}
+                </p>
+              </div>
+            </div>
+
+            {/* Credits */}
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center space-x-3">
+                <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L15 8h6l-4.9 4.2L18 20l-6-3.5L6 20l1.9-7.8L3 8h6z" />
+                </svg>
+                <p className="text-sm font-medium text-gray-700">
+                  <span className="text-gray-600">Current Credits:</span> {credits?.currentCredits || 0}
+                </p>
+              </div>
+              <div className="flex items-center space-x-3">
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 1L3 5v6c0 5.25 7 13 9 13s9-7.75 9-13V5l-9-4z" />
+                </svg>
+                <p className="text-sm font-medium text-gray-700">
+                  <span className="text-gray-600">Total Credits Earned:</span> {credits?.totalCreditsEarned || 0}
                 </p>
               </div>
             </div>

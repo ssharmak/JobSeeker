@@ -1,5 +1,6 @@
 const Candidate = require("../models/candidates");
 const Institution = require("../models/Institution");
+const Credit = require("../models/credit");
 
 //To update personnel information in profile
 const updatePersonnel= async (req,res)=>{
@@ -148,27 +149,38 @@ const updateCertificates= async(req,res)=>{
     }
 };
 
-const getInstProfile= async(req,res)=>{
-    try{
-        const inst_id=req.user.id;
-        if(!inst_id){
-            return res.status(401).json({message:"institute id not provided"});
-        }
+const getInstProfile = async (req, res) => {
+  try {
+    const inst_id = req.user.id;
 
-        const inst = await Institution.findById(inst_id).select("name address mobile_number email ");
-
-        if (!inst) {
-            return res.status(404).json({ message: "Institute not found" });
-        };
-         return res.status(200).json({Institute:inst});
-
+    if (!inst_id) {
+      return res.status(401).json({ message: "Institute ID not provided" });
     }
-    catch(error){
-        console.error("Error fetching institution profile:", error);
+
+    // Get institution basic details
+    const inst = await Institution.findById(inst_id).select("name address mobile_number email");
+
+    if (!inst) {
+      return res.status(404).json({ message: "Institute not found" });
+    }
+
+    // Get credit info for this institution
+    const creditInfo = await Credit.findOne({ userId: inst_id }).select("totalCreditsEarned currentCredits");
+
+    return res.status(200).json({
+      Institute: inst,
+      Credits: creditInfo || {
+        totalCreditsEarned: 0,
+        currentCredits: 0
+      }
+    });
+
+  } catch (error) {
+    console.error("Error fetching institution profile:", error);
     return res.status(400).json({ message: error.message || "Error occurred" });
+  }
+};
 
-    }
-}
 
 const getCandProfile= async(req,res)=>{
     try{

@@ -16,7 +16,7 @@ const app = express();
 
 // CORS options
 const corsOptions = {
-  origin: "https://teachersearch.in", // Allow only this origin
+  origin: "https://teachersearch.in", 
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
@@ -51,6 +51,7 @@ const searchCandidatesRoutes = require("./src/routes/searchcandidateRoute");
 const contactRoutes = require('./src/routes/contactRoute');
 const jobPostListRoutes = require("./src/routes/jobpostlistRoute");
 const notificationRoutes = require("./src/routes/notificationRouter");
+const creditRoutes = require("./src/routes/credit_routers");
 
 // Use routes
 app.use("/api/auth", authRoute);
@@ -66,6 +67,7 @@ app.use("/api/institutionfilter", institutionRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/jobs", jobPostListRoutes);
 app.use("/api/notification", notificationRoutes);
+app.use("/api/credits",creditRoutes);
 
 // Serve resume files statically
 //app.use("/uploads/resumes", express.static(path.join(__dirname, "uploads/resumes")));

@@ -44,18 +44,38 @@ const Addcredits = () => {
     setLoggingOut(false);
   };
 
-  const handleAddCredits = () => {
+  const handleAddCredits = async () => {
     if (!selectedInstitute) {
       alert("Please select an institute.");
       return;
     }
-    if (!credits) {
-      alert("Please enter credits.");
+
+    const creditValue = Number(credits);
+    if (!creditValue || creditValue <= 0) {
+      alert("Please enter a valid credit amount.");
       return;
     }
-    // You can add your logic here to submit the credits for the selected institute
-    alert(`Credits ${credits} added to ${selectedInstitute}`);
-    setCredits(""); // Reset credits input after submission
+
+    try {
+      const response = await axios.post(
+        "https://app.teachersearch.in/api/credits/add-credits", 
+        {
+          userId: selectedInstitute,
+          totalcredits: creditValue,
+          description: "Admin added credits"
+        },
+        {
+          withCredentials: true
+        }
+      );
+      //console.log("credits details ", response.data);
+      alert("Credits successfully added.");
+      setCredits("");
+      setSelectedInstitute("");
+    } catch (error) {
+      console.error("Error adding credits:", error);
+      alert("Failed to add credits. Please try again.");
+    }
   };
 
   return (
@@ -85,6 +105,7 @@ const Addcredits = () => {
       <main className="max-w-4xl px-6 pt-24 mx-auto md:pl-64">
         <h1 className="mb-6 text-2xl font-semibold">Add Credits</h1>
 
+        {/* Institute Select Dropdown */}
         <div className="max-w-sm mb-6">
           <label htmlFor="instituteSelect" className="block mb-2 font-medium text-gray-700">
             Select Institute
@@ -96,15 +117,15 @@ const Addcredits = () => {
             onChange={(e) => setSelectedInstitute(e.target.value)}
           >
             <option value="">-- Select an Institute --</option>
-            {institutes.map((inst, index) => (
-              <option key={index} value={inst.name}>
+            {institutes.map((inst) => (
+              <option key={inst._id} value={inst._id}>
                 {inst.name}
               </option>
             ))}
           </select>
         </div>
 
-        {/* Add Credits Input */}
+        {/* Credits Input */}
         <div className="max-w-sm mb-6">
           <label htmlFor="creditsInput" className="block mb-2 font-medium text-gray-700">
             Enter Credits
