@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Menu, X, User } from 'lucide-react';
+import { ChevronDown, Menu, X, User, Bell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import images from '../constants/images';
 
@@ -94,7 +94,6 @@ const Navbar = () => {
         <div className="items-center justify-center flex-1 hidden space-x-6 md:flex">
           <a href="/" className="text-gray-700 hover:text-blue-600">Home</a>
 
-          {/* Jobs Menu */}
           <div className="relative">
             <button onClick={() => setJobsOpen(!isJobsOpen)} className="flex items-center text-gray-700 hover:text-blue-600">
               Jobs <ChevronDown className="w-4 h-4 ml-1" />
@@ -114,8 +113,17 @@ const Navbar = () => {
           <button className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Book a Demo</button>
         </div>
 
-        {/* Auth & Mobile Menu */}
+        {/* Auth, Bell, and Mobile Toggle */}
         <div className="flex items-center space-x-2">
+          {/* Bell icon (always visible) */}
+          <div className="relative hidden md:block">
+            <button className="relative p-2 text-gray-700 rounded-full hover:text-blue-600 hover:bg-gray-100">
+              <Bell size={20} />
+              <span className="absolute w-2 h-2 bg-red-500 rounded-full top-1 right-1 animate-ping" />
+              <span className="absolute w-2 h-2 bg-red-500 rounded-full top-1 right-1" />
+            </button>
+          </div>
+
           {!isLoggedIn ? (
             <>
               <button className="px-4 py-2 text-blue-600 border border-blue-600 rounded hover:bg-blue-50" onClick={() => navigate("/login")}>
@@ -170,6 +178,12 @@ const Navbar = () => {
           )}
           <a href="#" className="text-gray-700 hover:text-blue-600">Plans</a>
           <button className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Book a Demo</button>
+
+          {/* Bell Icon (always visible in mobile too) */}
+          <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600">
+            <Bell size={20} />
+            <span>Notifications</span>
+          </button>
         </div>
       )}
     </header>
