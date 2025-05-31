@@ -157,29 +157,29 @@ const InstitutionRegistrationForm = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-gray-900 bg-opacity-60">
-      <div className="relative w-full max-w-xl max-h-screen overflow-y-auto bg-white rounded-lg shadow-lg">
-        {/* Top Section */}
-        <div className="sticky top-0 z-10 px-4 pt-4 pb-2 bg-white border-b border-gray-200 sm:px-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold sm:text-xl">Apply for free and Hire Talent</h2>
-            <button className="text-gray-600 hover:text-red-500" onClick={() => navigate("/")}>
-              <X size={24} />
-            </button>
-          </div>
-          <div className="flex gap-2 mt-4 mb-2">
-            <button
-              className={`w-1/2 px-3 py-2 rounded-md text-sm font-semibold ${
-                selectedType === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"
-              }`}
-              onClick={() => {
-                setSelectedType("user");
-                navigate("/user");
-              }}
-            >
-              Register as User
-            </button>
-            <button
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-y-auto bg-gray-900 bg-opacity-60">
+        <div className="relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl max-h-screen overflow-y-auto bg-white rounded-lg shadow-lg">
+          {/* Top Section */}
+          <div className="sticky top-0 z-10 px-4 pt-4 pb-2 sm:px-6 bg-white border-b border-gray-200">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <h2 className="text-lg font-bold sm:text-xl">Apply for free and Hire Talent</h2>
+              <button className="text-gray-600 hover:text-red-500" onClick={() => navigate("/")}>
+                <X size={24}/>
+              </button>
+            </div>
+            <div className="flex gap-2 mt-4 mb-2">
+              <button
+                  className={`w-1/2 px-3 py-2 rounded-md text-sm font-semibold ${
+                      selectedType === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"
+                  }`}
+                  onClick={() => {
+                    setSelectedType("user");
+                    navigate("/user");
+                  }}
+              >
+                Register as User
+              </button>
+              <button
               className={`w-1/2 px-3 py-2 rounded-md text-sm font-semibold ${
                 selectedType === "institution" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"
               }`}
