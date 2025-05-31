@@ -147,6 +147,7 @@ const handleNext = async (values, validateForm, setErrors, setSubmitting) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto bg-gray-900 bg-opacity-50 sm:p-6">
       <div className="relative w-full max-w-lg p-6 bg-white rounded-lg shadow-lg sm:max-w-xl lg:max-w-2xl sm:p-8">
+        <h2 className="text-lg font-bold sm:text-xl">Apply for free and get your dream job</h2>
         <button className="absolute top-3 right-3" onClick={() => navigate("/")}>
           <X size={24} />
         </button>
