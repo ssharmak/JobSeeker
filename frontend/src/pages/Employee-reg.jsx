@@ -102,7 +102,11 @@ const handleNext = async (values, validateForm, setErrors, setSubmitting) => {
       if (response.data.message === "OTP sent successfully") {
         setStep(1);
       } else {
-        setErrors({ api: response.data.message || "Registration failed" });
+        if (response.data.message && response.data.message.toLowerCase().includes("duplicate")) {
+          setErrors({ api: "User Already registered" });
+        } else {
+          setErrors({ api: response.data.message || "Registration failed" });
+        }
       }
     } else if (step === 1) {
       const response = await axios.post(`${API_BASE_URL}/api/auth/verify`, { otp1: values.otp1 });
