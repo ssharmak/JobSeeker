@@ -78,44 +78,40 @@ const Navbar = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-gradient-to-r from-blue-100 to-white shadow-md sticky top-0 z-50">
       <nav className="container flex items-center justify-between p-4 mx-auto">
-        {/* Logo */}
-        <div className="flex-shrink-0">
+        <div className="flex items-center gap-4">
           <img
             src={images.logo}
-            className="rounded"
-            style={{ width: '100px', height: '50px' }}
+            className="rounded-xl shadow-md"
+            style={{ width: '120px', height: '55px' }}
             alt="Jobseeker Logo"
           />
         </div>
 
-        {/* Desktop Nav */}
-        <div className="items-center justify-center flex-1 hidden space-x-6 md:flex">
-          <a href="/" className="text-gray-700 hover:text-blue-600">Home</a>
+        <div className="hidden md:flex items-center gap-6">
+          <a href="/" className="text-gray-700 font-medium hover:text-blue-600 transition">Home</a>
 
           <div className="relative">
-            <button onClick={() => setJobsOpen(!isJobsOpen)} className="flex items-center text-gray-700 hover:text-blue-600">
+            <button onClick={() => setJobsOpen(!isJobsOpen)} className="flex items-center text-gray-700 font-medium hover:text-blue-600 transition">
               Jobs <ChevronDown className="w-4 h-4 ml-1" />
             </button>
             {isJobsOpen && (
-              <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white shadow-lg rounded-lg p-6 w-[750px] z-10">
-                <div className="flex flex-col space-y-6 md:flex-row md:space-x-4 md:space-y-0">
-                  <DropdownSection label="JOBS BY CATEGORY" items={categories} isOpen={openDropdown === 'category'} toggle={() => toggleDropdown('category')} />
-                  <DropdownSection label="JOBS BY LOCATIONS" items={locations} isOpen={openDropdown === 'location'} toggle={() => toggleDropdown('location')} onClick={handleNavigate} className="ml-[-10rem]" />
-                  <DropdownSection label="JOBS BY DESIGNATIONS" items={designations} isOpen={openDropdown === 'designation'} toggle={() => toggleDropdown('designation')} className="ml-[-29rem]" />
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-white shadow-lg rounded-lg p-6 w-[800px] z-10 border border-blue-100">
+                <div className="flex flex-col md:flex-row gap-6 justify-between w-full">
+                <DropdownSection label="Jobs by Category" items={categories} isOpen={openDropdown === 'category'} toggle={() => toggleDropdown('category')} />
+                <DropdownSection label="Jobs by Locations" items={locations} isOpen={openDropdown === 'location'} toggle={() => toggleDropdown('location')} onClick={handleNavigate} />
+                <DropdownSection label="Jobs by Designation" items={designations} isOpen={openDropdown === 'designation'} toggle={() => toggleDropdown('designation')} />
                 </div>
               </div>
             )}
           </div>
 
-          <a href="#" className="text-gray-700 hover:text-blue-600">Plans</a>
-          <button className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Book a Demo</button>
+          <a href="#" className="text-gray-700 font-medium hover:text-blue-600 transition">Plans</a>
+          <button className="px-4 py-2 text-white bg-blue-600 rounded-full hover:bg-blue-700 shadow">Book a Demo</button>
         </div>
 
-        {/* Auth, Bell, and Mobile Toggle */}
-        <div className="flex items-center space-x-2">
-          {/* Bell icon (always visible) */}
+        <div className="flex items-center gap-2">
           <div className="relative hidden md:block">
             <button className="relative p-2 text-gray-700 rounded-full hover:text-blue-600 hover:bg-gray-100">
               <Bell size={20} />
@@ -126,26 +122,19 @@ const Navbar = () => {
 
           {!isLoggedIn ? (
             <>
-              <button className="px-4 py-2 text-blue-600 border border-blue-600 rounded hover:bg-blue-50" onClick={() => navigate("/login")}>
-                Login
-              </button>
-              <button className="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700" onClick={() => navigate("/user")}>
-                Register
-              </button>
+              <button className="px-4 py-2 text-blue-600 font-medium border border-blue-600 rounded-full hover:bg-blue-50" onClick={() => navigate("/login")}>Login</button>
+              <button className="px-4 py-2 text-white bg-green-600 font-medium rounded-full hover:bg-green-700" onClick={() => navigate("/user")}>Register</button>
             </>
           ) : (
             <div className="relative profile-menu">
-              <button
-                onClick={() => setProfileOpen(!isProfileOpen)}
-                className="flex items-center px-2 py-1 space-x-2 text-gray-700 transition duration-150 rounded-full hover:bg-gray-100"
-              >
-                <div className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full">
+              <button onClick={() => setProfileOpen(!isProfileOpen)} className="flex items-center gap-2 text-gray-700 font-medium hover:bg-gray-100 p-2 rounded-full">
+                <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full">
                   <User size={18} />
                 </div>
                 <ChevronDown size={16} />
               </button>
               {isProfileOpen && (
-                <div className="absolute right-0 z-20 w-40 py-2 mt-2 bg-white border rounded shadow-md">
+                <div className="absolute right-0 z-20 mt-2 w-44 py-2 bg-white border border-gray-200 rounded shadow-lg">
                   <button onClick={() => { setProfileOpen(false); navigate('/ProfilePage'); }} className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100">Profile</button>
                   <button onClick={handleLogout} className="block w-full px-4 py-2 text-left text-red-600 hover:bg-gray-100">Logout</button>
                 </div>
@@ -153,8 +142,7 @@ const Navbar = () => {
             </div>
           )}
 
-          {/* Mobile Menu Toggle */}
-          <div className="ml-2 md:hidden">
+          <div className="md:hidden">
             <button onClick={() => setMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -162,13 +150,10 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="flex flex-col items-center px-4 pb-4 space-y-3 md:hidden">
+        <div className="flex flex-col items-start px-4 pb-4 space-y-3 md:hidden bg-white shadow">
           <a href="/" className="text-gray-700 hover:text-blue-600">Home</a>
-          <button onClick={() => setJobsOpen(!isJobsOpen)} className="flex items-center text-gray-700 hover:text-blue-600">
-            Jobs <ChevronDown className="w-4 h-4 ml-1" />
-          </button>
+          <button onClick={() => setJobsOpen(!isJobsOpen)} className="text-gray-700 hover:text-blue-600">Jobs <ChevronDown className="w-4 h-4 ml-1" /></button>
           {isJobsOpen && (
             <>
               <DropdownMobile label="Jobs by Category" items={categories} isOpen={openDropdown === 'category'} toggle={() => toggleDropdown('category')} />
@@ -177,13 +162,7 @@ const Navbar = () => {
             </>
           )}
           <a href="#" className="text-gray-700 hover:text-blue-600">Plans</a>
-          <button className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Book a Demo</button>
-
-          {/* Bell Icon (always visible in mobile too) */}
-          <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600">
-            <Bell size={20} />
-            <span>Notifications</span>
-          </button>
+          <button className="px-3 py-1 text-white bg-blue-600 rounded hover:bg-blue-700">Book a Demo</button>
         </div>
       )}
     </header>
@@ -215,13 +194,19 @@ const DropdownMobile = ({ label, items, isOpen, toggle, onClick }) => (
       {label} <ChevronDown className="w-4 h-4 ml-1" />
     </button>
     {isOpen && (
-      <div className="grid grid-cols-1 gap-4 mt-2">
+      <div className="grid grid-cols-1 gap-2 mt-2">
         {items.map((item, idx) => (
-          <div key={idx}>
-            <a href="#" onClick={(e) => { e.preventDefault(); if (onClick) onClick(item.toLowerCase()); }} className="text-xs text-gray-600 hover:text-blue-600 hover:underline">
-              {item}
-            </a>
-          </div>
+          <a
+            key={idx}
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              if (onClick) onClick(item.toLowerCase());
+            }}
+            className="text-sm text-gray-600 hover:text-blue-600 hover:underline"
+          >
+            {item}
+          </a>
         ))}
       </div>
     )}

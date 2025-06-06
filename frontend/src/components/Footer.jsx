@@ -2,45 +2,40 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="py-12 bg-white shadow-md">
+    <footer className="py-12 bg-gradient-to-tr from-white via-slate-100 to-white shadow-lg rounded-t-2xl">
       {/* Footer Main Content */}
-      <div className="container px-4 mx-auto mb-8 sm:px-6 md:px-8 lg:px-16">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 justify-items-center">
+      <div className="container px-4 mx-auto sm:px-6 md:px-8 lg:px-16">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 text-center">
           {/* JobSeek Section */}
-          <div className="text-center">
-            <h3 className="mb-4 font-semibold text-gray-800">JobSeek</h3>
+          <div>
+            <h3 className="mb-4 text-lg font-bold text-gray-800 uppercase tracking-wide">JobSeek</h3>
             <ul className="space-y-2">
-              <li><a href="/about-us" className="text-gray-600 hover:text-blue-600">About us</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Careers</a></li>
+              <li><a href="/about-us" className="text-gray-600 hover:text-blue-600 transition duration-300">About us</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-blue-600 transition duration-300">Careers</a></li>
             </ul>
           </div>
 
           {/* Help & Support Section */}
-          <div className="text-center">
-            <h3 className="mb-4 font-semibold text-gray-800">Help & Support</h3>
+          <div>
+            <h3 className="mb-4 text-lg font-bold text-gray-800 uppercase tracking-wide">Help & Support</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Help center</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-blue-600">Report Issue</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-blue-600 transition duration-300">Help center</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-blue-600 transition duration-300">Report Issue</a></li>
             </ul>
           </div>
 
           {/* Legal Section */}
-          <div className="text-center">
-            <h3 className="mb-4 font-semibold text-gray-800">Legal</h3>
+          <div>
+            <h3 className="mb-4 text-lg font-bold text-gray-800 uppercase tracking-wide">Legal</h3>
             <ul className="space-y-2">
-              <li><a href="/privacy-policy" className="text-gray-600 hover:text-blue-600">Privacy policy</a></li>
-              <li><a href="/terms-conditions" className="text-gray-600 hover:text-blue-600">Terms & conditions</a></li>
+              <li><a href="/privacy-policy" className="text-gray-600 hover:text-blue-600 transition duration-300">Privacy policy</a></li>
+              <li><a href="/terms-conditions" className="text-gray-600 hover:text-blue-600 transition duration-300">Terms & conditions</a></li>
             </ul>
           </div>
         </div>
 
-        {/* Copyright Section */}
-        <div className="mb-4 text-center text-gray-500">
-          © 2025 JobSeek. All rights reserved.
-        </div>
-
-        {/* Social Media Icons Section */}
-        <div className="flex justify-center mb-4 space-x-6">
+        {/* Social Media Icons */}
+        <div className="flex justify-center mt-10 mb-6 space-x-5">
           {[{
             Icon: 'Facebook',
             path: 'M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z',
@@ -57,14 +52,19 @@ const Footer = () => {
             <a
               key={index}
               href="#"
-              className="text-gray-600 transition hover:text-blue-600"
+              className="text-gray-600 hover:text-white bg-gray-200 hover:bg-blue-600 rounded-full p-2 transition duration-300"
               aria-label={social.Icon}
             >
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d={social.path} />
               </svg>
             </a>
           ))}
+        </div>
+
+        {/* Copyright */}
+        <div className="mt-2 text-sm text-center text-gray-500">
+          © 2025 <span className="font-medium text-gray-700">JobSeek</span>. All rights reserved.
         </div>
       </div>
     </footer>

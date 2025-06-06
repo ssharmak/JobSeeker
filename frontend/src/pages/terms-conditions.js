@@ -1,12 +1,15 @@
 import React from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const TermsAndConditions = () => {
   return (
+    <>
+    <Navbar/>
     <div className="p-8 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">Terms & Conditions</h1>
       <p className="mb-2">
-        Welcome to Jobs in Education! These terms and conditions outline the rules and
-        regulations for the use of our platform.
+        Welcome to Teacher Search!. These terms and conditions outline the rules and regulations for the use of our platform.
       </p>
       <h2 className="text-2xl font-semibold mt-4">1. Acceptance of Terms</h2>
       <p>
@@ -30,6 +33,8 @@ const TermsAndConditions = () => {
         at support@jobsineducation.net.
       </p>
     </div>
+    <Footer/>
+    </>
   );
 };
 

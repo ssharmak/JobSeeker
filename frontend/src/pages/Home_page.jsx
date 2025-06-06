@@ -14,12 +14,11 @@ const JobSeekerHomepage = () => {
   const [experience, setExperience] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
-  //  Map experience selection to range
   const getExperienceRange = (label) => {
     if (label === '0-2 years') return [0, 2];
     if (label === '2-5 years') return [2, 5];
     if (label === '5+ years') return [5, 50];
-    return [0, 50]; // default
+    return [0, 50];
   };
 
   const handleSearch = async () => {
@@ -59,13 +58,11 @@ const JobSeekerHomepage = () => {
     <div className="min-h-screen font-sans bg-gray-50">
       <Navbar />
 
-      <main className="container px-4 py-8 mx-auto">
-        {/* Hero Section */}
-        <section className="mb-12 text-center">
-          <h1 className="mb-4 text-3xl font-bold text-gray-800 sm:text-4xl">Find your dream job now</h1>
-          <p className="mb-6 text-base text-gray-600 sm:text-lg">5 lakh+ jobs for you to explore</p>
+      <main className="container px-4 py-12 mx-auto">
+        <section className="mb-16 text-center bg-gradient-to-r from-blue-100 via-white to-purple-100 p-10 rounded-lg shadow-md">
+          <h1 className="mb-4 text-4xl font-extrabold text-gray-800 sm:text-5xl">Find Your Dream Teaching Job</h1>
+          <p className="mb-6 text-lg text-gray-600 sm:text-xl">Discover 5+ Lakh teaching jobs across India & beyond</p>
 
-          {/* Search Bar */}
           <div className="flex flex-col items-stretch justify-center gap-4 mb-6 lg:flex-row">
             <div className="relative w-full lg:w-1/3">
               <input 
@@ -104,66 +101,63 @@ const JobSeekerHomepage = () => {
 
             <button 
               onClick={handleSearch}
-              className="w-full px-6 py-2 text-white transition bg-blue-500 rounded-md lg:w-auto hover:bg-blue-600"
+              className="w-full px-6 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-md lg:w-auto hover:scale-105 transition-transform duration-300"
             >
-              Search
+              🔍 Search
             </button>
           </div>
         </section>
 
-        {/* Search Results */}
         {searchResults.length > 0 && (
-          <section className="mb-12">
+          <section className="mb-16">
             <h2 className="mb-6 text-2xl font-semibold text-center text-gray-800">Search Results</h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {searchResults.map((job, index) => (
-                <div key={index} className="p-4 transition bg-white border rounded-lg shadow hover:shadow-md">
-                  <h3 className="mb-1 text-lg font-semibold text-gray-800">{job.title}</h3>
-                  <p className="text-sm text-gray-600">
-                    {job.address?.city}, {job.address?.state}, {job.address?.country}
-                  </p>
-                  <p className="mt-1 text-sm text-gray-700">Experience: {job.min_experience} - {job.max_experience} years</p>
+                <div key={index} className="p-4 bg-white border rounded-lg shadow hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                  <h3 className="mb-1 text-xl font-bold text-gray-800">{job.title}</h3>
+                  <p className="text-sm text-gray-600">{job.address?.city}, {job.address?.state}</p>
+                  <span className="inline-block mt-2 px-2 py-1 text-xs font-medium text-white bg-blue-500 rounded-full">
+                    {job.min_experience} - {job.max_experience} yrs
+                  </span>
                   <p className="mt-2 text-sm text-gray-600 line-clamp-3">{job.description}</p>
+                  <button className="mt-3 text-sm font-semibold text-blue-600 hover:underline">View More</button>
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* Trending Categories */}
-        <section className="mb-12">
-          <h2 className="mb-8 text-2xl font-semibold text-center text-gray-800">Trending on This Website today</h2>
+        <section className="mb-16">
+          <h2 className="mb-8 text-2xl font-semibold text-center text-gray-800">Trending on This Website Today</h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 justify-items-center">
             {trendingCategories.map((category, index) => (
               <div 
                 key={index} 
-                className="text-center cursor-pointer"
+                className="p-6 text-center bg-white rounded-xl shadow-md hover:shadow-xl transition-transform hover:scale-105 cursor-pointer w-full max-w-xs"
                 onClick={() => navigate(category.path)}
               >
-                <div className="inline-block p-5 mb-4 transition bg-white rounded-full shadow-md hover:shadow-lg">
+                <div className="inline-block p-4 bg-gradient-to-br from-purple-100 to-purple-300 rounded-full mb-4">
                   {category.icon}
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-700">{category.label}</p>
-                  <p className="text-sm text-gray-500">{category.jobs}</p>
-                </div>
+                <p className="text-lg font-semibold text-gray-800">{category.label}</p>
+                <p className="text-sm text-gray-500">{category.jobs}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Featured Companies */}
         <section>
           <h2 className="mb-8 text-2xl font-semibold text-center text-gray-800">Teaching Job Vacancies From</h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 justify-items-center">
             {featuredCompanies.map((company, index) => (
               <div key={index} className="w-full max-w-xs p-6 text-center transition bg-white rounded-lg shadow hover:shadow-md">
-                <img 
-                  src={company.logo}
-                  alt={`${company.name} logo`}
-                  className="object-contain mx-auto mb-4 bg-white rounded"
-                  style={{ width: '100px', height: '90px' }}
-                />
+                <div className="rounded-full bg-gray-100 p-2 w-[100px] h-[100px] flex items-center justify-center mx-auto mb-4">
+                  <img 
+                    src={company.logo}
+                    alt={`${company.name} logo`}
+                    className="object-contain max-h-[80px]"
+                  />
+                </div>
                 <p className="mb-1 font-semibold text-gray-800">{company.name}</p>
                 <p className="text-sm text-gray-500">{company.reviews}</p>
               </div>
@@ -171,7 +165,6 @@ const JobSeekerHomepage = () => {
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );
