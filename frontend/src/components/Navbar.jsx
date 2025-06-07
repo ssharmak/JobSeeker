@@ -97,11 +97,11 @@ const Navbar = () => {
               Jobs <ChevronDown className="w-4 h-4 ml-1" />
             </button>
             {isJobsOpen && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-white shadow-lg rounded-lg p-6 w-[800px] z-10 border border-blue-100">
-                <div className="flex flex-col md:flex-row gap-6 justify-between w-full">
-                <DropdownSection label="Jobs by Category" items={categories} isOpen={openDropdown === 'category'} toggle={() => toggleDropdown('category')} />
-                <DropdownSection label="Jobs by Locations" items={locations} isOpen={openDropdown === 'location'} toggle={() => toggleDropdown('location')} onClick={handleNavigate} />
-                <DropdownSection label="Jobs by Designation" items={designations} isOpen={openDropdown === 'designation'} toggle={() => toggleDropdown('designation')} />
+              <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white shadow-lg rounded-lg p-6 w-[750px] z-10">
+                <div className="flex flex-col space-y-6 md:flex-row md:space-x-4 md:space-y-0">
+                  <DropdownSection label="JOBS BY CATEGORY" items={categories} isOpen={openDropdown === 'category'} toggle={() => toggleDropdown('category')} />
+                  <DropdownSection label="JOBS BY LOCATIONS" items={locations} isOpen={openDropdown === 'location'} toggle={() => toggleDropdown('location')} onClick={handleNavigate} className="ml-[-13rem]" />
+                  <DropdownSection label="JOBS BY DESIGNATIONS" items={designations} isOpen={openDropdown === 'designation'} toggle={() => toggleDropdown('designation')} className="ml-[-29rem]" />
                 </div>
               </div>
             )}
