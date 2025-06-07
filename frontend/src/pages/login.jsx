@@ -58,11 +58,8 @@ const LoginPage = () => {
     } catch (error) {
       console.error("Login Error:", error);
       setErrors({
-        general:
-          error.response?.data?.message?.includes("already registered")
-            ? "This email is already registered. Please log in or reset your password."
-            : error.response?.data?.message || "Login failed. Please check your credentials.",
-    });
+        general: error.response?.data?.message || "Login failed. Please check your credentials."
+      });
     }
 
     setSubmitting(false);
