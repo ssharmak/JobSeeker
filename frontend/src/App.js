@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+
+
 import JobSeekerHomepage from "./pages/Home_page";
 import LoginPage from "./pages/login";
 import EmployeeRegistrationForm from "./pages/Employee-reg";
@@ -18,6 +20,7 @@ import ContactUs from "./pages/ContactUs";
 import PostJob from "./pages/post-job";
 import AboutUS from "./pages/aboutus";
 import Addcredits from "./pages/admin/addcredits";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -41,6 +44,7 @@ function App() {
         <Route path="/post-job" element={<PostJob />} />
         <Route path="/about-us" element={<AboutUS/>}/>
         <Route path="/admin/addcredits" element={<Addcredits/>}/>
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </Router>
   );

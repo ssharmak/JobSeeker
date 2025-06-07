@@ -58,8 +58,11 @@ const LoginPage = () => {
     } catch (error) {
       console.error("Login Error:", error);
       setErrors({
-        general: error.response?.data?.message || "Login failed. Please check your credentials."
-      });
+        general:
+          error.response?.data?.message?.includes("already registered")
+            ? "This email is already registered. Please log in or reset your password."
+            : error.response?.data?.message || "Login failed. Please check your credentials.",
+    });
     }
 
     setSubmitting(false);
@@ -103,53 +106,64 @@ const LoginPage = () => {
         >
           {({ isSubmitting, errors }) => (
             <Form>
-              {/* General Error Message */}
-              {errors.general && (
-                <p className="mb-4 text-sm text-center text-red-600">{errors.general}</p>
-              )}
+  {/* General Error Message */}
+  {errors.general && (
+    <p className="mb-4 text-sm text-center text-red-600">{errors.general}</p>
+  )}
 
-              {/* Email Field */}
-              <div className="mb-4">
-                <label className="block mb-1 text-sm font-medium text-gray-700">Email ID</label>
-                <Field
-                  type="email"
-                  name="email"
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder={userType === "user" ? "Enter your Email" : "Enter your Registered Email"}
-                />
-                <ErrorMessage name="email" component="div" className="mt-1 text-sm text-red-500" />
-              </div>
+  {/* Email Field */}
+  <div className="mb-4">
+    <label className="block mb-1 text-sm font-medium text-gray-700">Email ID</label>
+    <Field
+      type="email"
+      name="email"
+      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder={userType === "user" ? "Enter your Email" : "Enter your Registered Email"}
+    />
+    <ErrorMessage name="email" component="div" className="mt-1 text-sm text-red-500" />
+  </div>
 
-              {/* Password Field */}
-              <div className="mb-4">
-                <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
-                <div className="relative">
-                  <Field
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter Password"
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 flex items-center text-gray-600 right-3"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-                <ErrorMessage name="password" component="div" className="mt-1 text-sm text-red-500" />
-              </div>
+  {/* Password Field */}
+  <div className="mb-1">
+    <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
+    <div className="relative">
+      <Field
+        type={showPassword ? "text" : "password"}
+        name="password"
+        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter Password"
+      />
+      <button
+        type="button"
+        className="absolute inset-y-0 flex items-center text-gray-600 right-3"
+        onClick={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+      </button>
+    </div>
+    <ErrorMessage name="password" component="div" className="mt-1 text-sm text-red-500" />
+  </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="w-full py-2 mt-2 text-white transition bg-blue-600 rounded hover:bg-blue-700"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Logging in..." : "Login"}
-              </button>
-            </Form>
+  {/* Forgot Password */}
+  <div className="mb-4 text-right">
+    <span
+      className="text-sm text-blue-600 cursor-pointer hover:underline"
+      onClick={() => navigate("/forgot-password")}
+    >
+      Forgot Password?
+    </span>
+  </div>
+
+  {/* Submit Button */}
+  <button
+    type="submit"
+    className="w-full py-2 mt-2 text-white transition bg-blue-600 rounded hover:bg-blue-700"
+    disabled={isSubmitting}
+  >
+    {isSubmitting ? "Logging in..." : "Login"}
+  </button>
+</Form>
+
           )}
         </Formik>
 
