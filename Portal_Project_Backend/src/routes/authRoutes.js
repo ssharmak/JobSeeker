@@ -1,6 +1,6 @@
 const express= require("express");
 
-const {loginUser, verifyOtp,setPassword, registerUser,logoutUser} = require("../controllers/authController");
+const {loginUser, verifyOtp,setPassword, registerUser,logoutUser,forgotPassword,ptokenVerification,setNewPassword} = require("../controllers/authController");
 const { authenticateTempToken } = require("../middleware/authMiddleware");
 const {
     registerInstitution,
@@ -27,6 +27,11 @@ router.post("/verify-otp-inst", verifyOtpInstitution);
 
 //resend otp
 router.post("/resend-otp", resendOtp);
+
+//reset password
+router.post("/forgotPasswordEmail",forgotPassword);
+router.post("/reset-password",ptokenVerification);
+router.post("/setNewPassword",setNewPassword);
 
 // // Set Password: Only password is required; institution email comes from token
 router.post("/password-inst", singleToken , setPasswordInstitution);

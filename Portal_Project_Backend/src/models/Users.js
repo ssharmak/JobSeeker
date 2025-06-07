@@ -23,6 +23,7 @@ country: {
     is_verified:{type:Boolean,required:true,default:false},
     last_login:{type:Date,default:Date.now()},
     role:{type:String, default:"user"},
+    ptoken:{type:String},
     auth_provider:{type:String,default:"local"}
 },{ timestamps:true });
 

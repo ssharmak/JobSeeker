@@ -8,6 +8,7 @@ const Candidate =require("../models/candidates");
 const multer = require("multer");
 const redis=require("redis");
 const { appendFile } = require("fs");
+const { render } = require("../routes/profile_Routes");
 const redisClient = redis.createClient();
 
 
@@ -340,9 +341,85 @@ const logoutUser= async(req,res)=>{
 
   }
 
-}
+};
 
-module.exports={ loginUser,setPassword,verifyOtp,registerUser,logoutUser }
+const forgotPassword=async(req,res)=>{
+  try{
+  const {email}= req.body;
+
+  if(!email){
+    return res.status(400).json({message:"Email is required"});
+  };
+  const verifiedUser=await User.findOne({email:email});
+  if(!verifiedUser ||!verifiedUser.is_verified){
+    return res.status(404).json({message:"User is not found or not verified"});
+  };
+  const ptoken=crypto.randomInt(100000, 999999).toString();
+  verifiedUser.ptoken=ptoken;
+  await verifiedUser.save();
+  const url=`https://teachersearch.in/reset-password?token=${ptoken}`
+
+  await sendEmail(
+      email,"Password reset link",`Your password resetting link is here:${url}`
+      
+      
+    );
+    res.status(200).json({message:"Email sent"});
+
+}
+catch(error){
+  console.error("Forgot password error:", error);
+  return res.status(500).json({ message: "Internal Server Error", error });
+
+};
+};
+
+const ptokenVerification=async(req,res)=>{
+  try{
+    const query=req.query;
+
+    const ptoken=query.ptoken;
+
+    const user=await User.findOne({ptoken:ptoken});
+
+    if(!user){
+      return res.status(404).json({message:"User not found"});
+
+    }
+    res.redirect(`https://teachersearch.in/setNewPassword?ptoken=${ptoken}`)
+    //redirect to the url
+
+  
+
+  }
+  catch(error){
+console.error("token password error:", error);
+  return res.status(500).json({ message: "Internal Server Error", error });
+  };
+
+};
+
+const setNewPassword=async(req,res)=>{
+  try{
+  const {newPassword,confirmPassword}=req.body;
+  const ptoken=req.query.ptoken;
+  const user=await User.findOne({ptoken:ptoken});
+  if(!user){
+    return res.status(400).json({message:"User not found"});
+  }
+  if(newPassword===confirmPassword){
+     user.password=confirmPassword;
+     await user.save();
+  };
+  return res.status(200).json({message:"Password set successfully"});
+}
+catch(error){
+console.error("Password error:", error);
+return res.status(500).json({ message: "Internal Server Error", error });
+}
+};
+
+module.exports={ loginUser,setPassword,verifyOtp,registerUser,logoutUser,forgotPassword,ptokenVerification,setNewPassword }
 
 
 
