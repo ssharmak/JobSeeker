@@ -108,7 +108,15 @@ const Navbar = () => {
           </div>
 
           <a href="#" className="text-gray-700 font-medium hover:text-blue-600 transition">Plans</a>
-          <button className="px-4 py-2 text-white bg-blue-600 rounded-full hover:bg-blue-700 shadow">Book a Demo</button>
+            <button className="inline-flex items-center gap-2 px-3.5 py-1.5 text-sm font-semibold text-gray-700 bg-white border-2 border-blue-500 rounded-full hover:bg-blue-50 hover:border-blue-600 transition-colors duration-200 shadow-sm">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Book a Demo
+          </button>
         </div>
 
         <div className="flex items-center gap-2">
