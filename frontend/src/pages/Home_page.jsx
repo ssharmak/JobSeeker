@@ -13,6 +13,84 @@ const JobSeekerHomepage = () => {
   const [location, setLocation] = useState('');
   const [experience, setExperience] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  
+  // Dropdown states
+  const [showTitleDropdown, setShowTitleDropdown] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const [showExperienceDropdown, setShowExperienceDropdown] = useState(false);
+
+  // Job title options
+  const jobTitles = [
+    'Mathematics Teacher Jobs',
+    'English Teacher Jobs',
+    'Teacher Jobs',
+    'Biology Teacher Jobs',
+    'Science Teacher Jobs',
+    'Hindi Teacher Jobs',
+    'Social Science Teacher Jobs',
+    'Physics Teacher Jobs',
+    'Chemistry Teacher Jobs',
+    'Assistant Teacher Jobs',
+    'Computer Science Teacher Jobs',
+    'History Teacher Jobs',
+    'Computer Teacher Jobs',
+    'Commerce Teacher Jobs',
+    'Economics Teacher Jobs',
+    'Accountancy Teacher Jobs',
+    'Academic Coordinator Jobs',
+    'English Language Teacher Jobs',
+    'General Teacher Jobs',
+    'Geography Teacher Jobs',
+    'Academic Counsellor Jobs',
+    'Accountant Jobs',
+    'Administration Executive Jobs',
+    'Physical Education Teacher Jobs',
+    'Political Science Teacher Jobs'
+  ];
+
+  // Location options (without "Teacher jobs in" prefix)
+  const locations = [
+    'Bangalore',
+    'Hyderabad',
+    'Lucknow',
+    'Coimbatore',
+    'Pune',
+    'Ahmedabad',
+    'Delhi',
+    'Patna',
+    'Chennai',
+    'Mumbai',
+    'Indore',
+    'Agra',
+    'Kolkata',
+    'Jaipur',
+    'Bhubaneswar'
+  ];
+
+  // Experience options
+  const experienceOptions = [
+    'Fresher',
+    '1 year',
+    '2 years',
+    '3 years',
+    '4 years',
+    '5 years',
+    '6+ years',
+    '10+ years'
+  ];
+
+  // Filter functions
+  const filteredTitles = jobTitles.filter(job => 
+    job.toLowerCase().includes(title.toLowerCase())
+  );
+
+  const filteredLocations = locations.filter(loc => 
+    loc.toLowerCase().includes(location.toLowerCase())
+  );
+
+  const filteredExperience = experienceOptions.filter(exp => 
+    exp.toLowerCase().includes(experience.toLowerCase())
+  );
 
   const getExperienceRange = (label) => {
     if (label === '0-2 years') return [0, 2];
@@ -40,6 +118,21 @@ const JobSeekerHomepage = () => {
     }
   };
 
+  const handleTitleSelect = (selectedTitle) => {
+    setTitle(selectedTitle);
+    setShowTitleDropdown(false);
+  };
+
+  const handleLocationSelect = (selectedLocation) => {
+    setLocation(selectedLocation);
+    setShowLocationDropdown(false);
+  };
+
+  const handleExperienceSelect = (selectedExperience) => {
+    setExperience(selectedExperience);
+    setShowExperienceDropdown(false);
+  };
+
   const trendingCategories = [
     { icon: <Home className="w-8 h-8 text-purple-500" />, label: 'Pre-School', jobs: '5.3k + jobs', path: '/jobs/preschool' },
     { icon: <Building2 className="w-8 h-8 text-blue-500" />, label: 'EdTech', jobs: '19.3k + jobs', path: '/jobs/edtech' },
@@ -64,49 +157,120 @@ const JobSeekerHomepage = () => {
           <p className="mb-6 text-lg text-gray-600 sm:text-xl">Discover 5+ Lakh teaching jobs across India & beyond</p>
 
           <div className="flex flex-col items-stretch justify-center gap-4 mb-6 lg:flex-row">
+            {/* Job Title Input with Dropdown */}
             <div className="relative w-full lg:w-1/3">
               <input 
                 type="text" 
                 placeholder="Type your job title.." 
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  setShowTitleDropdown(true);
+                }}
+                onFocus={() => setShowTitleDropdown(true)}
                 className="w-full px-4 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <MapPin className="absolute w-5 h-5 text-gray-400 left-3 top-3" />
+              
+              {showTitleDropdown && filteredTitles.length > 0 && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                  {filteredTitles.map((jobTitle, index) => (
+                    <div
+                      key={index}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600"
+                      onClick={() => handleTitleSelect(jobTitle)}
+                    >
+                      {jobTitle}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
+            {/* Location Input with Dropdown */}
             <div className="relative w-full lg:w-1/4">
               <input 
                 type="text" 
                 placeholder="Enter location" 
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={(e) => {
+                  setLocation(e.target.value);
+                  setShowLocationDropdown(true);
+                }}
+                onFocus={() => setShowLocationDropdown(true)}
                 className="w-full px-4 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <MapPin className="absolute w-5 h-5 text-gray-400 left-3 top-3" />
+              
+              {showLocationDropdown && filteredLocations.length > 0 && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                  {filteredLocations.map((loc, index) => (
+                    <div
+                      key={index}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600"
+                      onClick={() => handleLocationSelect(loc)}
+                    >
+                      {loc}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="w-full lg:w-1/6">
-              <select 
+            {/* Experience Input with Dropdown */}
+            <div className="relative w-full lg:w-1/6">
+              <input
+                type="text"
+                placeholder="Select Experience"
                 value={experience}
-                onChange={(e) => setExperience(e.target.value)}
+                onChange={(e) => {
+                  setExperience(e.target.value);
+                  setShowExperienceDropdown(true);
+                }}
+                onFocus={() => setShowExperienceDropdown(true)}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select Experience</option>
-                <option>0-2 years</option>
-                <option>2-5 years</option>
-                <option>5+ years</option>
-              </select>
+              />
+              
+              {showExperienceDropdown && filteredExperience.length > 0 && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                  {filteredExperience.map((exp, index) => (
+                    <div
+                      key={index}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600"
+                      onClick={() => handleExperienceSelect(exp)}
+                    >
+                      {exp}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button 
-              onClick={handleSearch}
+              onClick={() => {
+                handleSearch();
+                setShowTitleDropdown(false);
+                setShowLocationDropdown(false);
+                setShowExperienceDropdown(false);
+              }}
               className="w-full px-6 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-md lg:w-auto hover:scale-105 transition-transform duration-300"
             >
               🔍 Search
             </button>
           </div>
         </section>
+
+        {/* Click outside to close dropdowns */}
+        {(showTitleDropdown || showLocationDropdown || showExperienceDropdown) && (
+          <div 
+            className="fixed inset-0 z-5"
+            onClick={() => {
+              setShowTitleDropdown(false);
+              setShowLocationDropdown(false);
+              setShowExperienceDropdown(false);
+            }}
+          />
+        )}
 
         {searchResults.length > 0 && (
           <section className="mb-16">
