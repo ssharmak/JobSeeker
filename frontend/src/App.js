@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 
-
 import JobSeekerHomepage from "./pages/Home_page";
 import LoginPage from "./pages/login";
 import EmployeeRegistrationForm from "./pages/Employee-reg";
