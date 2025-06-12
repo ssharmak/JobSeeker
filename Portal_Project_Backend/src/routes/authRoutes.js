@@ -36,7 +36,7 @@ router.post("/setNewPassword",setNewPassword);
 // // Set Password: Only password is required; institution email comes from token
 router.post("/password-inst", singleToken , setPasswordInstitution);
 
-router.post("/login-inst",loginInstitution)
+router.post("/login-inst",loginInstitution);
 
 //login route for user and admin [Specify role="admin while inserting admin record in database"]
 router.post("/login-user",loginUser);
