@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+// EditProfile component for editing user profile information
 const EditProfile = ({ onClose, userData, setUserData }) => {
   const [formData, setFormData] = useState({ ...userData });
 
