@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+// AdminSidebar component with responsive design for desktop and mobile
 const AdminSidebar = ({ sidebarOpen, setSidebarOpen, onLogout, loggingOut }) => {
   return (
     <>
